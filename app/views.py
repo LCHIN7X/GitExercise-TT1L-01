@@ -6,7 +6,7 @@ from flask import Blueprint, render_template
 # Create new flask Blueprint with name "views"
 views = Blueprint("views",__name__)
 
-# Define route for home page (/home)
+# NOTE: Incomplete! 
 @views.route("/home")
 def home():
     return render_template("base.html")
