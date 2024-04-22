@@ -2,6 +2,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from . import database as db
+from werkzeug.security import generate_password_hash
 
 # ------------------------------- CODE ---------------------------------------------
 
@@ -45,7 +46,7 @@ def create_account():
                 new_user_account = User(email=email,
                                     username=username,
                                     student_id=student_id,
-                                    password=password1)
+                                    password=generate_password_hash(password1,method="scrypt"))
                 db.session.add(new_user_account)
                 db.session.commit()
                 return redirect(url_for("views.home"))
