@@ -4,7 +4,7 @@ from .models import User
 from . import database as db
 from werkzeug.security import generate_password_hash
 from email_validator import validate_email, EmailNotValidError
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 from sqlalchemy.exc import IntegrityError
 
 # ------------------------------- CODE ---------------------------------------------
@@ -25,7 +25,7 @@ def create_account():
         password2 = request.form.get("password2")
 
         #  check if credentials meet the program requirements
-
+        #  validate email
         try:
             email_info = validate_email(email,check_deliverability=False)
             normalized_email = email_info.normalized 
@@ -37,7 +37,7 @@ def create_account():
             flash("Username must be at least 2 characters long.",category="error")
 
         elif len(student_id) != 10:
-            flash("Student ID must be 10 characters long.")
+            flash("Student ID must be 10 characters long.",category="error")
         
         elif len(password1) < 8:
             flash("Password must be at least 8 characters long.",category="error")
@@ -46,8 +46,7 @@ def create_account():
             flash("Passwords do not match.",category="error")
         
         else:            
-            user_in_db = User.query.filter(and_(User.email == normalized_email,
-                                                User.student_id == student_id)).first()
+            user_in_db = User.query.filter(or_(User.email == normalized_email, User.student_id == student_id)).first()
 
             if user_in_db:
                 flash("Account already exists",category="error")
