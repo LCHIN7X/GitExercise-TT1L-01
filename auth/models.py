@@ -1,7 +1,8 @@
 # imports
-from main import database as db 
-
+from flask_sqlalchemy import SQLAlchemy
 # ------------------------------- CODE ---------------------------------------------
+
+db = SQLAlchemy()
 
 # Create User table
 class User(db.Model):

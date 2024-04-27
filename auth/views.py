@@ -1,7 +1,6 @@
 # imports
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
-from main import database as db
+from .models import User, db
 from werkzeug.security import generate_password_hash
 from email_validator import validate_email, EmailNotValidError
 from sqlalchemy import or_
@@ -61,7 +60,7 @@ def create_account():
                     db.session.add(new_user_account)
                     db.session.commit()
                     flash("Account successfully created!",category="success")
-                    return redirect(url_for("views.home"))
+                    return redirect(url_for("auth.login"))
                 
                 except IntegrityError:
                     db.session.rollback()
@@ -70,3 +69,8 @@ def create_account():
     
     # if method is GET, render page
     return render_template("create_account.html")
+
+
+@auth.route("/login",methods=['GET','POST'])
+def login():
+    return render_template('login.html')
