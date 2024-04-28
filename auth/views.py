@@ -69,7 +69,7 @@ def create_account():
 
     
     # if method is GET, render page
-    return render_template("create_account.html")
+    return render_template("create_account.html",current_page="create_account")
 
 
 @auth.route("/login",methods=['GET','POST'])
@@ -98,4 +98,4 @@ def login():
 
             
     # if method is GET, render page
-    return render_template('login.html')
+    return render_template('login.html',current_page="login")
