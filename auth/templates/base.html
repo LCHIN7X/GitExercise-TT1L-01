@@ -43,15 +43,21 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
+            {% if current_user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link {% if current_page == 'home' %}active{% endif %}" href="#">Home</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('auth.login')}}">Log Out</a>
+            </li>
+            {% else %}
             <li class="nav-item">
               <a class="nav-link {% if current_page == 'login' %}active{% endif %}" href="{{url_for('auth.login')}}">Login</a>
             </li>
             <li class="nav-item">
               <a class="nav-link {% if current_page == 'create_account' %}active{% endif %}" href="{{url_for('auth.create_account')}}">Create Account</a>
             </li>
+            {% endif %}
           </ul>
         </div>
       </div>
