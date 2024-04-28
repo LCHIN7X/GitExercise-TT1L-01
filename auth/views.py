@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
-from flask_login import login_user
+from flask_login import login_user, login_required, logout_user, current_user
 
 # ------------------------------- CODE ---------------------------------------------
 
@@ -24,53 +24,57 @@ def create_account():
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
 
+        # set default value for normalized email 
+        normalized_email = None
+
         #  check if credentials meet the program requirements
         #  validate email
         try:
-            email_info = validate_email(email,check_deliverability=False)
+            email_info = validate_email(email,check_deliverability=True)
             normalized_email = email_info.normalized 
+
+            if len(username) < 2:
+                flash("Username must be at least 2 characters long.",category="error")
+
+            elif len(student_id) != 10:
+                flash("Student ID must be 10 characters long.",category="error")
+        
+            elif len(password1) < 8:
+                flash("Password must be at least 8 characters long.",category="error")
+            
+            elif password1 != password2:
+                flash("Passwords do not match.",category="error")
+        
+            else:            
+                user_in_db = User.query.filter(or_(User.email == normalized_email, User.student_id == student_id)).first()
+
+                if user_in_db:
+                    flash("Account already exists",category="error")
+
+                else: 
+                # if user record is not in database, try to create new account
+                    try:
+                        new_user_account = User(email=normalized_email,
+                                                username=username,
+                                                student_id=student_id,
+                                                password=generate_password_hash(password1,method="scrypt"))
+                        db.session.add(new_user_account)
+                        db.session.commit()
+                        flash("Account successfully created!",category="success")
+                        return redirect(url_for("auth.login"))
+
+                # if UNIQUE constraint fails:     
+                    except IntegrityError:
+                        db.session.rollback()
+                        flash("Username already taken, please enter a new username.",category="error")
 
         except EmailNotValidError as e:
             flash("Invalid email address.",category="error")
 
-        if len(username) < 2:
-            flash("Username must be at least 2 characters long.",category="error")
 
-        elif len(student_id) != 10:
-            flash("Student ID must be 10 characters long.",category="error")
-        
-        elif len(password1) < 8:
-            flash("Password must be at least 8 characters long.",category="error")
-        
-        elif password1 != password2:
-            flash("Passwords do not match.",category="error")
-        
-        else:            
-            user_in_db = User.query.filter(or_(User.email == normalized_email, User.student_id == student_id)).first()
-
-            if user_in_db:
-                flash("Account already exists",category="error")
-
-            else: 
-            # if user record is not in database, try to create new account
-                try:
-                    new_user_account = User(email=normalized_email,
-                                            username=username,
-                                            student_id=student_id,
-                                            password=generate_password_hash(password1,method="scrypt"))
-                    db.session.add(new_user_account)
-                    db.session.commit()
-                    flash("Account successfully created!",category="success")
-                    return redirect(url_for("auth.login"))
-
-            # if UNIQUE constraint fails:     
-                except IntegrityError:
-                    db.session.rollback()
-                    flash("Username already taken, please enter a new username.",category="error")
-
-    
     # if method is GET, render page
-    return render_template("create_account.html",current_page="create_account")
+    return render_template("create_account.html",current_page="create_account",current_user=current_user)
+
 
 #  define route for login (/login)
 @auth.route("/login",methods=['GET','POST'])
@@ -86,7 +90,7 @@ def login():
         
         if user_in_db:
             # if user account exists, first check if password is correct
-            if check_password_hash(user_in_db.password,password):
+            if check_password_hash(user_in_db.password, password):
                 flash(f"Hello {user_in_db.username}, You Are Now Logged In!",category='success')
                 login_user(user_in_db, remember=True)
                 return redirect(url_for('auth.create_account'))  #  Redirect to create account page for testing, to be changed later
@@ -96,8 +100,16 @@ def login():
                 flash("Incorrect password, please try again.",category='error')
 
         else:
-            flash("User account does not exist.",category="error")
+            flash("User account does not exist, please create an account.",category="error")
 
-            
     # if method is GET, render page
-    return render_template('login.html',current_page="login")
+    return render_template('login.html',current_page="login",current_user=current_user)
+
+
+# define route for logging out
+@auth.route("/logout",methods=["GET"])
+@login_required
+def logout():
+    logout_user()
+    flash("Logged Out Successfully.",category="success")
+    return redirect(url_for('auth.login'))

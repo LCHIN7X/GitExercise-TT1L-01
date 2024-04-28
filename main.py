@@ -22,12 +22,12 @@ def create_app():
     with app.app_context():
         db.create_all()
 
+    from auth.models import User
+
     #  create LoginManager object to handle logins
     login_manager = LoginManager()
     login_manager.login_view = "auth.login"
     login_manager.init_app(app)
-
-    from auth.models import User
 
     @login_manager.user_loader 
     def load_user(id):
