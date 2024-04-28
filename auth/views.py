@@ -62,7 +62,8 @@ def create_account():
                     db.session.commit()
                     flash("Account successfully created!",category="success")
                     return redirect(url_for("auth.login"))
-                
+
+            # if UNIQUE constraint fails:     
                 except IntegrityError:
                     db.session.rollback()
                     flash("Username already taken, please enter a new username.",category="error")
@@ -71,7 +72,7 @@ def create_account():
     # if method is GET, render page
     return render_template("create_account.html",current_page="create_account")
 
-
+#  define route for login (/login)
 @auth.route("/login",methods=['GET','POST'])
 def login():
     if request.method == "POST":
@@ -88,8 +89,9 @@ def login():
             if check_password_hash(user_in_db.password,password):
                 flash(f"Hello {user_in_db.username}, You Are Now Logged In!",category='success')
                 login_user(user_in_db, remember=True)
-                return redirect(url_for('auth.create_account'))  #  Redirect to create account page for testing
+                return redirect(url_for('auth.create_account'))  #  Redirect to create account page for testing, to be changed later
             
+            # if password is incorrect, flash error message
             else:
                 flash("Incorrect password, please try again.",category='error')
 
