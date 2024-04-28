@@ -1,10 +1,11 @@
 # imports
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User, db
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
+from flask_login import login_user
 
 # ------------------------------- CODE ---------------------------------------------
 
@@ -73,4 +74,28 @@ def create_account():
 
 @auth.route("/login",methods=['GET','POST'])
 def login():
+    if request.method == "POST":
+        email = request.form.get('email')
+        student_id = request.form.get('student_id')
+        password = request.form.get('password') 
+
+        #  check if credentials entered exist in User table
+        user_in_db = User.query.filter_by(email=email, 
+                                          student_id=student_id).first()
+        
+        if user_in_db:
+            # if user account exists, first check if password is correct
+            if check_password_hash(user_in_db.password,password):
+                flash(f"Hello {user_in_db.username}, You Are Now Logged In!",category='success')
+                login_user(user_in_db, remember=True)
+                return redirect(url_for('auth.create_account'))  #  Redirect to create account page for testing
+            
+            else:
+                flash("Incorrect password, please try again.",category='error')
+
+        else:
+            flash("User account does not exist.",category="error")
+
+            
+    # if method is GET, render page
     return render_template('login.html')
