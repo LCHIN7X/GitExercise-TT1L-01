@@ -1,9 +1,32 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
+{% block favicon %}
+<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('.static', filename='assets/favicons/apple-touch-icon.png')}}" />
+<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('.static',filename='assets/favicons/favicon-32x32.png') }}" />
+<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('.static',filename='assets/favicons/favicon-16x16.png') }}" />
+<link rel="manifest" href="{{url_for('.static', filename='assets/favicons/site.webmanifest')}}" />
+{% endblock %}
 {% block title %}
 Log In 
 {% endblock %}
 
 {% block content %}
-<h1>Log In</h1>
+<div class="container" id="login-form">
+    <h1 class="text-lg-center mt-2 mb-2">Log In</h1>
+    <form method="POST">
+        <div class="form-group mt-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" name="email" class="form-control" required id="email">
+        </div>
+        <div class="form-group mt-3">
+            <label for="student_id" class="form-label">Student ID</label>
+            <input type="text" minlength="10" maxlength="10" name="student_id" class="form-control">
+        </div>
+        <div class="form-group mt-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" minlength="8" name="password" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary mt-4">Log In</button>
+    </form>
+</div>
 {% endblock %}
