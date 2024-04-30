@@ -1,7 +1,8 @@
 from flask import redirect,render_template,url_for,request,flash,Blueprint
 from . import database as db
-from .models import Faculty,Subject
+from .models import Faculty,Subject,Addbook
 from .bforms import Addbooks 
+from flask_uploads import UploadSet, IMAGES
 
 
 
@@ -40,9 +41,17 @@ def addbook():
     faculties = Faculty.query.all()
     subjects = Subject.query.all()
     form=Addbooks(request.form)
-
-    if request.method == 'POST' and 'photo' in request.files:
-        photos.save(request.files['photo'])
-        flash("Photo saved successfully.")
-        return render_template('views.addbook.html')
-    return render_template('books/addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects)
+    photos = UploadSet('photos', IMAGES)
+    if request.method == 'POST':
+        name = form.name.data
+        price = form.price.data
+        stock = form.stock.data
+        desc = form.discription.data
+        faculty = request.form.get('faculty')
+        subject = request.form.get('subject')
+        image = photos.save(request.files['image'])
+        addbo = Addbook(name=name,price=price,stock=stock,desc=desc,faculty_id=faculty,subject_id=subject,image=image)
+        db.session.add(addbo)
+        flash(f"Book {name} has been added to your database",'success')
+        return redirect(url_for('views.addbook'))
+    return render_template('books/addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects,photos=photos)
