@@ -2,7 +2,8 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from auth.models import db
 from auth.views import auth
-from app.views import home, add
+# from app.views import home, add
+from app.views import views
 
 # Intialize SQLAlchemy database
 DATABASE_NAME = "database.db"
@@ -17,6 +18,7 @@ def create_app():
 
     # Registering flask Blueprints
     app.register_blueprint(auth, url_prefix="/auth")
+    app.register_blueprint(views) 
 
     with app.app_context():
         db.create_all()
@@ -36,5 +38,5 @@ def render_home():
 def render_add():
     return render_template("add.html")
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     app.run(debug=True)
