@@ -1,34 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Second Hand Books</title>
+    <link rel="stylesheet" type="text/css" href="add-and-remove_style.css">
 </head>
 <body>
     <h1>Update and Remove Second-hand Books</h1>
     <div class="container">
+        <img src="logo.jpg" alt="Logo" class="logo">
         <div class="row">
-            <form id="Upload">
-                <label for="Username">Username:</label>
-                <input type="text" name="Username" id="Username" required><br>
-                <label for="Student ID">Student ID:</label>
-                <input type="number" name="Student ID" id="Student ID" required><br>
-                <label for="email">Email address:</label>
-                <input type="email" name="email" id="email" required><br>
-                <label for="Add Faculty">Add Faculty:</label>
-                <input type="text" name="Add Faculty" id="Add Faculty" required><br>
-                <label for="Add Subject">Add Subject:</label>
-                <input type="text" name="Add Subject" id="Add Subject" required><br>
-                <label for="Quantity">Quantity:</label>
-                <input type="number" name="Quantity" id="Quantity" required><br>
-                <label for="Price">Price:</label>
-                <input type="number" name="Price" id="Price" required><br>
-                <label for="Remark">Remark:</label>
-                <input type="text" name="Remark" id="Remark" required><br>
-                <label for="photo">Photo:</label>
-                <input type="file" name="photo" id="photo" required><br>
-                <input type="submit" value="Submit">
+            <form action="/upload_form" method="post" enctype="multipart/form-data">
+                <fieldset>
+                    <legend>Information</legend>
+                    <label for="name">Username:</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your username"><br>
+                    <label for="ID">Student ID:</label>
+                    <input type="text" id="ID" name="ID" required placeholder="Enter your student ID"><br>
+                    <label for="email">Email address:</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email address"><br>
+                    <label for="faculty">Add Faculty:</label>
+                    <input type="text" id="faculty" name="faculty" required placeholder="Enter the faculty"><br>
+                    <label for="subject">Add Subject:</label>
+                    <input type="text" id="subject" name="subject" required placeholder="Enter the subject"><br>
+                    <label for="Quantity">Quantity:</label>
+                    <input type="number" id="Quantity" name="Quantity" required placeholder="Enter the quantity"><br>
+                    <label for="Price">Price:</label>
+                    <input type="text" id="Price" name="Price" required placeholder="Enter the price"><br>
+                    <label for="Remark">Remark:</label>
+                    <textarea id="Remark" name="Remark" required placeholder="Enter any remarks"></textarea><br>
+                    <label for="photo">Photo:</label>
+                    <input type="file" id="photo" name="photo" required><br>
+                    <input type="submit" value="Submit">
+                </fieldset>
             </form>
-         </div>
+        </div>
     </div>
 </body>
 </html>
