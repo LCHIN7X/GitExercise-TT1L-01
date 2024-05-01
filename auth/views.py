@@ -114,3 +114,9 @@ def logout():
 
     flash("Logged Out Successfully.",category="success")
     return redirect(url_for('auth.login',logout=True))
+
+
+@auth.route('/change_password',methods=['GET','POST'])
+@login_required
+def change_password():
+    return render_template('change_password.html')
