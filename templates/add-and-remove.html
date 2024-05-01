@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Hand Books</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='add-and-remove_style.css') }}"> 
+</head>
+<body>
+    <div class="header-container">
+        <div class="header">
+        <img src="{{ url_for('static', filename='/addRmvAsset/logo.jpg') }}" alt="Logo" class="logo">
+        <h1>NAV-BAR HERE</h1>
+    </div>
+    <div class="title">
+        <h1>Update Second-hand Books</h1>
+    </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <!-- <div class="hero">
+            </div> -->
+            <form action="/upload_form" method="post" enctype="multipart/form-data">
+                <fieldset>
+                    <legend>Information</legend>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="name">Username:</label>
+                            <input type="text" id="name" name="name" required placeholder="Enter your username"><br>
+                        </div>
+                        <div class="col-6">
+                            <label for="ID">Student ID:</label>
+                            <input type="text" id="ID" name="ID" required placeholder="Enter your student ID"><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="email">Email address:</label>
+                            <input type="email" id="email" name="email" required placeholder="Enter your email address"><br>
+                        </div>
+                        <div class="col-6">
+                            <label for="faculty">Add Faculty:</label>
+                            <input type="text" id="faculty" name="faculty" required placeholder="Enter the faculty"><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="subject">Add Subject:</label>
+                            <input type="text" id="subject" name="subject" required placeholder="Enter the subject"><br>
+                        </div>
+                        <div class="col-6">
+                            <label for="Quantity">Quantity:</label>
+                            <input type="number" id="Quantity" name="Quantity" required placeholder="Enter the quantity"><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="Price">Price:</label>
+                            <input type="text" id="Price" name="Price" required placeholder="Enter the price"><br>
+                        </div>
+                        <div class="col-6">
+                            <label for="photo">Photo:</label>
+                            <input type="file" id="photo" name="photo" required><br>
+                        </div>
+                    </div> 
+                    <label for="Remark">Remark:</label>
+                    <textarea id="Remark" name="Remark" required placeholder="Enter any remarks"></textarea><br>      
+                    <input type="submit" value="Submit">
+                    <div class="bottom-image">
+                        <img src="{{ url_for('static', filename='/addRmvAsset/e-bee.png') }}" alt="Transparent Image" class="bottom-right-image">
+                    </div>                
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="container" id="remove">
+        <div class="title">
+        <h1>Remove Second-hand Books</h1>
+    </div>
+        <div class="row">
+            <!-- <div class="hero">
+            </div> -->
+            <form action="/upload_form" method="post" enctype="multipart/form-data">
+                <fieldset>
+                <label for="books">Select book to remove:</label>
+                    <select name="books" id="books">
+                      <option value="math">Math</option>
+                      <option value="science">Science</option>
+                      <option value="english">English</option>
+                      <option value="economy">Economy</option>
+                    </select>
+                <input type="submit" value="Submit">
+                </div> 
+            </fieldset>    
+            </form>
+        </div>
+    </div>
+</body>

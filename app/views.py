@@ -1,7 +1,7 @@
 ### from flask import Blueprint, render_template
 from flask import Blueprint, render_template, url_for
 
-views = Blueprint("views",__name__)
+# views = Blueprint("views",__name__)
 
 ### Define the Blueprint with optional custom paths for templates and static files
 views = Blueprint(
@@ -20,3 +20,7 @@ def home():
 @views.route("/add")
 def add():
     return render_template("add-and-remove.html")
+
+@views.route("/upload_form", methods=['GET', 'POST'])
+def upload_form():
+    return render_template("success.html")
