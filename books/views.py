@@ -1,30 +1,34 @@
 from flask import redirect,render_template,url_for,request,flash,Blueprint
-from . import database as db
+from auth.models import db
 from .models import Faculty,Subject,Addbook
 from .bforms import Addbooks 
 from flask_uploads import UploadSet, IMAGES
 
 
 
-views = Blueprint("views",__name__)
+views = Blueprint("views",__name__,template_folder="templates",static_folder="static")
+
 
 @views.route("/home")
 def home():
     return render_template("base.html")
 
-@views.route('/addfaculty',methods=['GET','POST'])
+@views.route('/addfaculty', methods=['GET','POST'])
 def addfaculty():
-    if request.method =="POST":
+    if request.method == "POST":
         getfaculty = request.form.get('faculty')
         faculty = Faculty(name=getfaculty)
         db.session.add(faculty)
-        flash(f'Faculty {getfaculty} was added to your datebase','success')
+        flash(f'Faculty {getfaculty} was added to your database', 'success')
         db.session.commit()
         return redirect(url_for('views.addfaculty'))
     
-    return render_template('books/addfaculty.html',faculties='faculties')
+    return render_template('addfaculty.html', faculties='faculties')
 
-@views.route('/addsub',methods=['GET','POST'])
+
+
+
+@views.route('/addsub', methods=['GET','POST'])
 def addsub():
     if request.method =="POST":
         getfaculty = request.form.get('subject')
@@ -34,9 +38,9 @@ def addsub():
         db.session.commit()
         return redirect(url_for('views.addfaculty'))
     
-    return render_template('books/addfaculty.html')
+    return render_template('addfaculty.html')
 
-@views.route('/addbook',methods=['POST','GET'])
+@views.route('/addbook', methods=['POST', 'GET'])
 def addbook():
     faculties = Faculty.query.all()
     subjects = Subject.query.all()
@@ -54,4 +58,4 @@ def addbook():
         db.session.add(addbo)
         flash(f"Book {name} has been added to your database",'success')
         return redirect(url_for('views.addbook'))
-    return render_template('books/addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects,photos=photos)
+    return render_template('addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects,photos=photos)

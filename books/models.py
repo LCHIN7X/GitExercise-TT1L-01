@@ -1,4 +1,4 @@
-from . import database as db
+from auth.models import db
 from datetime import datetime
 
 
@@ -8,8 +8,7 @@ class Addbook(db.Model):
     price = db.Column(db.Numeric, nullable=False)
     stock = db.Column(db.Integer, nullable=False)
     desc = db.Column(db.Text, nullable=False)
-    pub_date = db.Column(db.DateTime, nullable=False,
-        default=datetime.utcnow)
+    pub_date = db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
 
     faculty_id = db.Column(db.Integer, db.ForeignKey('faculty.id'),nullable=False)
     faculty = db.relationship('Faculty',backref=db.backref('posts', lazy=True))
