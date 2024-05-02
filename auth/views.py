@@ -116,7 +116,19 @@ def logout():
     return redirect(url_for('auth.login',logout=True))
 
 
+# define route for changing password
 @auth.route('/change_password',methods=['GET','POST'])
 @login_required
 def change_password():
-    return render_template('change_password.html')
+    if request.method == "POST":
+        old_password = request.form.get('old_password')
+        new_password = request.form.get('new_password')
+
+        if check_password_hash(current_user.password, old_password):
+            user_in_db = User.query.filter_by(password=generate_password_hash(old_password,method="scrypt"))
+            user_in_db.password = generate_password_hash(new_password,method='scrypt')
+            db.session.commit()
+            print('Password change was successful.')
+        
+
+    return render_template('change_password.html',current_page='change_password')
