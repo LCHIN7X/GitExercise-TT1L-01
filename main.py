@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 from flask_login import LoginManager
+from admin import admin
 
 import os
 
@@ -26,6 +27,7 @@ def create_app():
     app.config["SECRET_KEY"] = os.urandom(24)
     configure_uploads(app, photos)
     db.init_app(app)
+    admin.init_app(app)
 
     #  registering flask Blueprints
     from auth.views import auth
@@ -33,6 +35,7 @@ def create_app():
 
     from books.views import views 
     app.register_blueprint(views, url_prefix="/views")
+    
     
     from books.models import Faculty, Subject, Addbook
 
