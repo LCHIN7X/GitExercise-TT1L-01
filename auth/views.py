@@ -130,6 +130,7 @@ def change_password():
             flash('Password successfully changed.',category='success')
         
         else:
+            db.session.rollback()
             flash("Incorrect old password.",category='error')
         
 
