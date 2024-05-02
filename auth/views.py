@@ -125,10 +125,12 @@ def change_password():
         new_password = request.form.get('new_password')
 
         if check_password_hash(current_user.password, old_password):
-            user_in_db = User.query.filter_by(password=generate_password_hash(old_password,method="scrypt"))
-            user_in_db.password = generate_password_hash(new_password,method='scrypt')
+            current_user.password = generate_password_hash(new_password,method='scrypt')
             db.session.commit()
-            print('Password change was successful.')
+            flash('Password successfully changed.',category='success')
+        
+        else:
+            flash("Incorrect old password.",category='error')
         
 
     return render_template('change_password.html',current_page='change_password')
