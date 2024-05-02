@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 from flask_login import LoginManager
-from admin import admin
+from admin import admin, add_admin_to_db
 
 import os
 
@@ -54,8 +54,12 @@ def create_app():
         user = db.session.get(User, int(id))
         return user
     
+
     return app 
+
+
 
 if __name__ == "__main__":
     app = create_app()
     app.run(debug=True)
+    add_admin_to_db(app)
