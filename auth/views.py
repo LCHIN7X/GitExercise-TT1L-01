@@ -114,3 +114,24 @@ def logout():
 
     flash("Logged Out Successfully.",category="success")
     return redirect(url_for('auth.login',logout=True))
+
+
+# define route for changing password
+@auth.route('/change_password',methods=['GET','POST'])
+@login_required
+def change_password():
+    if request.method == "POST":
+        old_password = request.form.get('old_password')
+        new_password = request.form.get('new_password')
+
+        if check_password_hash(current_user.password, old_password):
+            current_user.password = generate_password_hash(new_password,method='scrypt')
+            db.session.commit()
+            flash('Password successfully changed.',category='success')
+        
+        else:
+            db.session.rollback()
+            flash("Incorrect old password.",category='error')
+        
+
+    return render_template('change_password.html',current_page='change_password')
