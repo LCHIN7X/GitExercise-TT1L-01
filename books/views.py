@@ -1,6 +1,6 @@
 from flask import redirect,render_template,url_for,request,flash,Blueprint
 from auth.models import db
-from .models import Faculty,Subject,Addbook
+from .models import Faculty,Subject,Book
 from .bforms import Addbooks 
 from flask_uploads import UploadSet, IMAGES
 
@@ -54,8 +54,9 @@ def addbook():
         faculty = request.form.get('faculty')
         subject = request.form.get('subject')
         image = photos.save(request.files['image'])
-        addbo = Addbook(name=name,price=price,stock=stock,desc=desc,faculty_id=faculty,subject_id=subject,image=image)
+        addbo = Book(name=name,price=price,stock=stock,desc=desc,faculty_id=faculty,subject_id=subject,image=image)
         db.session.add(addbo)
+        db.session.commit()
         flash(f"Book {name} has been added to your database",'success')
         return redirect(url_for('views.addbook'))
     return render_template('addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects,photos=photos)

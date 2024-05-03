@@ -1,7 +1,7 @@
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from auth.models import db, User
-from books.models import Addbook, Subject
+from books.models import Book, Subject
 from werkzeug.security import generate_password_hash
 
 #  initialize Admin instance
@@ -9,7 +9,7 @@ admin = Admin(template_mode='bootstrap4')
 
 #  add views for admin
 admin.add_view(ModelView(User,db.session))
-admin.add_view(ModelView(Addbook,db.session))
+admin.add_view(ModelView(Book,db.session))
 admin.add_view(ModelView(Subject,db.session))
 
 
