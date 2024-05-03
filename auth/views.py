@@ -93,7 +93,12 @@ def login():
             if check_password_hash(user_in_db.password, password):
                 flash(f"Hello {user_in_db.username}, You Are Now Logged In!",category='success')
                 login_user(user_in_db, remember=True)
-                return redirect(url_for('auth.create_account'))  #  Redirect to create account page for testing, to be changed later
+
+                if email == "admin@gmail.com" and student_id == "super_user":
+                    return redirect(url_for('admin.index'))
+
+                
+                return redirect(url_for('views.home'))  #  Redirect to create account page for testing, to be changed later
             
             # if password is incorrect, flash error message
             else:
