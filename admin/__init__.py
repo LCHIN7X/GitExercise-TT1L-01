@@ -28,7 +28,8 @@ def add_admin_to_db(app):
             admin_user = User(email=email,
                             username=username,
                             student_id=student_id,
-                            password=generate_password_hash(password,method="scrypt"))
+                            password=generate_password_hash(password,method="scrypt"),
+                            is_admin=True)
             db.session.add(admin_user)
             db.session.commit()
             print("Admin successfully added!")

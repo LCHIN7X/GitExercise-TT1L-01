@@ -12,6 +12,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(100), unique=True, nullable=False)
     student_id = db.Column(db.String(10), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f"User(id={self.id}, username={self.username}, email={self.email}, student_id={self.student_id})"
