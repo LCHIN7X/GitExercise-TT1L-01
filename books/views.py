@@ -3,17 +3,19 @@ from auth.models import db
 from .models import Faculty,Subject,Book
 from .bforms import Addbooks 
 from flask_uploads import UploadSet, IMAGES
-
+from flask_login import login_required
 
 
 views = Blueprint("views",__name__,template_folder="templates",static_folder="static")
 
 
 @views.route("/home")
+@login_required
 def home():
     return render_template("base.html")
 
 @views.route('/addfaculty', methods=['GET','POST'])
+@login_required
 def addfaculty():
     if request.method == "POST":
         getfaculty = request.form.get('faculty')
@@ -29,6 +31,7 @@ def addfaculty():
 
 
 @views.route('/addsub', methods=['GET','POST'])
+@login_required
 def addsub():
     if request.method =="POST":
         getfaculty = request.form.get('subject')
@@ -41,6 +44,7 @@ def addsub():
     return render_template('addfaculty.html')
 
 @views.route('/addbook', methods=['POST', 'GET'])
+@login_required
 def addbook():
     faculties = Faculty.query.all()
     subjects = Subject.query.all()
