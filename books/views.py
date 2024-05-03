@@ -1,19 +1,21 @@
 from flask import redirect,render_template,url_for,request,flash,Blueprint
 from auth.models import db
-from .models import Faculty,Subject,Addbook
+from .models import Faculty,Subject,Book
 from .bforms import Addbooks 
 from flask_uploads import UploadSet, IMAGES
-
+from flask_login import login_required
 
 
 views = Blueprint("views",__name__,template_folder="templates",static_folder="static")
 
 
 @views.route("/home")
+@login_required
 def home():
     return render_template("base.html")
 
 @views.route('/addfaculty', methods=['GET','POST'])
+@login_required
 def addfaculty():
     if request.method == "POST":
         getfaculty = request.form.get('faculty')
@@ -29,6 +31,7 @@ def addfaculty():
 
 
 @views.route('/addsub', methods=['GET','POST'])
+@login_required
 def addsub():
     if request.method =="POST":
         getfaculty = request.form.get('subject')
@@ -41,6 +44,7 @@ def addsub():
     return render_template('addfaculty.html')
 
 @views.route('/addbook', methods=['POST', 'GET'])
+@login_required
 def addbook():
     faculties = Faculty.query.all()
     subjects = Subject.query.all()
@@ -54,7 +58,7 @@ def addbook():
         faculty = request.form.get('faculty')
         subject = request.form.get('subject')
         image = photos.save(request.files['image'])
-        addbo = Addbook(name=name,price=price,stock=stock,desc=desc,faculty_id=faculty,subject_id=subject,image=image)
+        addbo = Book(name=name,price=price,stock=stock,desc=desc,faculty_id=faculty,subject_id=subject,image=image)
         db.session.add(addbo)
         db.session.commit()
         flash(f"Book {name} has been added to your database",'success')
