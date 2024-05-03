@@ -56,6 +56,7 @@ def addbook():
         image = photos.save(request.files['image'])
         addbo = Addbook(name=name,price=price,stock=stock,desc=desc,faculty_id=faculty,subject_id=subject,image=image)
         db.session.add(addbo)
+        db.session.commit()
         flash(f"Book {name} has been added to your database",'success')
         return redirect(url_for('views.addbook'))
     return render_template('addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects,photos=photos)
