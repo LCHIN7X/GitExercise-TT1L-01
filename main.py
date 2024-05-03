@@ -52,8 +52,10 @@ def create_app():
     @login_manager.user_loader 
     def load_user(id):
         user = db.session.get(User, int(id))
+        print(user)
         return user
     
+    add_admin_to_db(app)
 
     return app 
 
@@ -62,4 +64,3 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     app.run(debug=True)
-    add_admin_to_db(app)
