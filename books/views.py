@@ -9,10 +9,28 @@ from flask_login import login_required
 views = Blueprint("views",__name__,template_folder="templates",static_folder="static")
 
 
-@views.route("/home")
+@views.route('/home')
 @login_required
 def home():
-    return render_template("base.html")
+    books = Book.query.filter(Book.stock >0)
+    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
+    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
+    return render_template('home.html', books=books,facultiess=facultiess,subjects=subjects)
+
+@views.route('/faculty/<int:id>')
+def get_faculty(id):
+    faculty = Book.query.filter_by(faculty_id=id)
+    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
+    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
+    return render_template('home.html',faculty=faculty,facultiess=facultiess,subjects=subjects)
+
+@views.route('/subjects/<int:id>')
+def get_subject(id):
+    get_sub = Book.query.filter_by(subject_id=id)
+    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
+    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
+    return render_template('home.html',subjects=subjects,get_sub=get_sub,facultiess=facultiess)
+
 
 @views.route('/addfaculty', methods=['GET','POST'])
 @login_required

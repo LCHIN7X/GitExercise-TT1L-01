@@ -22,7 +22,7 @@ def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "wellofwisdom"
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_NAME}"
-    app.config["UPLOADED_PHOTOS_DEST"] = "https://drive.google.com/drive/folders/1qG15zIPH8TzHx377sNfvRQFIIWLtYucy?usp=drive_link"
+    app.config["UPLOADED_PHOTOS_DEST"] = "static/images"
     app.config["SECRET_KEY"] = os.urandom(24)
     configure_uploads(app, photos)
     db.init_app(app)
