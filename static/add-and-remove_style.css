@@ -461,21 +461,21 @@ ul li:hover ul.dropdown {
 }
 
 .secondhand_book_tag .book_price sub {
-    font-size: 25px; /* Adjust the font size for the discounted price */
-    color: #aaa; /* Adjust the color */
+    font-size: 25px; 
+    color: #aaa; 
 }
 
 .secondhand_book_tag .f_btn {
-    display: inline-block; /* Make the button display inline-block */
-    padding: 10px 20px; /* Add padding */
-    background-color: #007bff; /* Set background color */
-    color: #fff; /* Set text color */
-    text-decoration: none; /* Remove underline */
-    border-radius: 5px; /* Add border radius */
-    margin-top: 15px; /* Add top margin */
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: #007bff; 
+    color: #fff; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    margin-top: 15px; 
     margin-bottom: 20px;
 }
 
 .secondhand_book_tag .f_btn:hover {
-    background-color: #0056b3; /* Change background color on hover */
+    background-color: #0056b3; 
 }
