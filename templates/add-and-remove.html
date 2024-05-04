@@ -25,28 +25,27 @@
                     <legend>Information</legend>
                     <div class="row">
                         <div class="col-6">
-                            <label for="name">Username:</label>
-                            <input type="text" id="name" name="name" required placeholder="Enter your username"><br>
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="name" required placeholder="Enter your username"><br>
                         </div>
-                        <div class="col-6">
-                            <label for="ID">Student ID:</label>
-                            <input type="text" id="ID" name="ID" required placeholder="Enter your student ID"><br>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label for="email">Email address:</label>
-                            <input type="email" id="email" name="email" required placeholder="Enter your email address"><br>
-                        </div>
-                        <div class="col-6">
+                          <div class="col-6">
                             <label for="faculty">Add Faculty:</label>
-                            <input type="text" id="faculty" name="faculty" required placeholder="Enter the faculty"><br>
-                        </div>
-                    </div>
+                            <select name="faculty" id="faculty">
+                                <option value="FCI">FCI</option>
+                                <option value="FCM">FCM</option>
+                                <option value="FOM">FOM</option>
+                                <option value="FAC">FAC</option>
+                            </select>
+                      </div>
                     <div class="row">
                         <div class="col-6">
                             <label for="subject">Add Subject:</label>
-                            <input type="text" id="subject" name="subject" required placeholder="Enter the subject"><br>
+                            <select name="subject" id="subject">
+                                <option value="math">Math</option>
+                                <option value="english">English</option>
+                                <option value="science">Science</option>
+                                <option value="economy">Economy</option>
+                            </select>
                         </div>
                         <div class="col-6">
                             <label for="Quantity">Quantity:</label>

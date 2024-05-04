@@ -28,15 +28,5 @@ def create_app():
 # Get the Flask application instance
 app = create_app()
 
-# Define route to render home template
-@app.route('/')
-def render_home():
-    return render_template("base.html")
-
-# Define route to render add template
-@app.route('/add')
-def render_add():
-    return render_template("add.html")
-
 if __name__ == "__main__":
     app.run(debug=True)
