@@ -1,5 +1,7 @@
 ### from flask import Blueprint, render_template
 from flask import Blueprint, render_template, url_for,request,flash,redirect
+import os
+from flask_sqlalchemy import SQLAlchemy
 from auth.models import db
 
 
@@ -24,19 +26,23 @@ def add():
     if request.method == "POST":
         username = request.form.get("username")
         faculty = request.form.get("faculty")
+        faculty = faculty(name=faculty)
+        db.session.add(faculty)
+        db.session.commit()
         subject = request.form.get("subject")
+        subject = subject(name=subject)
+        db.session.add(subject)
+        db.session.commit()
         Quantity = request.form.get("Quantity")
+        Quantity = Quantity(name=Quantity)
+        db.session.add(Quantity)
+        db.session.commit()
         Price = request.form.get("Price")
+        Price = Price(name=Price)
+        db.session.add(Price)
+        db.session.commit()
         photo = request.form.get("photo")
         Remark = request.form.get("Remark")
-        
-         # Assuming you have defined the 'Faculty' model
-        faculty = faculty.query.filter_by(name=username).first()
-        if not faculty:
-            faculty = faculty(name=faculty)
-            db.session.add(faculty)
-            db.session.commit()
-            flash(f'Faculty {faculty} was added to your database', 'success')
             
     return render_template("add-and-remove.html")
 

@@ -2,12 +2,7 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from auth.models import db
 from auth.views import auth
-# from app.views import home, add
-from app.views import views
-from app.views import home, add
-from auth.models import db
-from flask import Flask 
-from flask_sqlalchemy import SQLAlchemy 
+from app.views import views 
 from flask_bcrypt import Bcrypt
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 from flask_login import LoginManager
@@ -38,31 +33,14 @@ def create_app():
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(views) 
 
-    from books.views import views 
-    app.register_blueprint(views, url_prefix="/views")
-    
-    from books.models import Faculty, Subject, Book
-
     with app.app_context():
         db.create_all()
 
     return app
-    from auth.models import User
-
-    #  create LoginManager object to handle logins
-    login_manager = LoginManager()
-    login_manager.login_view = "auth.login"
-    login_manager.init_app(app)
-
-    @login_manager.user_loader 
-    def load_user(id):
-        user = db.session.get(User, int(id))
-        return user
-    
-    return app 
 
 # Get the Flask application instance
 app = create_app()
 
 if __name__ == "__main__":
+    db.create_all
     app.run(debug=True)
