@@ -29,6 +29,15 @@ def add():
         Price = request.form.get("Price")
         photo = request.form.get("photo")
         Remark = request.form.get("Remark")
+        
+         # Assuming you have defined the 'Faculty' model
+        faculty = faculty.query.filter_by(name=username).first()
+        if not faculty:
+            faculty = faculty(name=faculty)
+            db.session.add(faculty)
+            db.session.commit()
+            flash(f'Faculty {faculty} was added to your database', 'success')
+            
     return render_template("add-and-remove.html")
 
 @views.route("/upload_form", methods=['GET', 'POST'])
