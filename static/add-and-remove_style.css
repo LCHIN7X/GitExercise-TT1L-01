@@ -315,7 +315,7 @@ nav .logo img {
 }
 
 [id="shb"] body {
-    width: 100%;
+    width: 80%;
     height: 100vh;
     background-image:url('./addRmvAsset/blue bg.jpg');
     background-size: cover;
@@ -406,24 +406,13 @@ ul li:hover ul.dropdown {
 
 .thumbs {
     display: flex;
-    width: 500px;
+    width: 100%;
+    margin: 10px;
     max-width: 100%;
     padding: 20px;
     align-items: baseline;
     flex-direction: row;
     justify-content: center;
-  }
-
-  .thumbs> a img {
-    transform: scale(1);
-    transition: transform 0.1s ease-in-out;
-    filter: grayscale(50%);
-    width: 200px;
-    height: auto;
-  }
-  .thumbs> a:hover img {
-    transform: scale(1.1);
-    filter: grayscale(0%);
   }
 
   .secondhand_book_tag {
@@ -435,19 +424,19 @@ ul li:hover ul.dropdown {
   }
 
 .secondhand_book_tag h2 {
-    font-size: 35px; 
+    font-size: 25px; 
     margin-bottom: 5px;
 }
 
 .secondhand_book_tag .writer {
     font-style: italic; 
-    font-size: 30px;
+    font-size: 20px;
     /* font-weight: bold; */
     color: #000; 
 }
 
 .secondhand_book_tag .categories {
-    font-size: 30px; 
+    font-size: 20px; 
     color: #000; 
     margin-top: 5px; 
     white-space: nowrap; 
@@ -456,26 +445,53 @@ ul li:hover ul.dropdown {
 }
 
 .secondhand_book_tag .book_price {
-    font-size: 30px; 
+    font-size: 20px; 
     margin-top: 10px;
 }
 
 .secondhand_book_tag .book_price sub {
-    font-size: 25px; 
+    font-size: 15px; 
     color: #aaa; 
 }
 
 .secondhand_book_tag .f_btn {
     display: inline-block; 
-    padding: 10px 20px; 
+    padding: 15px 20px; 
     background-color: #007bff; 
     color: #fff; 
     text-decoration: none; 
     border-radius: 5px; 
-    margin-top: 15px; 
+    margin-top: 10px; 
     margin-bottom: 20px;
 }
 
 .secondhand_book_tag .f_btn:hover {
     background-color: #0056b3; 
 }
+
+.book-container {
+    width: 100%;
+    max-width: 20vw;
+    margin: 1em 5em;
+}
+
+.book-container a img {
+    transform: scale(1);
+    transition: transform 0.1s ease-in-out;
+    filter: grayscale(50%);
+    width: 100%;
+    border-radius: 22px;
+}
+
+.book-container a {
+    max-width: 150px;
+    height: 50px;
+    margin: 10px;
+    overflow: hidden;
+    border-radius: 5px;
+  }
+
+.book-container a:hover img {
+    transform: scale(1.1);
+    filter: grayscale(0%);
+  }

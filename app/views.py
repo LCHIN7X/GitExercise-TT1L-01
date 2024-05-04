@@ -35,6 +35,6 @@ def add():
 def upload_form():
     return render_template("success.html")
 
-@views.route("/secondhand books", methods=['GET', 'POST'])
+@views.route("/secondhand-books", methods=['GET', 'POST'])
 def secondhand():
     return render_template("secondhand-books.html")
