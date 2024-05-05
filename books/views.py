@@ -17,6 +17,13 @@ def home():
     subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
     return render_template('home.html', books=books,facultiess=facultiess,subjects=subjects)
 
+@views.route('/book/<int:id>')
+def single_page(id):
+    book = Book.query.get_or_404(id)
+    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
+    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
+    return render_template('single_page.html',book=book,facultiess=facultiess,subjects=subjects)
+
 @views.route('/faculty/<int:id>')
 def get_faculty(id):
     faculty = Book.query.filter_by(faculty_id=id)
