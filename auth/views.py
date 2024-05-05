@@ -98,7 +98,7 @@ def login():
                     return redirect(url_for('admin.index'))
 
                 
-                return redirect(url_for('views.home'))  #  Redirect to create account page for testing, to be changed later
+                return redirect(url_for('views.home'))  
             
             # if password is incorrect, flash error message
             else:
