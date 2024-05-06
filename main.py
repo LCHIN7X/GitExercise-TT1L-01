@@ -20,7 +20,6 @@ photos = UploadSet("photos", IMAGES)
 def create_app():
     # create new Flask app and configuring app settings
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = "wellofwisdom"
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_NAME}"
     app.config["UPLOADED_PHOTOS_DEST"] = "static/images"
     app.config["SECRET_KEY"] = os.urandom(24)
