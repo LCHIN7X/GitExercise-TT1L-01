@@ -1,6 +1,5 @@
 from auth.models import db
 from flask import Flask 
-from flask_sqlalchemy import SQLAlchemy 
 from flask_bcrypt import Bcrypt
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 from flask_login import LoginManager
