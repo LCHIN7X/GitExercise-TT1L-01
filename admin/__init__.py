@@ -30,10 +30,17 @@ class AdminModelView(ModelView):
     
 
 class AdminBookView(AdminModelView):
-    column_list = ['name','price','stock','desc','pub_date','faculty','subject','image']
+    column_list = ['name','price','stock','desc','pub_date','faculty','subject']
     form_columns = ['name','price','stock','desc','pub_date','faculty','subject','image']
     column_filters = ['price','faculty','subject']
     column_searchable_list = ['name','desc']
+
+
+class AdminUserView(AdminModelView):
+    column_list = ['id','email','username','student_id']
+    form_columns = ['email','username','student_id','password']
+    column_filters = ['email','username','student_id']
+    column_searchable_list = ['email','username','student_id']
 
 
 #  initialize Admin instance
@@ -41,10 +48,11 @@ admin = Admin(template_mode='bootstrap4',index_view=AdminIndex())
 
     
 #  add views for admin
-admin.add_view(AdminModelView(User,db.session))
 admin.add_view(AdminBookView(Book,db.session))
+admin.add_view(AdminUserView(User,db.session))
 admin.add_view(AdminModelView(Subject,db.session))
 admin.add_view(AdminModelView(Faculty,db.session))
+
 
 def add_admin_to_db(app):
     with app.app_context():
