@@ -34,7 +34,7 @@ class AdminBookView(AdminModelView):
     column_list = ['name','price','stock','desc','pub_date','faculty','subject']
     form_columns = ['name','price','stock','desc','pub_date','faculty','subject','image']
     column_filters = ['name','faculty','subject','pub_date']
-    column_sortable_list = ['name','price','stock','pub_date','faculty','subject']
+    column_sortable_list = ['name','price','stock','pub_date',('faculty','faculty.name'), ('subject', 'subject.name')]
     column_searchable_list = ['name','desc']
 
 
