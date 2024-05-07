@@ -19,7 +19,7 @@ class Book(db.Model):
     image = db.Column(db.String(150),nullable=False,default='image.jpg')
 
     def __repr__(self):
-        return '<Post %r>' % self.title
+        return '<Post %r>' % self.name
 
 
 class Faculty(db.Model):
