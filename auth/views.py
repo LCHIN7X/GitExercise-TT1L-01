@@ -93,7 +93,7 @@ def login():
             if check_password_hash(user_in_db.password, password):
                 flash(f"Hello {user_in_db.username}, You Are Now Logged In!",category='success')
                 login_user(user_in_db, remember=True)
-                return redirect(url_for('auth.create_account'))  #  Redirect to create account page for testing, to be changed later
+                return redirect(url_for('views.home'))  #  Redirect to home page
             
             # if password is incorrect, flash error message
             else:
