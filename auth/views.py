@@ -94,11 +94,11 @@ def login():
                 flash(f"Hello {user_in_db.username}, You Are Now Logged In!",category='success')
                 login_user(user_in_db, remember=True)
 
-                if email == "admin@gmail.com" and student_id == "super_user":
+                if user_in_db.is_admin:
                     return redirect(url_for('admin.index'))
 
-                
-                return redirect(url_for('views.home'))  
+                else:
+                    return redirect(url_for('views.home'))  
             
             # if password is incorrect, flash error message
             else:
