@@ -14,10 +14,10 @@
       <ul class="navbar-nav mr-auto">
         
         <li class="nav-item">
-          <a class="nav-link" href="/views/home">Books</a>
+          <a class="nav-link" href="#">Books</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" href="#" >Second Hand Books</a>
+          <a class="nav-link" href="/views/home">Second Hand Books</a>
         </li>
         <div class="dropdown">
           <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -33,7 +33,9 @@
         <div class="dropdown">
           <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Subject
-          </button>
+          </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<!--- search bar to right ===================-->
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             {% for subject in subjects %}
             <a class="dropdown-item" href="{{url_for('views.get_subject', id = subject.id)}}">{{subject.name}}</a>
@@ -44,7 +46,7 @@
 
         
       </ul>
-      <p>________________________________________________________</p> <!-- search bar to right -->
+      
       
       <form class="form-inline my-2 my-lg-0 ml-auto" action="{{url_for('views.searchh')}}"> 
         <div class="row  justify-content-end">
@@ -71,8 +73,10 @@
       <div class="card">
         <img class="card-img-top" src="{{url_for('static', filename='images/' + f.image)}}" alt="{{f.name}}" height="300">
         <div class="card-body">
+          <h5 style="text-shadow: 1px 1px 2px #000; color: #F00;">Second Hand</h5>
           <h5 class="card-title">{{ f.name }}</h5>
           <p class="card-text">RM {{ f.price }}</p>
+          <h9>Sell by: {{f.username}}</h9>
         </div>
         <div class="card-footer">  
           <a href="{{url_for('views.single_page', id = f.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
@@ -89,8 +93,10 @@
   <div class="card">
     <img class="card-img-top" src="{{url_for('static', filename='images/' + s.image)}}" alt="{{s.name}}" height="300">
     <div class="card-body">
+      <h5 style="text-shadow: 1px 1px 2px #000; color: #F00;">Second Hand</h5>
       <h5 class="card-title">{{ s.name }}</h5>
       <p class="card-text">RM {{ s.price }}</p>
+      <h9>Sell by: {{s.user.username}}</h9>
     </div>
     <div class="card-footer">  
       <a href="{{url_for('views.single_page', id = s.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
@@ -108,8 +114,10 @@
       <div class="card">
         <img class="card-img-top" src="{{url_for('static', filename='images/' + book.image)}}" alt="{{book.name}}" height="300">
         <div class="card-body">
+          <h5 style="text-shadow: 1px 1px 2px #000; color: #F00;">Second Hand</h5>
           <h5 class="card-title">{{ book.name }}</h5>
           <p class="card-text">RM {{ book.price }}</p>
+          <h9>Sell by: {{book.user.username}}</h9>
         </div>
         <div class="card-footer">  
           <a href="{{url_for('views.single_page', id = book.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
