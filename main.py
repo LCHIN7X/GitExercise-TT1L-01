@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 from flask_login import LoginManager
 from admin import admin, add_admin_to_db
+from flask_msearch import Search
 
 import os
 
@@ -14,6 +15,7 @@ import os
 
 DATABASE_NAME = "database.db"
 bcrypt = Bcrypt()
+search = Search()
 photos = UploadSet("photos", IMAGES)
 
 # Create function to create app instance
@@ -26,6 +28,7 @@ def create_app():
     configure_uploads(app, photos)
     db.init_app(app)
     admin.init_app(app)
+    search.init_app(app)
 
     #  registering flask Blueprints
     from auth.views import auth
@@ -33,6 +36,7 @@ def create_app():
 
     from books.views import views 
     app.register_blueprint(views, url_prefix="/views")
+    
     
     from books.models import Faculty, Subject, Book
 

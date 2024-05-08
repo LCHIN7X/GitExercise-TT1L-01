@@ -3,6 +3,7 @@ from datetime import datetime
 
 
 class Book(db.Model):
+    __searchbale__ = ['name','desc']
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     price = db.Column(db.Numeric(10,2), nullable=False)
@@ -28,7 +29,6 @@ class Faculty(db.Model):
 
     def __repr__(self):
         return self.name
-
 
 class Subject(db.Model):
     id = db.Column(db.Integer,primary_key=True)
