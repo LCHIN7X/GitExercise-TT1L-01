@@ -61,39 +61,6 @@ def addsub():
 @shbooks.route("/add", methods=["GET", "POST"])
 def add():
     return render_template("add-and-remove.html")
-    # add_form = AddBookForm()
-    # remove_form = RemoveBookForm()
-
-    # if add_form.validate_on_submit() and add_form.submit_add.data:
-    #     student_id = add_form.student_id.data
-    #     faculty = add_form.faculty.data
-    #     subject = add_form.subject.data
-    #     quantity = add_form.quantity.data
-    #     price = add_form.price.data
-    #     photo = add_form.photo.data
-    #     remark = add_form.remark.data
-
-
-    #     # Create a new book instance
-    #     new_book = SecondHandBooks(student_id=student_id, faculty=faculty, subject=subject, quantity=quantity, price=price, photo='photo_path', remark=remark)
-
-    #     db.session.add(new_book)
-    #     db.session.commit()
-
-    #     return redirect(url_for('success.html')) # Redirect to clear the form after submission
-
-    # if remove_form.validate_on_submit() and remove_form.submit_remove.data:
-    #     book_id = remove_form.books.data
-    #     book_to_remove = SecondHandBooks.query.get(book_id)
-
-    #     # Remove the book from the database
-    #     if book_to_remove:
-    #         db.session.delete(book_to_remove)
-    #         db.session.commit()
-
-    #     return redirect(url_for('success.html')) # Redirect to clear the form after submission
-
-    # return render_template('add_or_remove_book.html', add_form=add_form, remove_form=remove_form)
 
 @shbooks.route("/upload_form", methods=['GET', 'POST'])
 def upload_form():
