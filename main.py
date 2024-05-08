@@ -10,22 +10,23 @@ import os
 
 # ------------------------------- CODE ---------------------------------------------
 
-# Intialize SQLAlchemy database
-
-
 DATABASE_NAME = "database.db"
 bcrypt = Bcrypt()
-search = Search()
+search = Search(db=db)
 photos = UploadSet("photos", IMAGES)
+
 
 # Create function to create app instance
 def create_app():
     # create new Flask app and configuring app settings
     app = Flask(__name__)
+    app.config["SECRET_KEY"] = os.urandom(24)
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_NAME}"
     app.config["UPLOADED_PHOTOS_DEST"] = "static/images"
-    app.config["SECRET_KEY"] = os.urandom(24)
     configure_uploads(app, photos)
+
+    from auth.models import User
+
     db.init_app(app)
     admin.init_app(app)
     search.init_app(app)
@@ -43,7 +44,7 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-    from auth.models import User
+    add_admin_to_db(app)
 
     #  create LoginManager object to handle logins
     login_manager = LoginManager()
@@ -56,8 +57,6 @@ def create_app():
         print(user)
         return user
     
-    add_admin_to_db(app)
-
     return app 
 
 
