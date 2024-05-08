@@ -6,4 +6,4 @@ class Addbooks(Form):
     price = IntegerField('Price',[validators.DataRequired()])
     stock = IntegerField('Stock',[validators.DataRequired()])
     discription = TextAreaField('Discription',[validators.DataRequired()])
-    image = FileField('Image',validators=[FileRequired(),FileAllowed('jpg','png')])
+    image = FileField('Image',validators=[FileRequired(),FileAllowed('jpg','png',)])
