@@ -31,44 +31,10 @@ photos = UploadSet('photos', IMAGES)
 # def home():
 #     return render_template("base.html")
 
-@shbooks.route('/addFnS', methods=['GET','POST'])
-def addFnS():
-    if request.method == "POST":
-        getfaculty = request.form.get('faculty')
-        faculty = shbooks_Faculty(name=getfaculty)
-        db.session.add(faculty)
-        flash(f'Faculty {getfaculty} was added to your database', 'success')
-        db.session.commit()
-        return redirect(url_for('shbooks.addFnS'))
-    
-    return render_template('addFnS.html', shbfaculties='shbfaculties')
-
-
-
-
-@shbooks.route('/addsub', methods=['GET','POST'])
-def addsub():
-    if request.method =="POST":
-        getfaculty = request.form.get('subject')
-        sub = shbooks_Subject(name=getfaculty)
-        db.session.add(sub)
-        flash(f'Subject {getfaculty} was added to your datebase','success')
-        db.session.commit()
-        return redirect(url_for('shbooks.addFnS'))
-    
-    return render_template('addfaculty.html') 
-
-@shbooks.route("/add", methods=["GET", "POST"])
-def add():
-    return render_template("add-and-remove.html")
 
 @shbooks.route("/upload_form", methods=['GET', 'POST'])
 def upload_form():
     return render_template("success.html")
-
-@shbooks.route("/secondhand-books", methods=['GET', 'POST'])
-def secondhand():
-    return render_template("secondhand-books.html")
 
 @shbooks.route("/ownshop", methods=['GET', 'POST'])
 def myshop():
