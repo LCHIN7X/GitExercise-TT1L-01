@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" id="shop">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Hand Books</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='add-and-remove_style.css') }}">
+</head>
+<body>
+    <section>
+        <nav>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='/addRmvAsset/logo.jpg') }}" alt="Logo" class="logo">
+            </div>
+            <ul>
+                <li><a href="#Home">Home</a></li>
+                <li><a href="add">Update and Remove</a></li>
+                <li>
+                    <a href="secondhand-books">Second-hand books ▾</a>
+                    <ul class="dropdown">
+                        <li><a href="#Subject">Subject</a></li>
+                        <li><a href="#Faculty">Faculty</a></li>
+                    </ul>
+                </li>
+                <li><a href="ownshop">My Shop</a></li>
+            </ul>
+        </nav>
+    </section>
+    <div id="myshop">
+        <div class="title">
+            <h1>My Shop</h1>
+        </div>
+        <div class="card"> <img class="card-img-top" src="{{ url_for('static', filename='/addRmvAsset/user bg.jpg') }}" alt="Card image">
+            <div class="card-body little-profile text-center">
+                <div class="pro-img"><img src="{{ url_for('static', filename='/addRmvAsset/portrait.jpg') }}"alt="user"></div>
+                <h2 class="name">Chloe</h2>
+                <p>MMU Student</p>
+            </div>
+        </div>
+        <div id="mybook">
+            <div class="title">
+                <h1>My Books</h1>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search...">
+                    <button type="submit">Search</button>
+                </div>
+            </div>
+            <div class="thumbs">
+                <div class="book-container">
+                    <a href="#target1"><img src="{{ url_for('static', filename='/addRmvAsset/book.png') }}" alt=''></a>
+                    <div class="secondhand_book_tag">
+                        <h2>Second-hand Books</h2>
+                        <p class="writer">John</p>
+                        <div class="categories">FCI, Math</div>
+                        <p class="book_price">RM20<sub><del>Rm25</del></sub></p>
+                        <a href="#target1" class="f_btn">Learn More</a>
+                    </div>
+                </div>
+                <div class="book-container">
+                    <a href="#target2"><img src="{{ url_for('static', filename='/addRmvAsset/book1.png') }}" alt=''></a>
+                    <div class="secondhand_book_tag">
+                        <h2>Second-hand Books</h2>
+                        <p class="writer">Jane</p>
+                        <div class="categories">FCM, Science</div>
+                        <p class="book_price">RM23<sub><del>Rm28</del></sub></p>
+                        <a href="#target2" class="f_btn">Learn More</a>
+                    </div>
+                </div>
+                <div class="book-container">
+                    <a href="#target3"><img src="{{ url_for('static', filename='/addRmvAsset/book2.png') }}" alt=''></a>
+                    <div class="secondhand_book_tag">
+                        <h2>Second-hand Books</h2>
+                        <p class="writer">John</p>
+                        <div class="categories">FOE, Economy</div>
+                        <p class="book_price">RM25<sub><del>Rm32</del></sub></p>
+                        <a href="#target3" class="f_btn">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

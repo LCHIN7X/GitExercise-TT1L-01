@@ -1,18 +1,14 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-from auth.models import db
-from auth.views import auth
-from app.views import views 
 from flask_bcrypt import Bcrypt
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 from flask_login import LoginManager
+from auth.models import db
 
 import os
 
 # ------------------------------- CODE ---------------------------------------------
-
 # Intialize SQLAlchemy database
-
 
 DATABASE_NAME = "database.db"
 bcrypt = Bcrypt()
@@ -26,21 +22,41 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_NAME}"
     app.config["UPLOADED_PHOTOS_DEST"] = "static/images"
     app.config["SECRET_KEY"] = os.urandom(24)
-    configure_uploads(app, photos)
     db.init_app(app)
+   
+    
+    configure_uploads(app, photos)
 
-    # Registering flask Blueprints
+
+    #  registering flask Blueprints
+    from auth.views import auth
     app.register_blueprint(auth, url_prefix="/auth")
-    app.register_blueprint(views) 
+
+    from books.views import views 
+    app.register_blueprint(views, url_prefix="/views")
+    
+    from books.models import Faculty, Subject, Book
+    from shbooks.views import shbooks 
+    # Registering flask Blueprints
+    # app.register_blueprint(auth, url_prefix="/auth")
+    app.register_blueprint(shbooks,url_prefix="/")
+
+    # from auth.models import db
+    # from auth.models import User
+    # from shbooks.models import SecondHandBooks
+
 
     with app.app_context():
         db.create_all()
+    
+    
+    from auth.models import User
+
 
     return app
 
 # Get the Flask application instance
-app = create_app()
 
 if __name__ == "__main__":
-    db.create_all
+    app = create_app()
     app.run(debug=True)

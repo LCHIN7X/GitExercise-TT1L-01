@@ -1,16 +1,17 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField, FileField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, NumberRange
+from flask_wtf.file import FileAllowed,FileRequired,FileField
 
 
 class AddBookForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    student_id = IntegerField('student_id', validators=[DataRequired()])
     faculty = StringField('Faculty', validators=[DataRequired()])
     subject = StringField('Subject', validators=[DataRequired()])
     quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=1)])
     price = IntegerField('Price', validators=[DataRequired(), NumberRange(min=0)])
-    photo = FileField('Photo', validators=[DataRequired()])
-    remark = TextAreaField('Remark')
+    photo = FileField('photo',validators=[FileRequired(),FileAllowed('jpg','png')])
+    remark = TextAreaField('Remark', validators=[DataRequired()])
     submit_add = SubmitField('Add Book')
 
 class RemoveBookForm(FlaskForm):
