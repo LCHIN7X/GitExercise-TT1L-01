@@ -5,7 +5,6 @@ from flask_bcrypt import Bcrypt
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 from flask_login import LoginManager
 from flask_msearch import Search
-
 import os
 
 # ------------------------------- CODE ---------------------------------------------

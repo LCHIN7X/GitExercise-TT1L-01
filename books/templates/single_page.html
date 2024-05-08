@@ -17,7 +17,7 @@
           <a class="nav-link" href="/views/home">Books</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" href="#" >Second Hand Books</a>
+          <a class="nav-link" href="/views/home">Second Hand Books</a>
         </li>
         <div class="dropdown">
           <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -33,7 +33,11 @@
         <div class="dropdown">
           <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Subject
-          </button>
+          </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!--- search bar to right ===================-->
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             {% for subject in subjects %}
             <a class="dropdown-item" href="{{url_for('views.get_subject', id = subject.id)}}">{{subject.name}}</a>
@@ -44,7 +48,7 @@
 
         
       </ul>
-      <p>________________________________________________________</p> <!-- search bar to right -->
+      
       
       <form class="form-inline my-2 my-lg-0 ml-auto"> 
         <div class="row  justify-content-end">
@@ -72,9 +76,13 @@
         <hr>
         <h5>RM: {{book.price}}</h5>
         <hr>
-        <b>Book details:</b>
+        <h5>Stock: {{book.stock}}</h5>
         <hr>
+        <b>Book details:</b>
+        
         <p>{{book.desc}}</p>
+        <hr>
+        <h9>Sell by: {{book.user.username}}</h9>
         <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
       </div>
     </div>
