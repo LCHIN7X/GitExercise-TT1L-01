@@ -1,9 +1,9 @@
 from flask import redirect,render_template,url_for,request,flash,Blueprint
-from auth.models import db
+from auth.models import db,User
 from .models import Faculty,Subject,Book
 from .bforms import Addbooks 
 from flask_uploads import UploadSet, IMAGES
-from flask_login import login_required
+from flask_login import login_required,current_user
 
 
 views = Blueprint("views",__name__,template_folder="templates",static_folder="static")
@@ -81,19 +81,22 @@ def addsub():
 def addbook():
     faculties = Faculty.query.all()
     subjects = Subject.query.all()
+    users = User.query.all()
     form=Addbooks(request.form)
     photos = UploadSet('photos', IMAGES)
     if request.method == 'POST':
         name = form.name.data
+        username = request.form.get("username")
         price = form.price.data
         stock = form.stock.data
         desc = form.discription.data
         faculty = request.form.get('faculty')
         subject = request.form.get('subject')
         image = photos.save(request.files['image'])
-        addbo = Book(name=name,price=price,stock=stock,desc=desc,faculty_id=faculty,subject_id=subject,image=image)
+        user = current_user
+        addbo = Book(name=name,user_id=username,price=price,stock=stock,desc=desc,faculty_id=faculty,subject_id=subject,image=image,user=user)
         db.session.add(addbo)
         db.session.commit()
         flash(f"Book {name} has been added to your database",'success')
         return redirect(url_for('views.addbook'))
-    return render_template('addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects,photos=photos)
+    return render_template('addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects,photos=photos,users=users)

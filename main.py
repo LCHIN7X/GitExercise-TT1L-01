@@ -5,7 +5,6 @@ from flask_uploads import IMAGES, UploadSet, configure_uploads
 from flask_login import LoginManager
 from admin import admin, add_admin_to_db
 from flask_msearch import Search
-
 import os
 
 # ------------------------------- CODE ---------------------------------------------
