@@ -23,16 +23,19 @@ class Book(db.Model):
     image = db.Column(db.String(150),nullable=False,default='image.jpg')
 
     def __repr__(self):
-        return '<Post %r>' % self.title
+        return '<Post %r>' % self.name
 
 
 class Faculty(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(30),nullable=False,unique=True)
 
+    def __repr__(self):
+        return self.name
 
 class Subject(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(30),nullable=False,unique=True)
 
-
+    def __repr__(self):
+        return self.name
