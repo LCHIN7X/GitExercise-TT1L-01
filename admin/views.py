@@ -2,7 +2,6 @@ from flask_login import current_user
 from flask_admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask import flash
-from werkzeug.security import generate_password_hash
 
 
 class AdminIndex(AdminIndexView):
