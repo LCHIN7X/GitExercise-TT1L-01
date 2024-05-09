@@ -54,17 +54,10 @@ class AdminUserView(AdminModelView):
         "is_admin" : "Is Admin"
     }
     column_list = ['email','username','student_id','is_admin']
-    form_columns = ['email','username','student_id','password','is_admin']
+    form_columns = ['email','username','student_id','is_admin']
     column_filters = ['email','username','student_id','is_admin']
     column_searchable_list = ['email','username','student_id','is_admin']
 
-
-    def create_model(self, form):
-        password = form.password.data 
-        hashed_password = generate_password_hash(password,method='scrypt')
-        form.password.data = hashed_password 
-
-        return super().create_model(form)
 
 
     def delete_model(self, model):
