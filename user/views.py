@@ -5,4 +5,7 @@ user = Blueprint('user',__name__,template_folder="templates",static_folder="stat
 
 @user.route('/customize_profile', methods=["GET","POST"])
 def customize_profile():
-    return render_template('customize_profile.html')
+
+    
+
+    return render_template('customize_profile.html',current_page="customize_profile")
