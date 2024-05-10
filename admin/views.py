@@ -53,7 +53,20 @@ class AdminUserView(AdminModelView):
         "is_admin" : "Is Admin"
     }
     column_list = ['email','username','student_id','is_admin']
-    form_columns = ['email','username','student_id','is_admin']
+    form_columns = ['email','username','student_id','password','is_admin']
+    form_edit_rules = [
+        'email',
+        'username',
+        'student_id',
+        'is_admin'
+    ]
+    form_create_rules = [
+        'email',
+        'username',
+        'student_id',
+        'password',
+        'is_admin'
+    ]
     column_filters = ['email','username','student_id','is_admin']
     column_searchable_list = ['email','username','student_id','is_admin']
 
