@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block content %}
+<!--- navbar starts ===================-->
+<div class="container">
+  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/views/addbook">Books</a> <!--- cuz i lazy to type addbook,will change it later-->
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/views/home">Second Hand Books</a>
+          </li>
+          <div class="dropdown">
+            <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              Faculty
+            </button>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              {% for faculty in facultiess %}
+              <a class="dropdown-item" href="{{url_for('views.get_faculty', id = faculty.id)}}">{{faculty.name}}</a>
+              {% endfor %}
+            </div>
+          </div>
+  
+          <div class="dropdown">
+            <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              Subject
+            </button>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              {% for subject in subjects %}
+              <a class="dropdown-item" href="{{url_for('views.get_subject', id = subject.id)}}">{{subject.name}}</a>
+              {% endfor %}
+            </div>
+          </div>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('views.getCart')}}">Cart ({{session['Shopcart']|length}})</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!--- search bar to right ===================-->
+          </li>
+  
+          
+        </ul>
+        
+        
+        <form class="form-inline my-2 my-lg-0 ml-auto"> 
+          <div class="row  justify-content-end">
+            <div class="col">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="x">
+            </div>
+            <div class="col">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </div>
+          </div>
+        </form>
+       
+     
+      </div>
+    </nav>
+  </div>
+  <!--- navbar ends ===================-->
+  
+<div class="container">
+    <div class="row">
+        {% include "_messages.html" %}
+        <table class="table table-sm">
+            <thead>
+                <th>No.</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </thead>
+            <tbody>
+                {% for key , book in session['Shopcart'].items() %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td><img src="{{url_for('static', filename='images/' + book.image)}}" alt="{{book.name}}" height="60"></td>
+                    <td>{{book.name}}</td>
+
+                    <form action="{{url_for('views.updatecart', code=key)}}" method="POST"> 
+                        <td><input type="number" name="quantity" min="1" max="10" value="{{book.quantity}}"></td>
+                        <td>{{book.price}}</td>
+                        <td><button type="submit" class="btn btn-outline-dark">Update</button></td>
+                    </form>
+
+                    <td><a href="{{url_for('views.deletebook', id=key)}}" class="btn btn-outline-danger">Remove</a></td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></tc>
+                    <td></td>
+                    <td colspan="3"><h3>Total: RM{{ '{:.2f}'.format(total) }}</h3></td>
+                    <td><a href="/views/payment" class="btn btn-danger">Check Out ({{session['Shopcart']|length}})</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

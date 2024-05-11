@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -14,7 +15,7 @@
       <ul class="navbar-nav mr-auto">
         
         <li class="nav-item">
-          <a class="nav-link" href="/views/home">Books</a>
+          <a class="nav-link" href="/views/addbook">Books</a> <!--- cuz i lazy to type addbook,will change it later-->
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/views/home">Second Hand Books</a>
@@ -33,27 +34,30 @@
         <div class="dropdown">
           <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Subject
-          </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!--- search bar to right ===================-->
+          </button>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             {% for subject in subjects %}
             <a class="dropdown-item" href="{{url_for('views.get_subject', id = subject.id)}}">{{subject.name}}</a>
             {% endfor %}
           </div>
         </div>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('views.getCart')}}">Cart ({{session['Shopcart']|length}})</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!--- search bar to right ===================-->
+        </li>
         
 
         
       </ul>
       
       
-      <form class="form-inline my-2 my-lg-0 ml-auto"> 
+      <form class="form-inline my-2 my-lg-0 ml-auto" action="{{url_for('views.searchh')}}"> 
         <div class="row  justify-content-end">
           <div class="col">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="x">
           </div>
           <div class="col">
             <button class="btn btn-outline-success" type="submit">Search</button>
@@ -83,7 +87,15 @@
         <p>{{book.desc}}</p>
         <hr>
         <h9>Sell by: {{book.user.username}}</h9>
-        <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
+        <hr>
+    <form action="{{url_for('views.addcart')}}" method="post">
+      <input type="hidden" name="book_id" value="{{book.id}}">
+      <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+      <label form="">Quantity:</label>
+      <input type="number" name="quantity" id="" value="1" min="1" max="{{ book.stock }}">
+
+    </form>
+        
       </div>
     </div>
 
