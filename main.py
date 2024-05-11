@@ -40,6 +40,8 @@ def create_app():
     
     from books.models import Faculty, Subject, Book
 
+    
+
     with app.app_context():
         db.create_all()
 
