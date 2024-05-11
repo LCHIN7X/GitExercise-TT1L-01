@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 from flask_login import LoginManager
 from auth.models import db
-from flask_msearch import Search
+# from flask_msearch import Search
 
 import os
 
@@ -13,7 +13,7 @@ import os
 
 DATABASE_NAME = "database.db"
 bcrypt = Bcrypt()
-search = Search()
+# search = Search()
 photos = UploadSet("photos", IMAGES)
 
 # Create function to create app instance
@@ -28,7 +28,7 @@ def create_app():
    
     
     configure_uploads(app, photos)
-    search.init_app(app)
+    # search.init_app(app)
 
 
     #  registering flask Blueprints

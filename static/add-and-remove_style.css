@@ -513,7 +513,7 @@ ul li:hover ul.dropdown {
 }
 
 #shop .title {
-    padding: 10px 1em;
+    padding: 25px 1em;
     margin: auto;
 }
 
@@ -536,7 +536,7 @@ ul li:hover ul.dropdown {
 .card-img-top{
     width: 80vw;
     height: 350px;
-    margin-top: 8px;
+/*    margin-top: 8px;*/
 }
 
 .card-no-border .card {
@@ -600,4 +600,121 @@ h2.name {
 
 .search-bar button:hover {
     background-color: #0056b3; 
+}
+
+#mybook {
+    max-width: 1120px;
+}
+
+/* Ensure table takes up full width */
+.table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Style table header */
+.table thead th {
+    border: none;
+    background-color: #f8f9fa; /* Light gray background */
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 1.2rem; /* Increased padding */
+    border-bottom: 2px solid #dee2e6; /* Bottom border */
+}
+
+/* Style table body */
+.table tbody th,
+.table tbody td {
+    vertical-align: middle;
+}
+
+/* Remove borders from table body */
+.table tbody th,
+.table tbody td {
+    border: none;
+}
+
+/* Style product images */
+.table tbody img {
+    max-width: 90px; /* Increased image width */
+    height: auto;
+    border-radius: 6px; /* Larger border radius */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Increased shadow */
+}
+
+/* Style product titles */
+.table tbody h5 {
+    margin-bottom: 0;
+    font-size: 1.1rem; /* Increased font size */
+}
+
+/* Add padding to table cells */
+.table tbody th,
+.table tbody td {
+    padding: 1rem 1.67rem; /* Increased padding */
+}
+
+/* Style remove icons */
+.table tbody .fa-trash {
+    color: #dc3545; /* Red color */
+    font-size: 1.2rem; /* Increased font size */
+}
+
+/* Hover effect for remove icons */
+.table tbody .fa-trash:hover {
+    color: #c82333; /* Darker red color */
+    cursor: pointer;
+}
+
+/* Add bottom border to table rows */
+.table tbody tr {
+    border-bottom: 1px solid #00000020; /* Black border */
+}
+
+/* Remove bottom border from the last table row */
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+#shop .card {
+    width: 97vw;
+    margin-left: 10px;
+}
+
+th[scope="col"] {
+    text-align: center;
+}
+
+i.fa-edit {
+    font-size: 1.2rem;
+}
+
+#mybook tbody td:not(:first-child) {
+    text-align: center;
+}
+
+.card img {
+    object-fit: cover;
+}
+
+#mybook {
+    margin-top: 4em;
+    width: 100vw;
+    max-width: 1120px;
+    background-color: #fff;
+    padding: 1em 3em;
+    border-radius: 22px;
+    box-shadow: 0 26px 58px 0 rgba(0, 0, 0, 0.22), 0 5px 14px 0 rgba(0, 0, 0, 0.18);
+}
+
+#mybook .title {
+    margin-bottom: 2em;
+}
+
+#mybook .title h1 {
+    text-align: left;
+}
+
+#mybook h5 a.text-dark {
+    font-size: 1.67em;
 }

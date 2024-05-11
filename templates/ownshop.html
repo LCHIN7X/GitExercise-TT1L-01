@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Second Hand Books</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='add-and-remove_style.css') }}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <section>
@@ -45,38 +49,78 @@
                     <button type="submit">Search</button>
                 </div>
             </div>
-            <div class="thumbs">
-                <div class="book-container">
-                    <a href="#target1"><img src="{{ url_for('static', filename='/addRmvAsset/book.png') }}" alt=''></a>
-                    <div class="secondhand_book_tag">
-                        <h2>Second-hand Books</h2>
-                        <p class="writer">John</p>
-                        <div class="categories">FCI, Math</div>
-                        <p class="book_price">RM20<sub><del>Rm25</del></sub></p>
-                        <a href="#target1" class="f_btn">Learn More</a>
-                    </div>
-                </div>
-                <div class="book-container">
-                    <a href="#target2"><img src="{{ url_for('static', filename='/addRmvAsset/book1.png') }}" alt=''></a>
-                    <div class="secondhand_book_tag">
-                        <h2>Second-hand Books</h2>
-                        <p class="writer">Jane</p>
-                        <div class="categories">FCM, Science</div>
-                        <p class="book_price">RM23<sub><del>Rm28</del></sub></p>
-                        <a href="#target2" class="f_btn">Learn More</a>
-                    </div>
-                </div>
-                <div class="book-container">
-                    <a href="#target3"><img src="{{ url_for('static', filename='/addRmvAsset/book2.png') }}" alt=''></a>
-                    <div class="secondhand_book_tag">
-                        <h2>Second-hand Books</h2>
-                        <p class="writer">John</p>
-                        <div class="categories">FOE, Economy</div>
-                        <p class="book_price">RM25<sub><del>Rm32</del></sub></p>
-                        <a href="#target3" class="f_btn">Learn More</a>
-                    </div>
-                </div>
+            <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th class="border-0 bg-light">
+                        <div class="p-2 px-3 text-uppercase">Product</div>
+                      </th>
+                      <th scope="col" class="border-0 bg-light">
+                        <div class="py-2 text-uppercase">Price</div>
+                      </th>
+                      <th scope="col" class="border-0 bg-light">
+                        <div class="py-2 text-uppercase">Quantity</div>
+                      </th>
+                      <th scope="col" class="border-0 bg-light">
+                        <div class="py-2 text-uppercase">Edit</div>
+                      </th>
+                      <th scope="col" class="border-0 bg-light">
+                        <div class="py-2 text-uppercase">Remove</div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row" class="border-0">
+                        <div class="p-2">
+                            <img src="{{ url_for('static', filename='/addRmvAsset/book.png') }}" alt='' width="70" class="img-fluid rounded shadow-sm">
+                          <div class="ml-3 d-inline-block align-middle">
+                            <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">Math</a></h5><span class="text-muted font-weight-normal font-italic d-block">Category: Second-hand Book</span>
+                          </div>
+                        </div>
+                      </th>
+                      <td class="border-0 align-middle"><strong>$79.00</strong></td>
+                      <td class="border-0 align-middle"><strong>3</strong></td>
+                      <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-edit"></i></a></td>
+                      <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <div class="p-2">
+                            <img src="{{ url_for('static', filename='/addRmvAsset/book1.png') }}" alt='' width="70" class="img-fluid rounded shadow-sm">
+                          <div class="ml-3 d-inline-block align-middle">
+                            <h5 class="mb-0"><a href="#" class="text-dark d-inline-block">Science</a></h5><span class="text-muted font-weight-normal font-italic">Category: Second-hand Book</span>
+                          </div>
+                        </div>
+                      </th>
+                      <td class="align-middle"><strong>$79.00</strong></td>
+                      <td class="align-middle"><strong>3</strong></td>
+                      <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-edit"></i></a></td>
+                      <td class="align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <div class="p-2">
+                            <img src="{{ url_for('static', filename='/addRmvAsset/book2.png') }}" alt='' width="70" class="img-fluid rounded shadow-sm">
+                          <div class="ml-3 d-inline-block align-middle">
+                            <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block">Economy</a></h5><span class="text-muted font-weight-normal font-italic">Category: Second-hand Book</span>
+                          </div>
+                        </div>
+                        <td class="align-middle"><strong>$79.00</strong></td>
+                        <td class="align-middle"><strong>3</strong></td>
+                        <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-edit"></i></a></td>
+                        <td class="align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
         </div>
     </div>
+    <!-- Bootstrap Bundle JavaScript (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
