@@ -93,7 +93,12 @@ def login():
             if check_password_hash(user_in_db.password, password):
                 flash(f"Hello {user_in_db.username}, You Are Now Logged In!",category='success')
                 login_user(user_in_db, remember=True)
-                return redirect(url_for('views.home'))  #  Redirect to home page
+
+                if user_in_db.is_admin:
+                    return redirect(url_for('admin.index'))
+
+                else:
+                    return redirect(url_for('views.home'))  
             
             # if password is incorrect, flash error message
             else:
@@ -123,9 +128,13 @@ def change_password():
     if request.method == "POST":
         old_password = request.form.get('old_password')
         new_password = request.form.get('new_password')
+        confirm_new_password = request.form.get('confirm_new_password')
 
         if old_password == new_password:
-            flash("Passwords are the same.", category='error')
+            flash("Old Password and New Password Are The Same.", category='error')
+
+        elif new_password != confirm_new_password:
+            flash("New Passwords Don't Match.",category="error")
 
         elif check_password_hash(current_user.password, old_password):
             current_user.password = generate_password_hash(new_password,method='scrypt')

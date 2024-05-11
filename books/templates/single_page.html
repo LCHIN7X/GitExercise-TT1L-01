@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -14,10 +15,10 @@
       <ul class="navbar-nav mr-auto">
         
         <li class="nav-item">
-          <a class="nav-link" href="/views/home">Books</a>
+          <a class="nav-link" href="/views/addbook">Books</a> <!--- cuz i lazy to type addbook,will change it later-->
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" href="#" >Second Hand Books</a>
+          <a class="nav-link" href="/views/home">Second Hand Books</a>
         </li>
         <div class="dropdown">
           <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -40,16 +41,23 @@
             {% endfor %}
           </div>
         </div>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('views.getCart')}}">Cart ({{session['Shopcart']|length}})</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!--- search bar to right ===================-->
+        </li>
         
 
         
       </ul>
-      <p>________________________________________________________</p> <!-- search bar to right -->
       
-      <form class="form-inline my-2 my-lg-0 ml-auto"> 
+      
+      <form class="form-inline my-2 my-lg-0 ml-auto" action="{{url_for('views.searchh')}}"> 
         <div class="row  justify-content-end">
           <div class="col">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="x">
           </div>
           <div class="col">
             <button class="btn btn-outline-success" type="submit">Search</button>
@@ -72,10 +80,22 @@
         <hr>
         <h5>RM: {{book.price}}</h5>
         <hr>
-        <b>Book details:</b>
+        <h5>Stock: {{book.stock}}</h5>
         <hr>
+        <b>Book details:</b>
+        
         <p>{{book.desc}}</p>
-        <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
+        <hr>
+        <h9>Sell by: {{book.user.username}}</h9>
+        <hr>
+    <form action="{{url_for('views.addcart')}}" method="post">
+      <input type="hidden" name="book_id" value="{{book.id}}">
+      <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+      <label form="">Quantity:</label>
+      <input type="number" name="quantity" id="" value="1" min="1" max="{{ book.stock }}">
+
+    </form>
+        
       </div>
     </div>
 
