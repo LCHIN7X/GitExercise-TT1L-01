@@ -10,9 +10,12 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-    {% block favicon %} 
-    {% endblock %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles.css',_external='True')}}" />
+    {% block favicon %} {% endblock %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('.static',filename='styles.css',_external='True')}}"
+    />
 
     <title>{% block title %} Base {% endblock %}</title>
   </head>
@@ -28,7 +31,10 @@
           target="_blank"
           title="Visit the official MMU website"
         >
-          <img src="{{ url_for('.static', filename='assets/images/mmu_logo.png') }}" alt="MMU Logo" />
+          <img
+            src="{{ url_for('.static', filename='assets/images/mmu_logo.png') }}"
+            alt="MMU Logo"
+          />
         </a>
         <button
           class="navbar-toggler"
@@ -45,23 +51,66 @@
           <ul class="navbar-nav">
             {% if current_user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link {% if current_page == 'home' %}active{% endif %}" href="/views/home">Home</a>
+              <a
+                class="nav-link {% if current_page == 'home' %}active{% endif %}"
+                href="/views/home"
+                >Home</a
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{url_for('auth.logout')}}">Log Out</a>
             </li>
             <li class="nav-item">
-              <a href="{{url_for('auth.change_password')}}" class="nav-link {% if current_page == 'change_password' %}active{% endif %}">Change Password</a>
+              <a
+                href="{{url_for('auth.change_password')}}"
+                class="nav-link {% if current_page == 'change_password' %}active{% endif %}"
+                >Change Password</a
+              >
             </li>
             <li class="nav-item">
-              <a href="{{url_for('user_bp.customize_profile')}}" class="nav-link {% if current_page == 'customize_profile' %}active{% endif %}">Customize Profile</a>
+              <a
+                href="{{url_for('user_bp.customize_profile')}}"
+                class="nav-link {% if current_page == 'customize_profile' %}active{% endif %}"
+                >Customize Profile</a
+              >
+            </li>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp; 
+            {% if current_user.profile_pic != "default_pfp.png" %}
+            <li class="nav-item">
+              <img
+                src="{{ url_for('.static', filename='assets/images/user_uploads/' + current_user.profile_pic) }}"
+                alt="Profile Picture"
+                height="50"
+                class="rounded-circle"
+              />
             </li>
             {% else %}
             <li class="nav-item">
-              <a class="nav-link {% if current_page == 'login' %}active{% endif %}" href="{{url_for('auth.login')}}">Login</a>
+              <img
+                src="{{ url_for('.static', filename='assets/images/default_pfp.png') }}"
+                alt="Profile Picture"
+                height="50"
+                class="rounded-circle"
+              />
+            </li>
+            {% endif %} {% else %}
+            <li class="nav-item">
+              <a
+                class="nav-link {% if current_page == 'login' %}active{% endif %}"
+                href="{{url_for('auth.login')}}"
+                >Login</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if current_page == 'create_account' %}active{% endif %}" href="{{url_for('auth.create_account')}}">Create Account</a>
+              <a
+                class="nav-link {% if current_page == 'create_account' %}active{% endif %}"
+                href="{{url_for('auth.create_account')}}"
+                >Create Account</a
+              >
             </li>
             {% endif %}
           </ul>
@@ -85,11 +134,11 @@
     <div class="alert alert-dismissible alert-success show fade" role="alert">
       Logged Out Successfully.
       <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
     </div>
     {% else %}
     <div class="alert alert-dismissible alert-success show fade" role="alert">
@@ -108,7 +157,6 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    {% block js %}
-    {% endblock %}
+    {% block js %} {% endblock %}
   </body>
 </html>

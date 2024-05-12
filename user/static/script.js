@@ -1,10 +1,10 @@
 const bioTextArea = document.getElementById('bio')
 
+bioTextArea.addEventListener('click', () => {
 
-bioTextArea.addEventListener('click',() => {
     bioTextArea.focus()
-
     const inputFieldValue = bioTextArea.value
+
     if (inputFieldValue == 0) {
         bioTextArea.setSelectionRange(0,0)
     }
