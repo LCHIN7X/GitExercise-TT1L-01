@@ -21,13 +21,16 @@ def customize_profile():
             profile_pic = request.files['profile_pic']
             
             if profile_pic.filename != "":
-                if not file_is_valid(profile_pic):
+                if not file_is_valid(profile_pic.filename):
                     flash("Invalid File Type: Only .jpg, .jpeg and .png Files Are Allowed.",category="error")
                 
                 else:
                     filename = secure_filename(profile_pic.filename)
-                    profile_pic.save(os.path.join("static/assets/images/user_uploads", filename))
+                    cwd = os.getcwd()
+                    os.makedirs(f"{cwd}/user/static/assets/images/user_uploads", exist_ok=True)
+                    profile_pic.save(os.path.join(f"{cwd}/user/static/assets/images/user_uploads", filename))
                     current_user.profile_pic = filename
+                    db.session.commit()
 
         
         if bio:
