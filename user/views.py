@@ -35,7 +35,7 @@ def customize_profile():
                     os.makedirs(f"{cwd}/user/static/assets/images/user_uploads", exist_ok=True)
 
                     # resize image (make image smaller so it takes up less space) 
-                    img_size = (250,250)
+                    img_size = (150,150)
                     i = Image.open(profile_pic)
                     i.thumbnail(img_size)
 
