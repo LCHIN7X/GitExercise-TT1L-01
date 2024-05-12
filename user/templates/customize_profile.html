@@ -25,14 +25,13 @@
     <div class="form-group mt-4 mb-2">
       <div class="input-group">
         <span class="input-group-text" for="bio">Update Bio</span>
-        <textarea class="form-control" for="bio" id="bio" name="bio" placeholder="Tell people about yourself..." cols="5" rows="5">
-          {% if current_bio %}
-            {{current_bio}}
-          {% endif %}
-        </textarea>
+        <textarea class="form-control" for="bio" id="bio" name="bio" placeholder="Tell people about yourself..." cols="5" rows="2">{% if current_bio %}{{current_bio}}{% endif %}</textarea>
       </div>
     </div>
     <button class="btn btn-primary mt-4" type="submit">Update Account</button>
   </form>
 </div>
+{% endblock %}
+{% block js %}
+  <script src="{{ url_for('.static', filename='script.js') }}"></script>
 {% endblock %}
