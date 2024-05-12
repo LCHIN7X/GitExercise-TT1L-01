@@ -2,6 +2,7 @@ from flask_login import current_user
 from flask_admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask import flash
+from books.models import Book
 
 
 class AdminIndex(AdminIndexView):
@@ -39,10 +40,17 @@ class AdminBookView(AdminModelView):
         "pub_date" : "Date Published"
     }
     column_list = ['name','price','stock','desc','pub_date','faculty','subject']
-    form_columns = ['name','price','stock','desc','pub_date','faculty','subject','image']
+    form_columns = ['name','price','stock','desc','pub_date','faculty','subject','image','user']
     column_filters = ['name','faculty.name','subject.name','pub_date']
     column_sortable_list = ['name','price','stock','pub_date', ('faculty','faculty.name'), ('subject', 'subject.name')]
     column_searchable_list = ['name']
+
+    
+    def on_model_change(self, model, form, is_created):
+        if is_created:
+            model.user_id = current_user.id 
+        model.user = current_user
+
 
 
 class AdminUserView(AdminModelView):

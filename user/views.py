@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from auth.models import db
 from flask_login import current_user
 from werkzeug.utils import secure_filename
+from PIL import Image
 import os
 
 user = Blueprint('user',__name__,template_folder="templates",static_folder="static")
@@ -23,10 +24,22 @@ def customize_profile():
                     flash("Invalid File Type: Only .jpg, .jpeg and .png Files Are Allowed.",category="error")
                 
                 else:
-                    filename = secure_filename(profile_pic.filename)
                     cwd = os.getcwd()
+
+                    #  if user's original pic is not the default, delete it
+                    previous_profile_pic = current_user.profile_pic
+                    if previous_profile_pic != "default_pfp.png":
+                        os.remove(f"{cwd}/user/static/assets/images/user_uploads/{previous_profile_pic}")
+
+                    filename = secure_filename(profile_pic.filename)
                     os.makedirs(f"{cwd}/user/static/assets/images/user_uploads", exist_ok=True)
-                    profile_pic.save(os.path.join(f"{cwd}/user/static/assets/images/user_uploads", filename))
+
+                    # resize image (make image smaller so it takes up less space) 
+                    img_size = (250,250)
+                    i = Image.open(profile_pic)
+                    i.thumbnail(img_size)
+
+                    i.save(os.path.join(f"{cwd}/user/static/assets/images/user_uploads", filename))
                     current_user.profile_pic = filename
                     db.session.commit()
                     flash("Profile Picture Successfully Updated!",category='success')
