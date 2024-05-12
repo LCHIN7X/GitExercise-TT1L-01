@@ -1,13 +1,13 @@
 ### from flask import Blueprint, render_template
-from flask import Blueprint, render_template, url_for,request,flash,redirect
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 import os
-from flask_sqlalchemy import SQLAlchemy
 from auth.models import User
 from flask import session
-from .models import SecondHandBooks,shbooks_Faculty,shbooks_Subject
-from .forms import AddBookForm,RemoveBookForm
 from flask_uploads import UploadSet, IMAGES
 from auth.models import db
+from books.models import Book, Faculty, Subject
+from .forms import Editbook
+from werkzeug.utils import secure_filename
 
 ####
 # from main import User, SecondHandBooks,db
@@ -38,4 +38,61 @@ def upload_form():
 
 @shbooks.route("/ownshop", methods=['GET', 'POST'])
 def myshop():
-    return render_template("ownshop.html")
+    faculties = Faculty.query.all()
+    subjects = Subject.query.all()
+    form = Editbook(request.form)
+
+    if request.method == 'POST':
+        print("Form submitted")
+        if form.validate():
+            print("Form validated")  
+            name = form.name.data
+            price = form.price.data
+            stock = form.stock.data
+            selected_faculty = request.form.get('faculty')
+            selected_subject = request.form.get('subject')
+            image = form.image.data
+            print(f"Name: {name}, Price: {price}, Stock: {stock}, Faculty: {selected_faculty}, Subject: {selected_subject}, Image: {image}")
+            
+            # Handle file upload
+            if 'image' in request.files:
+                image = photos.save(request.files['image'])
+                print("Image uploaded")
+            else:
+                image = None
+            print(f"Image: {image}")
+            
+            book_id = request.form.get('book_id')
+            if book_id:
+                book = Book.query.get(book_id)
+                if book:
+                    book.name = name
+                    book.price = price
+                    book.stock = stock
+                    book.faculty = selected_faculty
+                    book.subject = selected_subject
+                    if image:
+                        book.image = image  
+                    db.session.commit()
+                    flash('Book updated successfully', 'success')
+                    return redirect(url_for('shbooks.myshop'))
+                else:
+                    flash('Book not found', 'error')
+            else:
+                book = Book(
+                    name=name,
+                    price=price,
+                    stock=stock,
+                    faculty=selected_faculty,
+                    subject=selected_subject,
+                    image=image, 
+                )
+                db.session.add(book)
+                db.session.commit()
+                flash('Book added successfully', 'success')
+                return redirect(url_for('shbooks.myshop'))
+        else:
+            flash('Form validation failed', 'error')
+
+    books = Book.query.all()
+    return render_template("ownshop.html", form=form, books=books, faculties=faculties, subjects=subjects)

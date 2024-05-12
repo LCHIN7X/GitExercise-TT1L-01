@@ -14,10 +14,10 @@
       <ul class="navbar-nav mr-auto">
         
         <li class="nav-item">
-          <a class="nav-link" href="/views/home">Books</a>
+          <a class="nav-link" href="/views/addbook">Books</a> <!--- cuz i lazy to type addbook,will change it later-->
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" href="#" >Second Hand Books</a>
+          <a class="nav-link" href="/views/home">Second Hand Books</a>
         </li>
         <div class="dropdown">
           <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -40,11 +40,18 @@
             {% endfor %}
           </div>
         </div>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('views.getCart')}}">Cart ({{session['Shopcart']|length}})</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!--- search bar to right ===================-->
+        </li>
         
 
         
       </ul>
-      <p>________________________________________________________</p> <!-- search bar to right -->
+      
       
       <form class="form-inline my-2 my-lg-0 ml-auto" action="{{url_for('views.searchh')}}"> 
         <div class="row  justify-content-end">
@@ -71,12 +78,18 @@
       <div class="card">
         <img class="card-img-top" src="{{url_for('static', filename='images/' + f.image)}}" alt="{{f.name}}" height="300">
         <div class="card-body">
+          <h5 style="text-shadow: 1px 1px 2px #000; color: #F00;">Second Hand</h5>
           <h5 class="card-title">{{ f.name }}</h5>
           <p class="card-text">RM {{ f.price }}</p>
+          <h9>Sell by: {{f.username}}</h9>
         </div>
         <div class="card-footer">  
           <a href="{{url_for('views.single_page', id = f.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
-          <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
+          <form action="{{url_for('views.addcart')}}" method="post">
+            <input type="hidden" name="book_id" value="{{f.id}}">
+            <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+            <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ f.stock }}">
+          </form>
         </div>
       </div>
     </div>
@@ -89,12 +102,18 @@
   <div class="card">
     <img class="card-img-top" src="{{url_for('static', filename='images/' + s.image)}}" alt="{{s.name}}" height="300">
     <div class="card-body">
+      <h5 style="text-shadow: 1px 1px 2px #000; color: #F00;">Second Hand</h5>
       <h5 class="card-title">{{ s.name }}</h5>
       <p class="card-text">RM {{ s.price }}</p>
+      <h9>Sell by: {{s.user.username}}</h9>
     </div>
     <div class="card-footer">  
       <a href="{{url_for('views.single_page', id = s.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
-      <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
+      <form action="{{url_for('views.addcart')}}" method="post">
+        <input type="hidden" name="book_id" value="{{s.id}}">
+        <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+        <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ s.stock }}">
+      </form>
     </div>
   </div>
 </div>
@@ -108,12 +127,18 @@
       <div class="card">
         <img class="card-img-top" src="{{url_for('static', filename='images/' + book.image)}}" alt="{{book.name}}" height="300">
         <div class="card-body">
+          <h5 style="text-shadow: 1px 1px 2px #000; color: #F00;">Second Hand</h5>
           <h5 class="card-title">{{ book.name }}</h5>
           <p class="card-text">RM {{ book.price }}</p>
+          <h9>Sell by: {{book.user.username}}</h9>
         </div>
         <div class="card-footer">  
           <a href="{{url_for('views.single_page', id = book.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
-          <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
+          <form action="{{url_for('views.addcart')}}" method="post">
+            <input type="hidden" name="book_id" value="{{book.id}}">
+            <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+            <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ book.stock }}">
+          </form>
         </div>
       </div>
     </div>

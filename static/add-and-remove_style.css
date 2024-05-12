@@ -190,12 +190,11 @@ textarea{
 
 input[type="submit"] {
     margin-top: 16px;
-    padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: 4px;
     background-color: #1520A6;
     color: #fff;
     font-family: 'Times New Roman', Times, serif, sans-serif;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 fieldset .row .col-6 {
@@ -420,7 +419,7 @@ ul li:hover ul.dropdown {
     justify-content: center;
   }
 
-  .secondhand_book_tag {
+.secondhand_book_tag {
     display: flex;
     text-align: center;
     margin-top: 20px;
@@ -717,4 +716,47 @@ i.fa-edit {
 
 #mybook h5 a.text-dark {
     font-size: 1.67em;
+ }
+
+ /* CSS for flash messages */
+
+.flash-messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.flash-messages ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.flash-messages li {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text */
+    border: 1px solid #f5c6cb; /* Border color */
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow */
+}
+
+.flash-messages li.success {
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Dark green text */
+    border-color: #c3e6cb; /* Border color */
+}
+
+.flash-messages li.error {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text */
+    border-color: #f5c6cb; /* Border color */
+}
+
+.flash-messages li.warning {
+    background-color: #fff3cd; /* Light yellow background */
+    color: #856404; /* Dark yellow text */
+    border-color: #ffeeba; /* Border color */
 }

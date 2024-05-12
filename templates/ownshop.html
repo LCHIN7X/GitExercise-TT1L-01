@@ -40,6 +40,18 @@
                 <h2 class="name">Chloe</h2>
                 <p>MMU Student</p>
             </div>
+        <!-- Flash messages section -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash-messages">
+              <ul>
+                  {% for message in messages %}
+                    <li>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+        {% endif %}
+        {% endwith %}
         </div>
         <div id="mybook">
             <div class="title">
@@ -77,62 +89,116 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row" class="border-0">
-                        <div class="p-2">
-                            <img src="{{ url_for('static', filename='/addRmvAsset/book.png') }}" alt='' width="70" class="img-fluid rounded shadow-sm">
-                          <div class="ml-3 d-inline-block align-middle">
-                            <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">Math</a></h5><span class="text-muted font-weight-normal font-italic d-block">Category: Second-hand Book</span>
-                          </div>
-                        </div>
-                      </th>
-                      <td class="border-0 align-middle"><strong>$79.00</strong></td>
-                      <td class="border-0 align-middle"><strong>3</strong></td>
-                      <td class="border-0 align-middle"><strong>FCI</strong></td>
-                      <td class="border-0 align-middle"><strong>Mathematics</strong></td>
-                      <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-edit"></i></a></td>
-                      <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">
-                        <div class="p-2">
-                            <img src="{{ url_for('static', filename='/addRmvAsset/book1.png') }}" alt='' width="70" class="img-fluid rounded shadow-sm">
-                          <div class="ml-3 d-inline-block align-middle">
-                            <h5 class="mb-0"><a href="#" class="text-dark d-inline-block">Physics</a></h5><span class="text-muted font-weight-normal font-italic">Category: Second-hand Book</span>
-                          </div>
-                        </div>
-                      </th>
-                      <td class="border-0 align-middle"><strong>$79.00</strong></td>
-                      <td class="border-0 align-middle"><strong>3</strong></td>
-                      <td class="border-0 align-middle"><strong>FOE</strong></td>
-                      <td class="border-0 align-middle"><strong>Physics</strong></td>
-                      <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-edit"></i></a></td>
-                      <td class="align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">
-                        <div class="p-2">
-                            <img src="{{ url_for('static', filename='/addRmvAsset/book2.png') }}" alt='' width="70" class="img-fluid rounded shadow-sm">
-                          <div class="ml-3 d-inline-block align-middle">
-                            <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block">Economy</a></h5><span class="text-muted font-weight-normal font-italic">Category: Second-hand Book</span>
-                          </div>
-                        </div>
-                        <td class="border-0 align-middle"><strong>$79.00</strong></td>
-                        <td class="border-0 align-middle"><strong>3</strong></td>
-                        <td class="border-0 align-middle"><strong>FOM</strong></td>
-                        <td class="border-0 align-middle"><strong>Economy</strong></td>
-                        <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-edit"></i></a></td>
-                        <td class="align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
+                      {% for book in books %}
+                      <tr>
+                          <th scope="row">
+                              <div class="p-2">
+                                  <img src="{{url_for('static', filename='images/' + book.image)}}" alt="{{book.name}}" alt='' width="70" class="img-fluid rounded shadow-sm">
+                                  <div class="ml-3 d-inline-block align-middle">
+                                      <span class="text-muted font-weight-normal font-italic book-name">{{ book.name }}</span>
+                                  </div>
+                              </div>
+                          </th>
+                          <<td class="border-0 align-middle book-price"><strong>{{ book.price }}</strong></td>
+                          <td class="border-0 align-middle book-stock"><strong>{{ book.stock }}</strong></td>
+                          <td class="border-0 align-middle book-faculty"><strong>{{ book.faculty }}</strong></td>
+                          <td class="border-0 align-middle book-subject"><strong>{{ book.subject }}</strong></td>
+                          <td class="border-0 align-middle"><a href="#" class="text-dark edit-book"><i class="fa fa-edit"></i></a></td>
+                          <td class="align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a></td>
+                      </tr>
+                      {% endfor %}
                   </tbody>
                 </table>
               </div>
             </div>
         </div>
     </div>
+    
+    <!-- Add a modal for the edit form -->
+    <form action="" method="POST" enctype="multipart/form-data">
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">Edit Book Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            
+            <div class="col-6">
+              <label for="photo">Product</label>
+              <input type="file" id="photo" name="photo"><br>
+            </div>
+            <div class="col-6">
+              <label for="name">Book name</label>
+              <input type="text" id="name" name="name" required placeholder="Enter the Book name"><br>
+            </div>
+            <div class="col-6">
+              <label for="price">Price</label>
+              <input type="text" id="price" name="price" required placeholder="Enter the Price"><br>
+            </div>
+            <div class="col-6">
+              <label for="quantity">Quantity</label>
+              <input type="number" id="quantity" name="quantity" required placeholder="Enter the Quantity"><br>
+            </div>
+            <div class="col-6">
+              <label for="faculty">Faculty</label>
+              <input type="text" id="faculty" name="faculty" required placeholder="Enter the Faculty"><br>
+            </div>
+            <div class="col-6">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" required placeholder="Enter the Subject"><br>
+            </div>
+            <div class="col-6"></div>
+              <input type="submit" value="Save Changes">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </form>
+
     <!-- Bootstrap Bundle JavaScript (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Add your JavaScript script within a document ready function -->
+    <script>
+    $(document).ready(function() {
+        // Get the edit icon elements
+        var editIcons = document.querySelectorAll('.edit-book');
+
+        // Loop through each edit icon
+        editIcons.forEach(function(editIcon) {
+            // Add click event listener
+            editIcon.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            // Get the data of the row where the edit icon was clicked
+        var bookId = $(this).data('id');
+        var bookImage = $(this).closest('tr').find('.book-img').attr('src');
+        var bookName = $(this).closest('tr').find('.book-name').text();
+        var bookPrice = $(this).closest('tr').find('.book-price strong').text();
+        var bookQuantity = $(this).closest('tr').find('.book-stock strong').text();
+        var bookFaculty = $(this).closest('tr').find('.book-faculty strong').text();
+        var bookSubject = $(this).closest('tr').find('.book-subject strong').text();
+        
+        // Fill the data into the edit form
+        $('#editBookId').val(bookId);
+        $('#photo').attr('src', bookImage);
+        $('#name').val(bookName);
+        $('#price').val(bookPrice);
+        $('#quantity').val(bookQuantity);
+        $('#faculty').val(bookFaculty);
+        $('#subject').val(bookSubject);
+
+                // Show the edit modal
+                $('#editModal').modal('show');
+            });
+        });
+      });
+    </script>
 </body>
+</html>
