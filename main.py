@@ -21,7 +21,7 @@ def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = os.urandom(24)
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_NAME}"
-    app.config["UPLOADED_PHOTOS_DEST"] = "static/images"
+    app.config["UPLOADED_PHOTOS_DEST"] = "static/assets/images/user_uploads"
     configure_uploads(app, photos)
 
     from auth.models import User

@@ -1,14 +1,38 @@
 <!DOCTYPE html>
-{% extends 'base.html' %}
-{% block title %}
-Customize Your Profile
-{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %} Customize Your Profile {% endblock
+%} {% block content %}
 <div class="container">
-    <h1 class="text-center mt-3">Customize Your Profile</h1>
-
-      
-      
+  <h1 class="text-center mt-2">Customize Your Profile</h1>
+  <div class="text-center">
+    {% if current_profile_pic %}
+      <img src="{{ url_for('.static', filename='assets/images/{{current_profile_pic}}') }}" alt="User Profile Picture" width="150" height="50"
+      class="img-fluid profile-pic">
+    {% else %}
+      <img src="{{ url_for('.static', filename='assets/images/default_pfp.jpg') }}" alt="Default Profile Pic" width="150" height="50"
+      class="img-fluid profile-pic">
+    {% endif %}
+  </div>
+  <form method="POST">
+    <div class="form-group mt-4 mb-2">
+      <label for="profile_pic" class="form-label"
+        >Upload a Profile Picture</label
+      >
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="inputGroupFile01">Upload</label>
+        <input type="file" class="form-control" accept=".jpg, .png" />
+      </div>
+    </div>
+    <div class="form-group mt-4 mb-2">
+      <div class="input-group">
+        <span class="input-group-text" for="bio">Update Bio</span>
+        <textarea class="form-control" for="bio" id="bio" name="bio" placeholder="Tell people about yourself..." cols="5" rows="5">
+          {% if current_bio %}
+            {{current_bio}}
+          {% endif %}
+        </textarea>
+      </div>
+    </div>
+    <button class="btn btn-primary mt-4" type="submit">Update Account</button>
+  </form>
 </div>
 {% endblock %}
