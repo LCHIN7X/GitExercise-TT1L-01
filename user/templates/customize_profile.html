@@ -2,20 +2,20 @@
 {% extends 'base.html' %} {% block title %} Customize Your Profile {% endblock
 %} {% block content %}
 <div class="container">
-  <h1 class="text-center mt-2">Customize Your Profile</h1>
+  <h1 class="text-center mt-2 mb-2">Customize Your Profile</h1>
   <div class="text-center">
-    {% if current_profile_pic != 'default_pfp.jpg' %}
-      <img src="{{ url_for('.static', filename='assets/images/user_uploads/' + current_profile_pic) }}" alt="User Profile Picture" width="100" height="50"
-      class="img-fluid profile-pic">
+    {% if current_profile_pic != 'default_pfp.png' %}
+      <img src="{{ url_for('.static', filename='assets/images/user_uploads/' + current_profile_pic) }}" alt="User Profile Picture" width="125"
+      class="img-fluid rounded-circle">
     {% else %}
-      <img src="{{ url_for('.static', filename='assets/images/default_pfp.jpg') }}" alt="Default Profile Pic" width="100" height="50"
-      class="img-fluid profile-pic">
+      <img src="{{ url_for('.static', filename='assets/images/default_pfp.png') }}" alt="Default Profile Pic" width="125" 
+      class="img-fluid rounded-circle">
     {% endif %}
   </div>
   <form method="POST" enctype="multipart/form-data">
     <div class="form-group mt-4 mb-2">
-      {% if current_profile_pic == 'default_pfp.jpg' %}
-      <label for="profile_pic" class="form-label" >Upload a Profile Picture</label>
+      {% if current_profile_pic == 'default_pfp.png' %}
+      <label for="profile_pic" class="form-label col-form-label-lg" >Upload a Profile Picture</label>
       {% else %}
       <label for="profile_pic" class="form-label">Change Profile Picture</label>
       {% endif %}
@@ -24,12 +24,13 @@
       </div>
     </div>
     <div class="form-group mt-4 mb-2">
+      <label for="bio" class="form-label">Bio</label>
       <div class="input-group">
         <span class="input-group-text" for="bio">Update Bio</span>
         <textarea class="form-control" for="bio" id="bio" name="bio" placeholder="Tell people about yourself..." cols="3" rows="4">{% if current_bio %}{{current_bio}}{% endif %}</textarea>
       </div>
     </div>
-    <button class="btn btn-primary mt-4" type="submit">Update Account</button>
+    <button class="btn btn-primary mt-2 mb-4" type="submit">Update Account</button>
   </form>
 </div>
 {% endblock %}

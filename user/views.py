@@ -13,10 +13,8 @@ def file_is_valid(filename):
 
 @user.route('/customize_profile', methods=["GET","POST"])
 def customize_profile():
-    
     if request.method == "POST":
-        bio = request.form.get('bio')
-
+        
         if 'profile_pic' in request.files:
             profile_pic = request.files['profile_pic']
             
@@ -31,12 +29,20 @@ def customize_profile():
                     profile_pic.save(os.path.join(f"{cwd}/user/static/assets/images/user_uploads", filename))
                     current_user.profile_pic = filename
                     db.session.commit()
+                    flash("Profile Picture Successfully Updated!",category='success')
 
+        bio = request.form.get('bio')
         
-        if bio:
+        if bio is not None and bio.strip() != "":
             current_user.bio = bio 
             db.session.commit()
-            flash("Account details successfully updated!", category='success')
+            flash("Bio Successfully Updated!",category='success')
+            return redirect(url_for('user_bp.customize_profile'))
+        
+        else:
+            current_user.bio = None 
+            db.session.commit()
+            flash("Bio Successfully Cleared!",category="success")
             return redirect(url_for('user_bp.customize_profile'))
 
 

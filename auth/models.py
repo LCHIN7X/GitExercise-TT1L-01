@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(100), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
     bio = db.Column(db.String(200),default=None)
-    profile_pic = db.Column(db.String(200),default="default_pfp.jpg")
+    profile_pic = db.Column(db.String(200),default="default_pfp.png")
 
 
     def __repr__(self):

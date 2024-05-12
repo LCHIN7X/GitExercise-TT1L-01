@@ -11,10 +11,6 @@ nav img {
     padding: 0 30px;
 }
 
-.profile-pic {
-    border-radius: 60%;
-}
-
 #bio {
     resize: none;
     padding-top: 0.3em;
