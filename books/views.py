@@ -2,6 +2,7 @@ from flask import redirect,render_template,url_for,request,flash,Blueprint,sessi
 from auth.models import db,User
 from .models import Faculty,Subject,Book
 from .bforms import Addbooks 
+from .invoice import Invoice
 from flask_uploads import UploadSet, IMAGES
 from flask_login import login_required,current_user
 
@@ -180,19 +181,43 @@ def deletebook(id):
         print(e)
         return redirect(url_for('views.getCart'))
     
+@views.route('/confirm')
+def confirm():
+    return render_template('confirm.html')
+    
 @views.route('/payment')
 def payment():
+    return render_template('payment.html')
+
+
+@views.route('/order')
+def order():
     if 'Shopcart' not in session or not session['Shopcart']:
         flash('Your cart is empty', 'warning')
         return redirect(url_for('views.getCart'))
 
+    order_details = session['Shopcart']
+    total = 0 
+    user = current_user  
+    invoices = Invoice.query.all() 
+    invoice_id = None  # Initialize invoice_id here
+
     try:
-        for book_id, item in session['Shopcart'].items():
+        # Create a new invoice
+        new_invoice = Invoice()
+        db.session.add(new_invoice)
+        db.session.commit()
+
+        # Add invoice ID to the order details
+        invoice_id = new_invoice.id
+        for book_id, item in order_details.items():
+            item['invoice_id'] = invoice_id
             book = Book.query.get(book_id)
             if book:
                 quantity_to_deduct = int(item['quantity'])
                 if book.stock >= quantity_to_deduct:
                     book.stock -= quantity_to_deduct
+                    total += float(item['price']) * quantity_to_deduct  
                 else:
                     flash(f'Insufficient stock for {book.name}. Please remove it from your cart.', 'warning')
                     return redirect(url_for('views.getCart'))
@@ -203,8 +228,23 @@ def payment():
         flash('An error occurred during checkout. Please try again later.', 'error')
         print(e)
 
-    
-    session.pop('Shopcart', None)
-    return render_template('payment.html')
+    session.pop('Shopcart', None)  
+
+    return render_template('order.html', order_details=order_details, total=total, user=user, invoice_id=invoice_id)
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
 
 

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h1 class="text-center">Confirm to buy ??</h1>
+                    <hr>
+                    <td></td>
+                    <a href="{{ url_for('views.getCart') }}" class="float-start btn btn-sm btn-secondary"><h5>Back</h5></a>
+
+                    <a href="{{url_for('views.payment')}}" class="float-end btn btn-sm btn-warning"><h5>Confirm</h5></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
