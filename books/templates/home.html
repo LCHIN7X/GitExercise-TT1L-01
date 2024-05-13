@@ -15,7 +15,7 @@
       <ul class="navbar-nav mr-auto">
         
         <li class="nav-item">
-          <a class="nav-link" href="#">Books</a>
+          <a class="nav-link" href="/views/addbook">Books</a> <!--- cuz i lazy to type addbook,will change it later-->
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/views/home">Second Hand Books</a>
@@ -34,15 +34,20 @@
         <div class="dropdown">
           <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Subject
-          </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<!--- search bar to right ===================-->
+          </button>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             {% for subject in subjects %}
             <a class="dropdown-item" href="{{url_for('views.get_subject', id = subject.id)}}">{{subject.name}}</a>
             {% endfor %}
           </div>
         </div>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('views.getCart')}}">Cart ({{session['Shopcart']|length}})</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!--- search bar to right ===================-->
+        </li>
         
 
         
@@ -81,7 +86,11 @@
         </div>
         <div class="card-footer">  
           <a href="{{url_for('views.single_page', id = f.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
-          <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
+          <form action="{{url_for('views.addcart')}}" method="post">
+            <input type="hidden" name="book_id" value="{{f.id}}">
+            <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+            <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ f.stock }}">
+          </form>
         </div>
       </div>
     </div>
@@ -101,7 +110,11 @@
     </div>
     <div class="card-footer">  
       <a href="{{url_for('views.single_page', id = s.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
-      <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
+      <form action="{{url_for('views.addcart')}}" method="post">
+        <input type="hidden" name="book_id" value="{{s.id}}">
+        <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+        <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ s.stock }}">
+      </form>
     </div>
   </div>
 </div>
@@ -122,7 +135,11 @@
         </div>
         <div class="card-footer">  
           <a href="{{url_for('views.single_page', id = book.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
-          <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
+          <form action="{{url_for('views.addcart')}}" method="post">
+            <input type="hidden" name="book_id" value="{{book.id}}">
+            <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+            <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ book.stock }}">
+          </form>
         </div>
       </div>
     </div>
