@@ -1,8 +1,15 @@
 from flask_login import current_user
 from flask_admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
-from flask import flash
+from flask import flash, redirect, url_for
 from books.models import Book
+from flask_admin.form.upload import FileUploadField
+from wtforms.validators import InputRequired, ValidationError
+from werkzeug.utils import secure_filename
+
+
+def file_is_valid(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'jpg', 'png', 'jpeg'}
 
 
 class AdminIndex(AdminIndexView):
@@ -45,12 +52,33 @@ class AdminBookView(AdminModelView):
     column_sortable_list = ['name','price','stock','pub_date', ('faculty','faculty.name'), ('subject', 'subject.name')]
     column_searchable_list = ['name']
 
+    form_extra_fields = {
+        'image' : FileUploadField('Image',
+                                  base_path="static/images", 
+                                  relative_path="assets/images/",
+                                  validators=[InputRequired()])
+                        }
+
     
     def on_model_change(self, model, form, is_created):
         if is_created:
             model.user_id = current_user.id 
         model.user = current_user
 
+    
+    def validate_form(self, form):
+        
+        img_field = form.image
+        if img_field.data:
+            filename = secure_filename(img_field.data.filename)
+            if not file_is_valid(filename):
+                raise ValidationError('Invalid File Type: Only .jpg, .png and .jpeg Are Allowed.')
+            
+        return super().validate_form(form)    
+
+    def on_validation_error(self, form):
+        flash('Form validation failed',category='error')
+        return redirect(url_for('admin.index'))
 
 
 class AdminUserView(AdminModelView):
