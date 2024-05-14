@@ -36,63 +36,53 @@ photos = UploadSet('photos', IMAGES)
 def upload_form():
     return render_template("success.html")
 
+
 @shbooks.route("/ownshop", methods=['GET', 'POST'])
 def myshop():
     faculties = Faculty.query.all()
     subjects = Subject.query.all()
     form = Editbook(request.form)
-
-    if request.method == 'POST':
-        print("Form submitted")
-        if form.validate():
-            print("Form validated")  
-            name = form.name.data
-            price = form.price.data
-            stock = form.stock.data
-            selected_faculty = request.form.get('faculty')
-            selected_subject = request.form.get('subject')
-            image = form.image.data
-            print(f"Name: {name}, Price: {price}, Stock: {stock}, Faculty: {selected_faculty}, Subject: {selected_subject}, Image: {image}")
-            
-            # Handle file upload
-            if 'image' in request.files:
-                image = photos.save(request.files['image'])
-                print("Image uploaded")
-            else:
-                image = None
-            print(f"Image: {image}")
-            
-            book_id = request.form.get('book_id')
-            if book_id:
-                book = Book.query.get(book_id)
-                if book:
-                    book.name = name
-                    book.price = price
-                    book.stock = stock
-                    book.faculty = selected_faculty
-                    book.subject = selected_subject
-                    if image:
-                        book.image = image  
-                    db.session.commit()
-                    flash('Book updated successfully', 'success')
-                    return redirect(url_for('shbooks.myshop'))
-                else:
-                    flash('Book not found', 'error')
-            else:
-                book = Book(
-                    name=name,
-                    price=price,
-                    stock=stock,
-                    faculty=selected_faculty,
-                    subject=selected_subject,
-                    image=image, 
-                )
-                db.session.add(book)
-                db.session.commit()
-                flash('Book added successfully', 'success')
-                return redirect(url_for('shbooks.myshop'))
-        else:
-            flash('Form validation failed', 'error')
-
     books = Book.query.all()
-    return render_template("ownshop.html", form=form, books=books, faculties=faculties, subjects=subjects)
+    return render_template("ownshop.html", books=books, form=form, faculties=faculties, subjects=subjects)
+
+
+# @shbooks.route("/edit/<int:id>", methods=['GET', 'POST'])
+# def edit(id):
+#     edit_book = Book.query.get_or_404(id)
+#     if request.method == "POST":
+#         edit_book.image = request.form['image']
+#         edit_book.name = request.form['name']
+#         edit_book.price = request.form['price']
+#         edit_book.stock = request.form['stock']
+#         edit_book.faculty = request.form['faculty']
+#         edit_book.subject = request.form['subject']
+        
+#         try:
+#             db.session.commit()
+#             flash('Book edited successfully', 'success')
+#             return redirect(url_for('shbooks.myshop'))
+#         except:
+#             flash('Failed to edit book', 'error')
+#             return redirect(url_for('shbooks.myshop'))
+    
+#     # Ensure edit_book has the id attribute
+#     print("Edit Book ID:", edit_book.id)
+    
+#     return render_template("ownshop.html", edit_book=edit_book)
+
+            
+    
+
+
+@shbooks.route("/delete/<int:id>")
+def delete(id):
+    delete_book = Book.query.get_or_404(id)
+    
+    try:
+        db.session.delete(delete_book)
+        db.session.commit()
+        flash('Book deleteted successfully', 'success')
+        return redirect(url_for('shbooks.myshop'))
+    except:
+        flash('Book deleted failed', 'error')
+        return redirect(url_for('shbooks.myshop'))

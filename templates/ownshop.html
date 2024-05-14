@@ -104,7 +104,7 @@
                           <td class="border-0 align-middle book-faculty"><strong>{{ book.faculty }}</strong></td>
                           <td class="border-0 align-middle book-subject"><strong>{{ book.subject }}</strong></td>
                           <td class="border-0 align-middle"><a href="#" class="text-dark edit-book"><i class="fa fa-edit"></i></a></td>
-                          <td class="align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a></td>
+                          <td class="align-middle"><a href="/delete/{{book.id}}" class="text-dark"><i class="fa fa-trash"></i></a></td>
                       </tr>
                       {% endfor %}
                   </tbody>
@@ -115,7 +115,8 @@
     </div>
     
     <!-- Add a modal for the edit form -->
-    <form action="" method="POST" enctype="multipart/form-data">
+    <form action="/ownshop" method="POST" enctype="multipart/form-data">
+    {{ form.csrf_token }}
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -128,8 +129,8 @@
           <div class="modal-body">
             
             <div class="col-6">
-              <label for="photo">Product</label>
-              <input type="file" id="photo" name="photo"><br>
+              <label for="image">Product</label>
+              <input type="file" id="image" name="image" required accept=".jpg, .png"><br>
             </div>
             <div class="col-6">
               <label for="name">Book name</label>
@@ -137,11 +138,11 @@
             </div>
             <div class="col-6">
               <label for="price">Price</label>
-              <input type="text" id="price" name="price" required placeholder="Enter the Price"><br>
+              <input type="number" id="price" name="price" required placeholder="Enter the Price"><br>
             </div>
             <div class="col-6">
-              <label for="quantity">Quantity</label>
-              <input type="number" id="quantity" name="quantity" required placeholder="Enter the Quantity"><br>
+              <label for="stock">Quantity</label>
+              <input type="number" id="stock" name="stock" required placeholder="Enter the Quantity"><br>
             </div>
             <div class="col-6">
               <label for="faculty">Faculty</label>
@@ -181,16 +182,16 @@
         var bookImage = $(this).closest('tr').find('.book-img').attr('src');
         var bookName = $(this).closest('tr').find('.book-name').text();
         var bookPrice = $(this).closest('tr').find('.book-price strong').text();
-        var bookQuantity = $(this).closest('tr').find('.book-stock strong').text();
+        var bookStock = $(this).closest('tr').find('.book-stock strong').text();
         var bookFaculty = $(this).closest('tr').find('.book-faculty strong').text();
         var bookSubject = $(this).closest('tr').find('.book-subject strong').text();
         
         // Fill the data into the edit form
         $('#editBookId').val(bookId);
-        $('#photo').attr('src', bookImage);
+        $('#image').attr('src', bookImage);
         $('#name').val(bookName);
         $('#price').val(bookPrice);
-        $('#quantity').val(bookQuantity);
+        $('#stock').val(bookStock);
         $('#faculty').val(bookFaculty);
         $('#subject').val(bookSubject);
 
