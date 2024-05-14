@@ -6,6 +6,7 @@ from books.models import Book
 from flask_admin.form.upload import FileUploadField
 from wtforms.validators import InputRequired, ValidationError
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash
 
 
 def file_is_valid(filename):
