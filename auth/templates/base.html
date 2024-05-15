@@ -96,6 +96,15 @@
               height="250"
               class="rounded-circle"  
             />
+            <li class="nav-item">
+              <a class="nav-link" href="/views/addbook">Sell Book</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('auth.logout')}}">Log Out</a>
+            </li>
+            
+            <li class="nav-item">
+              <a href="{{url_for('auth.change_password')}}" class="nav-link {% if current_page == 'change_password' %}active{% endif %}">Change Password</a>
             </li>
             {% else %}
             <li class="nav-item d-flex align-self-center justify-content-center">
