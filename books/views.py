@@ -1,6 +1,7 @@
 from flask import redirect,render_template,url_for,request,flash,Blueprint,session
 from auth.models import db,User
 from .models import Faculty,Subject,Book
+from .invoice import Invoice
 from .bforms import Addbooks 
 from flask_uploads import UploadSet, IMAGES
 from flask_login import login_required,current_user
@@ -182,29 +183,47 @@ def deletebook(id):
     
 @views.route('/payment')
 def payment():
+    return render_template('payment.html')
+
+
+@views.route('/order')
+def order():
     if 'Shopcart' not in session or not session['Shopcart']:
         flash('Your cart is empty', 'warning')
         return redirect(url_for('views.getCart'))
 
+    order_details = session['Shopcart']
+    total = 0 
+    user = current_user
+    invoices = Invoice.query.all()
+
     try:
-        for book_id, item in session['Shopcart'].items():
+        session.modified = True
+        for book_id, item in order_details.items():
             book = Book.query.get(book_id)
             if book:
                 quantity_to_deduct = int(item['quantity'])
                 if book.stock >= quantity_to_deduct:
                     book.stock -= quantity_to_deduct
+                    total += float(item['price']) * quantity_to_deduct
                 else:
                     flash(f'Insufficient stock for {book.name}. Please remove it from your cart.', 'warning')
                     return redirect(url_for('views.getCart'))
+
+        
         db.session.commit()
+
+        
+
         flash('Checkout successful. Your order has been placed.', 'success')
     except Exception as e:
         db.session.rollback()
         flash('An error occurred during checkout. Please try again later.', 'error')
         print(e)
 
-    
     session.pop('Shopcart', None)
-    return render_template('payment.html')
+
+    return render_template('order.html', order_details=order_details, total=total, user=user, invoices=invoices)
+
 
 

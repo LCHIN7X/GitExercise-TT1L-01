@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% include "_messages.html" %}
+        
+        {% for invoice in invoices %}
+        <h6>Invoice: {{ invoice.invoice }}</h6>
+        <h6>Status: {{ invoice.status }}</h6>
+        {% endfor %}
+
+        <h6>Student name: {{ user.username }}</h6>
+        <h6>Student Id: {{ user.student_id }}</h6>
+        <hr>
+        <table class="table table-sm">
+            <thead>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </thead>
+            <tbody>
+                {% for book_id, book in order_details.items() %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ book.name }}</td>
+                        <td>{{ book.quantity }}</td>
+                        <td>{{ book.price }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="3"><h5>Total: RM{{ '%.2f' % total }}</h5></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
