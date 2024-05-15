@@ -186,6 +186,8 @@ def payment():
     return render_template('payment.html')
 
 
+import secrets
+
 @views.route('/order')
 def order():
     if 'Shopcart' not in session or not session['Shopcart']:
@@ -195,7 +197,7 @@ def order():
     order_details = session['Shopcart']
     total = 0 
     user = current_user
-    invoices = Invoice.query.all()
+    invoice = None
 
     try:
         session.modified = True
@@ -210,20 +212,27 @@ def order():
                     flash(f'Insufficient stock for {book.name}. Please remove it from your cart.', 'warning')
                     return redirect(url_for('views.getCart'))
 
-        
+        # Create and save a new invoice
+        invoice_number = secrets.token_hex(5)
+        new_invoice = Invoice(invoice=invoice_number)
+        print(f"Attempting to add invoice: {invoice_number}")
+
+        db.session.add(new_invoice)
         db.session.commit()
 
-        
+        invoice = new_invoice
+        print(f"Invoice saved with ID: {invoice.id}")
 
         flash('Checkout successful. Your order has been placed.', 'success')
     except Exception as e:
         db.session.rollback()
         flash('An error occurred during checkout. Please try again later.', 'error')
-        print(e)
+        print(f"Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
 
     session.pop('Shopcart', None)
 
-    return render_template('order.html', order_details=order_details, total=total, user=user, invoices=invoices)
-
+    return render_template('order.html', order_details=order_details, total=total, user=user, invoices=[invoice])
 
 
