@@ -50,72 +50,56 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             {% if current_user.is_authenticated %}
-            <li class="nav-item d-flex align-self-center justify-content-end">
-              <a
-                class="nav-link {% if current_page == 'home' %}active{% endif %}"
-                href="/views/home"
-                >Home</a
-              >
-            </li>
-            <li class="nav-item d-flex align-self-center justify-content-end">
-              <a class="nav-link" href="{{url_for('auth.logout')}}">Log Out</a>
-            </li>
-            <li class="nav-item d-flex align-self-center justify-content-end">
-              <a
-                href="{{url_for('auth.change_password')}}"
-                class="nav-link {% if current_page == 'change_password' %}active{% endif %}"
-                >Change Password</a
-              >
-            </li>
-            <li class="nav-item d-flex align-self-center justify-content-end">
-              <a
-                href="{{url_for('user_bp.customize_profile')}}"
-                class="nav-link {% if current_page == 'customize_profile' %}active{% endif %}"
-                >Customize Profile</a
-              >
-            </li>
-            {% if current_user.is_admin %}
-            <li class="nav-item d-flex align-self-center justify-content-end">
-              <a
-                href="{{url_for('admin.index')}}"
-                class="nav-link"
-                >Admin Dashboard</a
-              >
-            </li>
-            {% endif %}
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <li class="nav-item d-flex align-self-center justify-content-end">
+                <a
+                  class="nav-link {% if current_page == 'home' %}active{% endif %}"
+                  href="/views/home"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item d-flex align-self-center justify-content-end">
+                <a class="nav-link" href="/views/addbook">Sell Book</a>
+              </li>
+              <li class="nav-item d-flex align-self-center justify-content-end">
+                <a class="nav-link" href="{{url_for('auth.logout')}}">Log Out</a>
+              </li>
+              <li class="nav-item d-flex align-self-center justify-content-end">
+                <a
+                  href="{{url_for('auth.change_password')}}"
+                  class="nav-link {% if current_page == 'change_password' %}active{% endif %}"
+                  >Change Password</a
+                >
+              </li>
+              {% if not current_user.is_admin %}
+              <li class="nav-item d-flex align-self-center justify-content-end">
+                <a
+                  href="{{url_for('user_bp.customize_profile')}}"
+                  class="nav-link {% if current_page == 'customize_profile' %}active{% endif %}"
+                  >Customize Profile</a
+                >
+              </li>
+              {% elif current_user.is_admin %}
+              <li class="nav-item d-flex align-self-center justify-content-end">
+                <a href="{{url_for('admin.index')}}" class="nav-link"
+                  >Admin Dashboard</a
+                >
+              </li>
+              {% endif %}
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {% if current_user.profile_pic != "default_pfp.png" %}
-            <li class="nav-item d-flex align-self-center justify-content-center">
-              <img
-              src="{{ url_for('user_bp.static', filename='assets/images/user_uploads/' + current_user.profile_pic) }}"
-              alt="Profile Picture"
-              height="250"
-              class="rounded-circle"  
-            />
-            <li class="nav-item">
-              <a class="nav-link" href="/views/addbook">Sell Book</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{url_for('auth.logout')}}">Log Out</a>
-            </li>
-            
-            <li class="nav-item">
-              <a href="{{url_for('auth.change_password')}}" class="nav-link {% if current_page == 'change_password' %}active{% endif %}">Change Password</a>
-            </li>
-            {% else %}
-            <li class="nav-item d-flex align-self-center justify-content-center">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <li
+              class="nav-item d-flex align-self-center justify-content-center"
+            >
               <img
                 src="{{ url_for('user_bp.static', filename='assets/images/default_pfp.png') }}"
                 alt="Profile Picture"
                 height="250"
                 class="rounded-circle"
               />
-            </li>
-            {% endif %} {% else %}
+            </li> 
+            {% else %}
             <li class="nav-item">
               <a
                 class="nav-link {% if current_page == 'login' %}active{% endif %}"
