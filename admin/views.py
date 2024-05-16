@@ -127,3 +127,22 @@ class AdminUserView(AdminModelView):
             return False
 
         return super().delete_model(model)
+    
+
+class AdminInvoiceView(AdminModelView):
+    column_labels = {
+        "id" : "ID",
+        "invoice" : "Invoice Details",
+        "status" : "Status",
+        "data_order" : "Date Ordered"
+    }
+    column_list = ['invoice','status','data_order']
+    form_columns = ['invoice','status']
+    column_filters = ['status','invoice','data_order']
+    column_searchable_list = ['status','invoice']
+    column_sortable_list = ['status','invoice','data_order']
+
+    form_edit_rules = [
+        "status",
+        'invoice'
+    ]
