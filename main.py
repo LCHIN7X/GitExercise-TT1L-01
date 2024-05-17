@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 from flask_login import LoginManager
 from auth.models import db
-# from flask_msearch import Search
+from flask_msearch import Search
 
 import os
 
@@ -20,7 +20,7 @@ from admin import admin, add_admin_to_db
 
 DATABASE_NAME = "database.db"
 bcrypt = Bcrypt()
-# search = Search(db=db)
+search = Search(db=db)
 photos = UploadSet("photos", IMAGES)
 
 
@@ -35,10 +35,10 @@ def create_app():
    
     
     configure_uploads(app, photos)
-    # search.init_app(app)
+    search.init_app(app)
 
     from auth.models import User
-
+    
     db.init_app(app)
     admin.init_app(app)
 
@@ -60,8 +60,6 @@ def create_app():
     # from auth.models import db
     # from auth.models import User
     # from shbooks.models import SecondHandBooks
-
-
     
 
     with app.app_context():

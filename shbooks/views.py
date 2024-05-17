@@ -8,6 +8,7 @@ from auth.models import db
 from books.models import Book, Faculty, Subject
 from .forms import Editbook
 from werkzeug.utils import secure_filename
+import sqlite3
 
 ####
 # from main import User, SecondHandBooks,db
@@ -31,6 +32,10 @@ photos = UploadSet('photos', IMAGES)
 # def home():
 #     return render_template("base.html")
 
+def get_db_connection():
+    con = sqlite3.connect("database.db")
+    con.row_factory = sqlite3.Row
+    return con
 
 @shbooks.route("/upload_form", methods=['GET', 'POST'])
 def upload_form():
@@ -41,37 +46,9 @@ def upload_form():
 def myshop():
     faculties = Faculty.query.all()
     subjects = Subject.query.all()
-    form = Editbook(request.form)
     books = Book.query.all()
-    return render_template("ownshop.html", books=books, form=form, faculties=faculties, subjects=subjects)
-
-
-# @shbooks.route("/edit/<int:id>", methods=['GET', 'POST'])
-# def edit(id):
-#     edit_book = Book.query.get_or_404(id)
-#     if request.method == "POST":
-#         edit_book.image = request.form['image']
-#         edit_book.name = request.form['name']
-#         edit_book.price = request.form['price']
-#         edit_book.stock = request.form['stock']
-#         edit_book.faculty = request.form['faculty']
-#         edit_book.subject = request.form['subject']
-        
-#         try:
-#             db.session.commit()
-#             flash('Book edited successfully', 'success')
-#             return redirect(url_for('shbooks.myshop'))
-#         except:
-#             flash('Failed to edit book', 'error')
-#             return redirect(url_for('shbooks.myshop'))
-    
-#     # Ensure edit_book has the id attribute
-#     print("Edit Book ID:", edit_book.id)
-    
-#     return render_template("ownshop.html", edit_book=edit_book)
-
-            
-    
+    form = Editbook(request.form)
+    return render_template("ownshop.html", books=books, form=form, faculties=faculties, subjects=subjects,edit_book=None)  
 
 
 @shbooks.route("/delete/<int:id>")
@@ -82,7 +59,51 @@ def delete(id):
         db.session.delete(delete_book)
         db.session.commit()
         flash('Book deleteted successfully', 'success')
-        return redirect(url_for('shbooks.myshop'))
+        return redirect('/ownshop')
     except:
         flash('Book deleted failed', 'error')
-        return redirect(url_for('shbooks.myshop'))
+        return redirect('/ownshop')
+
+@shbooks.route('/test/<int:id>', methods=['POST', 'GET'] )
+def testpage(id):
+    edit_book = Book.query.get_or_404(id)
+    return render_template('editform.html', edit_book=edit_book)
+
+@shbooks.route('/testfunction/<int:id>', methods=['POST', 'GET'])
+def testfunction(id):
+    edit_book = Book.query.get_or_404(id)
+    if request.method == "POST":
+        try:
+            # Ensure that the form data is properly retrieved
+            image = request.files['image']
+            if image and image.filename != '':
+                filename = secure_filename(image.filename)
+                image.save(os.path.join('static/images', filename))
+                edit_book.image = filename
+            
+            edit_book.name = request.form['name']
+            edit_book.price = float(request.form['price'])
+            edit_book.stock = int(request.form['stock'])
+            
+            edit_book.faculty_id = request.form['faculty']
+            edit_book.subject_id = request.form['subject']   
+            
+            
+            
+            db.session.commit()  # Commit changes to the database
+
+            flash('Book edited successfully', 'success')
+            return redirect(url_for('shbooks.myshop'))
+        except Exception as e:
+            flash(f'Error editing book: {str(e)}', 'error')
+            return redirect(url_for('shbooks.myshop'))
+
+    return redirect(url_for('shbooks.myshop'))
+
+@shbooks.route('/searchresult')
+def searchresult():
+    searchword = request.args.get('x')
+    books = Book.query.msearch(searchword,fields=['name','desc'],limit=3)
+    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
+    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
+    return render_template('searchresult.html',books=books,facultiess=facultiess,subjects=subjects)
