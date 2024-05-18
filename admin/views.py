@@ -143,6 +143,5 @@ class AdminInvoiceView(AdminModelView):
     column_sortable_list = ['status','invoice','data_order']
 
     form_edit_rules = [
-        "status",
-        'invoice'
+        "status"
     ]
