@@ -1,10 +1,11 @@
-from flask import redirect,render_template,url_for,request,flash,Blueprint,session
+from flask import redirect,render_template,url_for,request,flash,Blueprint,session,jsonify
 from auth.models import db,User
 from .models import Faculty,Subject,Book
 from .invoice import Invoice
 from .bforms import Addbooks 
 from flask_uploads import UploadSet, IMAGES
 from flask_login import login_required,current_user
+
 import secrets
 
 
@@ -14,39 +15,49 @@ views = Blueprint("views",__name__,template_folder="templates",static_folder="st
 @views.route('/home')
 @login_required
 def home():
-    books = Book.query.filter(Book.stock >0)
+    books = Book.query.filter(Book.stock > 0, Book.is_original == True).all()
+    bookss = Book.query.filter(Book.stock > 0, Book.is_original == False).all()
     facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
     subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
-    return render_template('home.html', books=books,facultiess=facultiess,subjects=subjects)
+    return render_template('home.html', books=books,bookss=bookss,facultiess=facultiess,subjects=subjects)
+
 
 @views.route('/searchh')
 def searchh():
     searchword = request.args.get('x')
-    books = Book.query.msearch(searchword,fields=['name','desc'],limit=3)
-    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
-    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
-    return render_template('searchh.html',books=books,facultiess=facultiess,subjects=subjects)
+    books = Book.query.msearch(searchword, fields=['name', 'desc']).filter(Book.stock > 0, Book.is_original == True).limit(3).all()
+    bookss = Book.query.filter_by(faculty_id=id).filter(Book.stock > 0, Book.is_original == False).all()
+    facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
+    subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
+    return render_template('searchh.html', books=books,bookss=bookss, facultiess=facultiess, subjects=subjects)
+
 
 @views.route('/book/<int:id>')
+@login_required
 def single_page(id):
-    book = Book.query.get_or_404(id)
-    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
-    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
-    return render_template('single_page.html',book=book,facultiess=facultiess,subjects=subjects)
+    book = Book.query.get_or_404(id)   
+    bookss = Book.query.filter_by(name=book.name).filter(Book.stock > 0,Book.is_original == False).all()
+    faculties = Faculty.query.all()
+    subjects = Subject.query.all()
+    return render_template('single_page.html', book=book, bookss=bookss, faculties=faculties, subjects=subjects)
+
 
 @views.route('/faculty/<int:id>')
 def get_faculty(id):
-    faculty = Book.query.filter_by(faculty_id=id)
-    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
-    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
-    return render_template('home.html',faculty=faculty,facultiess=facultiess,subjects=subjects)
+    faculty = Book.query.filter_by(faculty_id=id).filter(Book.stock > 0, Book.is_original == True).all()
+    bookss = Book.query.filter_by(faculty_id=id).filter(Book.stock > 0, Book.is_original == False).all()
+    facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
+    subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
+    return render_template('home.html', books=faculty, bookss=bookss, facultiess=facultiess, subjects=subjects)
 
 @views.route('/subjects/<int:id>')
 def get_subject(id):
-    get_sub = Book.query.filter_by(subject_id=id)
-    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
-    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
-    return render_template('home.html',subjects=subjects,get_sub=get_sub,facultiess=facultiess)
+    get_sub = Book.query.filter_by(subject_id=id).filter(Book.stock > 0, Book.is_original == True).all()
+    bookss = Book.query.filter_by(subject_id=id).filter(Book.stock > 0, Book.is_original == False).all()
+    facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
+    subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
+    return render_template('home.html', books=get_sub, bookss=bookss, facultiess=facultiess, subjects=subjects)
+
 
 
 @views.route('/addfaculty', methods=['GET','POST'])
@@ -92,11 +103,13 @@ def addbook():
         price = form.price.data
         stock = form.stock.data
         desc = form.discription.data
+        con = form.condition.data
         faculty = request.form.get('faculty')
         subject = request.form.get('subject')
         image = photos.save(request.files['image'])
         user = current_user
-        addbo = Book(name=name,user_id=username,price=price,stock=stock,desc=desc,faculty_id=faculty,subject_id=subject,image=image,user=user)
+        addbo = Book(name=name,user_id=username,price=price,stock=stock,desc=desc,con=con,faculty_id=faculty,
+                     subject_id=subject,image=image,user=user, is_original=True)
         db.session.add(addbo)
         db.session.commit()
         flash(f"Book {name} has been added to your database",'success')
@@ -104,21 +117,31 @@ def addbook():
     return render_template('addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects,photos=photos,users=users)
 
 
-@views.route('/addsbook', methods=['POST', 'GET'])
-def addsbook():
-    form=Addbooks(request.form)
-    user=current_user
+
+@views.route('/addsbook/<int:book_id>', methods=['POST', 'GET'])
+@login_required
+def addsbook(book_id):
+    form = Addbooks(request.form)
+    original_book = Book.query.get_or_404(book_id)
+    user = current_user
+
     if request.method == 'POST':
-        
         price = form.price.data
         stock = form.stock.data
-        desc = form.discription.data
-        addbo = Book(price=price,stock=stock,desc=desc)
+        con = form.condition.data
+        addbo = Book(name=original_book.name, price=price, stock=stock, desc=original_book.desc,con=con, image=original_book.image, 
+                     faculty_id=original_book.faculty_id, subject_id=original_book.subject_id, user_id=user.id,is_original=False)
+
         db.session.add(addbo)
         db.session.commit()
-        flash(f"Your book has been sell",'success')
-        return redirect(url_for('views.addsbook'))
-    return render_template('addsbook.html',form=form,user=user)
+        flash(f"Your book has been listed for sale", 'success')
+        return redirect(url_for('views.single_page', id=book_id))  
+
+    return render_template('addsbook.html', form=form, user=user, book=original_book)
+
+
+
+
 
 
 def MagerDicts(dict1, dict2):
@@ -253,3 +276,5 @@ def order():
     session.pop('Shopcart', None)
 
     return render_template('order.html', order_details=order_details, total=total, user=user, invoices=[invoice])
+
+

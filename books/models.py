@@ -9,6 +9,7 @@ class Book(db.Model):
     price = db.Column(db.Numeric(10,2), nullable=False)
     stock = db.Column(db.Integer, nullable=False)
     desc = db.Column(db.Text, nullable=False)
+    con = db.Column(db.Text, nullable=False)
     pub_date = db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
 
     faculty_id = db.Column(db.Integer, db.ForeignKey('faculty.id'),nullable=False)
@@ -21,6 +22,7 @@ class Book(db.Model):
     user = db.relationship('User', backref=db.backref('books', lazy=True))
 
     image = db.Column(db.String(150),nullable=False,default='image.jpg')
+    is_original = db.Column(db.Boolean, default=True, nullable=False)
 
     def __repr__(self):
         return '<Post %r>' % self.name
