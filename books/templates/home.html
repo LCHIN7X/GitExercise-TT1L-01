@@ -90,6 +90,7 @@
               <img src="{{ url_for('static', filename='images/' + f.image) }}" alt="{{ f.name }}" height="300" width="350">
               <hr>
               <p>RM {{ f.price }}</p>
+              <p>Condition: {{ f.con }}</p>
               <p>Stock: {{ f.stock }}</p>
               <form action="{{ url_for('views.addcart') }}" method="post">
                 <input type="hidden" name="book_id" value="{{ f.id }}">
@@ -152,6 +153,7 @@
               <img src="{{ url_for('static', filename='images/' + s.image) }}" alt="{{ s.name }}" height="300" width="350">
               <hr>
               <p>RM {{ s.price }}</p>
+              <p>Condition: {{ s.con }}</p>
               <p>Stock: {{ s.stock }}</p>
               <form action="{{ url_for('views.addcart') }}" method="post">
                 <input type="hidden" name="book_id" value="{{ s.id }}">
@@ -216,7 +218,9 @@
           <img src="{{ url_for('static', filename='images/' + book.image) }}" alt="{{ book.name }}" height="300" width="350">
           <hr>
           <p>RM {{ book.price }}</p>
+          <p>Condition: {{ book.con }}</p>
           <p>Stock: {{ book.stock }}</p>
+          
 
           <form action="{{ url_for('views.addcart') }}" method="post">
             <input type="hidden" name="book_id" value="{{ book.id }}">
