@@ -5,6 +5,7 @@ from .invoice import Invoice
 from .bforms import Addbooks 
 from flask_uploads import UploadSet, IMAGES
 from flask_login import login_required,current_user
+import secrets
 
 
 views = Blueprint("views",__name__,template_folder="templates",static_folder="static")
@@ -103,6 +104,23 @@ def addbook():
     return render_template('addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects,photos=photos,users=users)
 
 
+@views.route('/addsbook', methods=['POST', 'GET'])
+def addsbook():
+    form=Addbooks(request.form)
+    user=current_user
+    if request.method == 'POST':
+        
+        price = form.price.data
+        stock = form.stock.data
+        desc = form.discription.data
+        addbo = Book(price=price,stock=stock,desc=desc)
+        db.session.add(addbo)
+        db.session.commit()
+        flash(f"Your book has been sell",'success')
+        return redirect(url_for('views.addsbook'))
+    return render_template('addsbook.html',form=form,user=user)
+
+
 def MagerDicts(dict1, dict2):
     if isinstance(dict1, list) and isinstance(dict2, list):
         return dict1 + dict2
@@ -186,16 +204,17 @@ def payment():
     return render_template('payment.html')
 
 
-import secrets
+
 
 @views.route('/order')
+@login_required
 def order():
     if 'Shopcart' not in session or not session['Shopcart']:
         flash('Your cart is empty', 'warning')
         return redirect(url_for('views.getCart'))
 
     order_details = session['Shopcart']
-    total = 0 
+    total = 0
     user = current_user
     invoice = None
 
@@ -212,9 +231,9 @@ def order():
                     flash(f'Insufficient stock for {book.name}. Please remove it from your cart.', 'warning')
                     return redirect(url_for('views.getCart'))
 
-        # Create and save a new invoice
+        
         invoice_number = secrets.token_hex(5)
-        new_invoice = Invoice(invoice=invoice_number)
+        new_invoice = Invoice(invoice=invoice_number, user_id=user.id)  
         print(f"Attempting to add invoice: {invoice_number}")
 
         db.session.add(new_invoice)
@@ -234,5 +253,3 @@ def order():
     session.pop('Shopcart', None)
 
     return render_template('order.html', order_details=order_details, total=total, user=user, invoices=[invoice])
-
-
