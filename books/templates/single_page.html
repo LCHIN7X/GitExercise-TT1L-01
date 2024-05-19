@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!--- navbar starts ===================-->
+<div class="container">
+  
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        
+        <li class="nav-item">
+          <a class="nav-link" href="/views/home">Books</a> 
+        </li>
+        
+        <div class="dropdown">
+          <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Faculty
+          </button>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for faculty in facultiess %}
+            <a class="dropdown-item" href="{{url_for('views.get_faculty', id = faculty.id)}}">{{faculty.name}}</a>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Subject
+          </button>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for subject in subjects %}
+            <a class="dropdown-item" href="{{url_for('views.get_subject', id = subject.id)}}">{{subject.name}}</a>
+            {% endfor %}
+          </div>
+        </div>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('views.getCart')}}">Cart ({{session['Shopcart']|length}})</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <!--- search bar to right ===================-->
+        </li>
+        
+
+        
+      </ul>
+      
+      
+      <form class="form-inline my-2 my-lg-0 ml-auto" action="{{url_for('views.searchh')}}"> 
+        <div class="row  justify-content-end">
+          <div class="col">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="x">
+          </div>
+          <div class="col">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </div>
+        </div>
+      </form>
+     
+   
+    </div>
+  </nav>
+</div>
+<!--- navbar ends ===================-->
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6" id="f_image">
+            <img src="{{ url_for('static', filename='images/' + book.image) }}" alt="{{ book.name }}" height="400">
+        </div>
+        <div class="col-md-6">
+            <h5>Book name: {{ book.name }}</h5>
+            <hr>
+            <h5>RM: {{ book.price }}</h5>
+            <hr>
+            <h5>Condition: {{ book.con }}</h5>
+            <hr>
+            <h5>Stock: {{ book.stock }}</h5>
+            <hr>
+            <b>Book details:</b>
+            <p>{{ book.desc }}</p>
+            <hr>
+            
+
+            <form action="{{ url_for('views.addcart') }}" method="post">
+                <input type="hidden" name="book_id" value="{{ book.id }}">
+                <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ book.stock }}">
+            </form>
+            <hr>
+
+            <a href="{{ url_for('views.addsbook', book_id=book.id) }}" class="float-end">Sell same book?</a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+  <h3>Other Choose for {{ book.name }}</h3>
+    <div class="row">
+        {% for sbook in bookss %}
+        
+            <div class="col-md-3 mt-3">
+                <div class="card">
+                    
+                        
+                        <p class="card-text">RM {{ sbook.price }}</p>
+                        <p>Condition: {{ sbook.con }}</p>
+                        <p>Stock: {{ sbook.stock }}</p>
+                        <p>Sell by: {{ sbook.user.username }}</p>
+                        
+                    
+                    <div class="card-footer">
+                      <form action="{{url_for('views.addcart')}}" method="post">
+                        <input type="hidden" name="book_id" value="{{sbook.id}}">
+                        <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+                        <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ sbook.stock }}">
+                      </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
