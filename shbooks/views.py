@@ -84,7 +84,6 @@ def testfunction(id):
             edit_book.name = request.form['name']
             edit_book.price = float(request.form['price'])
             edit_book.stock = int(request.form['stock'])
-            
             edit_book.faculty_id = request.form['faculty']
             edit_book.subject_id = request.form['subject']   
             

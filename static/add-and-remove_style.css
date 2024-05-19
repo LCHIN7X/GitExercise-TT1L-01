@@ -759,3 +759,7 @@ i.fa-edit {
     color: #856404; /* Dark yellow text */
     border-color: #ffeeba; /* Border color */
 }
+
+#mybook .search{
+    margin-left: 700px;
+}
