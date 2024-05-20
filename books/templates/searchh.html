@@ -89,6 +89,7 @@
               <img src="{{ url_for('static', filename='images/' + book.image) }}" alt="{{ book.name }}" height="300" width="350">
               <hr>
               <p>RM {{ book.price }}</p>
+              <p>Condition: {{ book.con }}</p>
               <p>Stock: {{ book.stock }}</p>
     
               <form action="{{ url_for('views.addcart') }}" method="post">

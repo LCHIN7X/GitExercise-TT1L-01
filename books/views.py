@@ -26,10 +26,17 @@ def home():
 def searchh():
     searchword = request.args.get('x')
     books = Book.query.msearch(searchword, fields=['name', 'desc']).filter(Book.stock > 0, Book.is_original == True).limit(3).all()
-    bookss = Book.query.filter_by(faculty_id=id).filter(Book.stock > 0, Book.is_original == False).all()
+
+    if books:
+        bookss = Book.query.filter_by(name=books[0].name).filter(Book.stock > 0, Book.is_original == False).all()
+    else:
+        bookss = []
+
+   
     facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
     subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
-    return render_template('searchh.html', books=books,bookss=bookss, facultiess=facultiess, subjects=subjects)
+    
+    return render_template('searchh.html', books=books, bookss=bookss, facultiess=facultiess, subjects=subjects)
 
 
 @views.route('/book/<int:id>')
@@ -276,5 +283,3 @@ def order():
     session.pop('Shopcart', None)
 
     return render_template('order.html', order_details=order_details, total=total, user=user, invoices=[invoice])
-
-
