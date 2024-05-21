@@ -85,9 +85,21 @@ def testfunction(id):
             edit_book.price = float(request.form['price'])
             edit_book.stock = int(request.form['stock'])
             edit_book.faculty_id = request.form['faculty']
-            edit_book.subject_id = request.form['subject']   
+            edit_book.subject_id = request.form['subject'] 
+
+            faculty_name = request.form['faculty']
+            subject_name = request.form['subject']
             
-            
+           
+            faculty = Faculty.query.filter_by(name=faculty_name).first()
+            subject = Subject.query.filter_by(name=subject_name).first()
+
+            if not faculty or not subject:
+                flash('Invalid faculty or subject name', 'error')
+                return redirect(url_for('shbooks.myshop'))
+
+            edit_book.faculty_id = faculty.id
+            edit_book.subject_id = subject.id
             
             db.session.commit()  # Commit changes to the database
 

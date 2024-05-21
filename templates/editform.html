@@ -38,11 +38,11 @@
                     </div>
                     <div class="col-6">
                         <label for="faculty">Faculty</label>
-                        <input type="text" id="faculty" name="faculty" required placeholder="Enter the Faculty ID" value="{{ edit_book.faculty_id }}"><br>
+                        <input type="text" id="faculty" name="faculty" required placeholder="Enter the Faculty ID" value="{{ edit_book.faculty.name }}"><br>
                     </div>
                     <div class="col-6">
                         <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" required placeholder="Enter the Subject ID" value="{{ edit_book.subject_id }}"><br>
+                        <input type="text" id="subject" name="subject" required placeholder="Enter the Subject ID" value="{{ edit_book.subject.name }}"><br>
                     </div>
                     <input type="hidden" name="id" id="editBookId" value="{{ edit_book.id }}">
                     <div class="col-6"></div>
