@@ -36,7 +36,7 @@ class AdminModelView(ModelView):
     def can_create(self):
         return True
 
-class AdminBookView(AdminModelView):
+class AdminBookView(ModelView):
     column_labels = {
         "name": "Book Name",
         "faculty.name": "Faculty",
@@ -64,29 +64,34 @@ class AdminBookView(AdminModelView):
         }
     }
 
-    def on_model_change(self, form, model, is_created):
-        print(f"on_model_change called for book: {model.name}")
-        print(f"Type of model.name: {type(model.name)}, Value of model.name: '{model.name}'")
-        if is_created:
-            print(f"Attempting to add book with name: {model.name}")
-            
-            # Print current session state for debugging
-            print(f"Current session: {db.session}")
+    def create_model(self, form):
+        try:
+            print(f"create_model called for book: {form.name.data}")
+            book_name = form.name.data
+            book_already_exists = Book.query.filter_by(name=book_name).first()
+            print(f"Query result for book with name '{book_name}': {book_already_exists}")
 
-            # Check if a book with the same name already exists
-            db.session.commit()  # Ensure all prior changes are committed
-            book_already_exists = Book.query.filter_by(name=model.name).first()
-            print(f"Query result for book with name '{model.name}': {book_already_exists}")
+            model = self.model()
+            form.populate_obj(model)
 
             if book_already_exists:
-                model.is_original = True
+                print(f"Book with name '{book_name}' already exists.")
+                model.is_original = False
             else:
+                print(f"No book with name '{book_name}' found. Setting is_original to True.")
                 model.is_original = True
 
             model.user_id = current_user.id
+            model.user = current_user
 
-        model.user = current_user
-        return super().on_model_change(form, model, is_created)
+            self.session.add(model)
+            self.session.commit()
+            return model
+
+        except Exception as e:
+            flash(f'Error creating book: {str(e)}', 'error')
+            self.session.rollback()
+            return False
 
     def validate_form(self, form):
         if hasattr(form, 'image'):
