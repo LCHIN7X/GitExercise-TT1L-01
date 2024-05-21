@@ -1,0 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+
+nav img {
+    width: 70%;
+    height: 50px;
+}
+
+.container {
+    padding: 0 30px;
+}
+
+.rounded-circle {
+    border-radius: 50%;
+}
