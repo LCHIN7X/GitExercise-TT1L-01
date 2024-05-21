@@ -1,14 +1,13 @@
 from flask_login import current_user
-from flask_admin import AdminIndexView
+from flask_admin import AdminIndexView, Admin
 from flask_admin.contrib.sqla import ModelView
 from flask import flash, redirect, url_for
 from books.models import Book
+from books.invoice import Invoice
 from flask_admin.form.upload import FileUploadField
 from wtforms.validators import InputRequired, ValidationError
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import sessionmaker
 
 
 def file_is_valid(filename):
@@ -44,10 +43,10 @@ class AdminBookView(AdminModelView):
         "subject.name": "Subject",
         "desc": "Description",
         "pub_date": "Date Published",
-        'con' : 'Condition'
+        'con': 'Condition'
     }
     column_list = ['name', 'price', 'stock', 'desc', 'con', 'pub_date', 'faculty', 'subject']
-    form_columns = ['name', 'price', 'stock', 'desc','con','pub_date', 'faculty', 'subject', 'image','user']
+    form_columns = ['name', 'price', 'stock', 'desc', 'con', 'pub_date', 'faculty', 'subject', 'image', 'user']
     column_filters = ['name', 'faculty.name', 'subject.name', 'pub_date']
     column_sortable_list = ['name', 'price', 'stock', 'pub_date', ('faculty', 'faculty.name'), ('subject', 'subject.name')]
     column_searchable_list = ['name']
@@ -60,8 +59,8 @@ class AdminBookView(AdminModelView):
     }
 
     form_args = {
-        'con' : {
-            'default' : 'Brand New'
+        'con': {
+            'default': 'Brand New'
         }
     }
 
@@ -79,7 +78,6 @@ class AdminBookView(AdminModelView):
         model.user = current_user
         super().on_model_change(form, model, is_created)
 
-
     def validate_form(self, form):
         if hasattr(form, 'image'):
             img_field = form.image
@@ -93,6 +91,7 @@ class AdminBookView(AdminModelView):
     def on_validation_error(self, form):
         flash('Form validation failed', category='error')
         return redirect(url_for('admin.index'))
+
 
 class AdminUserView(AdminModelView):
     column_labels = {
@@ -137,19 +136,29 @@ class AdminUserView(AdminModelView):
 
         return super().delete_model(model)
 
-class AdminInvoiceView(AdminModelView):
-    column_labels = {
-        "id": "ID",
-        "invoice": "Invoice Details",
-        "status": "Status",
-        "data_order": "Date Ordered"
-    }
-    column_list = ['user', 'invoice', 'status', 'data_order']
-    form_columns = ['invoice', 'status']
-    column_filters = ['status', 'invoice', 'data_order', 'user']
-    column_searchable_list = ['status', 'invoice', 'user']
-    column_sortable_list = ['status', 'invoice', 'data_order', 'user']
 
-    form_edit_rules = [
-        "status"
-    ]
+class AdminInvoiceView(AdminModelView):
+    def can_delete(self):
+        return False
+    
+    def can_create(self):
+        return False
+    
+    column_labels = {
+        "user.username" : "Username",
+        'invoice' : "Invoice ID",
+        "status" : 'Payment Status',
+        "date_order" : "Order Date"
+    }
+    column_list = ['user', 'invoice', 'status', 'date_order']
+    form_columns = ['status']
+    column_filters = ['status', 'invoice', 'date_order', 'user.username']
+    column_searchable_list = ['status', 'invoice', 'user.username']
+    column_sortable_list = ['status', 'invoice', 'date_order', 'user']
+
+    def _format_username(view, context, model, name):
+        return model.user.username
+
+    column_formatters = {
+        'user': _format_username
+    }
