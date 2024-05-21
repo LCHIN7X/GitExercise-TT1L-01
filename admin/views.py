@@ -8,7 +8,7 @@ from flask_admin.form.upload import FileUploadField
 from wtforms.validators import InputRequired, ValidationError
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
-
+from auth.models import db
 
 def file_is_valid(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'jpg', 'png', 'jpeg'}
@@ -65,18 +65,28 @@ class AdminBookView(AdminModelView):
     }
 
     def on_model_change(self, form, model, is_created):
+        print(f"on_model_change called for book: {model.name}")
+        print(f"Type of model.name: {type(model.name)}, Value of model.name: '{model.name}'")
         if is_created:
+            print(f"Attempting to add book with name: {model.name}")
+            
+            # Print current session state for debugging
+            print(f"Current session: {db.session}")
+
             # Check if a book with the same name already exists
+            db.session.commit()  # Ensure all prior changes are committed
             book_already_exists = Book.query.filter_by(name=model.name).first()
+            print(f"Query result for book with name '{model.name}': {book_already_exists}")
+
             if book_already_exists:
-                model.is_original = False
+                model.is_original = True
             else:
                 model.is_original = True
 
             model.user_id = current_user.id
 
         model.user = current_user
-        super().on_model_change(form, model, is_created)
+        return super().on_model_change(form, model, is_created)
 
     def validate_form(self, form):
         if hasattr(form, 'image'):
@@ -91,6 +101,7 @@ class AdminBookView(AdminModelView):
     def on_validation_error(self, form):
         flash('Form validation failed', category='error')
         return redirect(url_for('admin.index'))
+
 
 
 class AdminUserView(AdminModelView):
@@ -154,7 +165,7 @@ class AdminInvoiceView(AdminModelView):
     form_columns = ['status']
     column_filters = ['status', 'invoice', 'date_order', 'user.username']
     column_searchable_list = ['status', 'invoice', 'user.username']
-    column_sortable_list = ['status', 'invoice', 'date_order', 'user']
+    column_sortable_list = ['status', 'invoice', 'date_order', 'user.username']
 
     def _format_username(view, context, model, name):
         return model.user.username

@@ -26,7 +26,7 @@ class Book(db.Model):
     is_original = db.Column(db.Boolean, default=True, nullable=False)
 
     def __repr__(self):
-        return '<Post %r>' % self.name
+        return self.name
 
 
 class Faculty(db.Model):
