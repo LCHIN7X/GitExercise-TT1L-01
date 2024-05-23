@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block content %}
@@ -15,11 +14,9 @@
       <ul class="navbar-nav mr-auto">
         
         <li class="nav-item">
-          <a class="nav-link" href="/views/addbook">Books</a> <!--- cuz i lazy to type addbook,will change it later-->
+          <a class="nav-link" href="/views/home">Books</a> 
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/views/home">Second Hand Books</a>
-        </li>
+        
         <div class="dropdown">
           <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Faculty
@@ -43,10 +40,10 @@
         </div>
         <li class="nav-item">
           <a class="nav-link" href="{{url_for('views.getCart')}}">Cart ({{session['Shopcart']|length}})</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!--- search bar to right ===================-->
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <!--- search bar to right ===================-->
         </li>
         
 
@@ -70,36 +67,64 @@
   </nav>
 </div>
 <!--- navbar ends ===================-->
+
 <div class="container mt-5">
     <div class="row">
-      <div class="col-md-6" id="f_image">
-        <img src="{{url_for('static', filename='images/' + book.image)}}" alt="{{book.name}}" height="400">
-      </div>  
-      <div class="col-md-6">
-        <h5>Book name: {{book.name}}</h5>
-        <hr>
-        <h5>RM: {{book.price}}</h5>
-        <hr>
-        <h5>Stock: {{book.stock}}</h5>
-        <hr>
-        <b>Book details:</b>
-        
-        <p>{{book.desc}}</p>
-        <hr>
-        <h9>Sell by: {{book.user.username}}</h9>
-        <hr>
-    <form action="{{url_for('views.addcart')}}" method="post">
-      <input type="hidden" name="book_id" value="{{book.id}}">
-      <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
-      <label form="">Quantity:</label>
-      <input type="number" name="quantity" id="" value="1" min="1" max="{{ book.stock }}">
+        <div class="col-md-6" id="f_image">
+            <img src="{{ url_for('static', filename='images/' + book.image) }}" alt="{{ book.name }}" height="400">
+        </div>
+        <div class="col-md-6">
+            <h5>Book name: {{ book.name }}</h5>
+            <hr>
+            <h5>RM: {{ book.price }}</h5>
+            <hr>
+            <h5>Condition: {{ book.con }}</h5>
+            <hr>
+            <h5>Stock: {{ book.stock }}</h5>
+            <hr>
+            <b>Book details:</b>
+            <p>{{ book.desc }}</p>
+            <hr>
+            
 
-    </form>
-        
-      </div>
+            <form action="{{ url_for('views.addcart') }}" method="post">
+                <input type="hidden" name="book_id" value="{{ book.id }}">
+                <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ book.stock }}">
+            </form>
+            <hr>
+
+            <a href="{{ url_for('views.addsbook', book_id=book.id) }}" class="float-end">Sell same book?</a>
+        </div>
     </div>
-
-    
 </div>
 
+<div class="container mt-5">
+  <h3>Other Choose for {{ book.name }}</h3>
+    <div class="row">
+        {% for sbook in bookss %}
+        
+            <div class="col-md-3 mt-3">
+                <div class="card">
+                    
+                        
+                        <p class="card-text">RM {{ sbook.price }}</p>
+                        <p>Condition: {{ sbook.con }}</p>
+                        <p>Stock: {{ sbook.stock }}</p>
+                        <p>Sell by: {{ sbook.user.username }}</p>
+                        
+                    
+                    <div class="card-footer">
+                      <form action="{{url_for('views.addcart')}}" method="post">
+                        <input type="hidden" name="book_id" value="{{sbook.id}}">
+                        <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
+                        <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ sbook.stock }}">
+                      </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock content %}

@@ -41,6 +41,9 @@ def create_app():
     from books.views import views 
     app.register_blueprint(views, url_prefix="/views")
     
+    from user.views import user
+    app.register_blueprint(user,url_prefix="/user",name="user_bp")
+
     
     from books.models import Faculty, Subject, Book
 
