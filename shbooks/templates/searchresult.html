@@ -54,70 +54,70 @@
         {% endwith %}
         </div>
         <div id="mybook">
-            <div class="title">
-                <h1>My Books</h1>
-                <form class="form-inline my-2 my-lg-0 ml-auto" action="{{url_for('shbooks.searchresult')}}"> 
-                  <div class="row  justify-content-end">
-                    <div class="col">
-                      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="x">
-                    </div>
-                    <div class="col">
-                      <button class="btn btn-outline-success" type="submit">Search</button>
-                    </div>
+          <div class="title">
+              <h1>My Books</h1>
+              <form class="search" action="{{url_for('shbooks.searchresult')}}"> 
+                <div class="row  justify-content-end">
+                  <div class="col">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="x">
                   </div>
-                </form>
-            </div>
-            <div class="table-responsive">
-                <table class="table">
-                  <thead>
+                  <div class="col">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  </div>
+                </div>
+              </form>
+          </div>
+          <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="border-0 bg-light">
+                      <div class="p-2 px-3 text-uppercase">Product</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="py-2 text-uppercase">Price</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="py-2 text-uppercase">Quantity</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="py-2 text-uppercase">Faculty</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="py-2 text-uppercase">Subject</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="py-2 text-uppercase">Edit</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="py-2 text-uppercase">Remove</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
                     <tr>
-                      <th class="border-0 bg-light">
-                        <div class="p-2 px-3 text-uppercase">Product</div>
-                      </th>
-                      <th scope="col" class="border-0 bg-light">
-                        <div class="py-2 text-uppercase">Price</div>
-                      </th>
-                      <th scope="col" class="border-0 bg-light">
-                        <div class="py-2 text-uppercase">Quantity</div>
-                      </th>
-                      <th scope="col" class="border-0 bg-light">
-                        <div class="py-2 text-uppercase">Faculty</div>
-                      </th>
-                      <th scope="col" class="border-0 bg-light">
-                        <div class="py-2 text-uppercase">Subject</div>
-                      </th>
-                      <th scope="col" class="border-0 bg-light">
-                        <div class="py-2 text-uppercase">Edit</div>
-                      </th>
-                      <th scope="col" class="border-0 bg-light">
-                        <div class="py-2 text-uppercase">Remove</div>
-                      </th>
+                        <th scope="row">
+                            <div class="p-2">
+                                <img src="{{url_for('static', filename='images/' + book.image)}}" alt="{{book.name}}" alt='' width="70" class="img-fluid rounded shadow-sm">
+                                <div class="ml-3 d-inline-block align-middle">
+                                    <span class="text-muted font-weight-normal font-italic book-name">{{ book.name }}</span>
+                                </div>
+                            </div>
+                        </th>
+                        <td class="border-0 align-middle book-price"><strong>{{ book.price }}</strong></td>
+                        <td class="border-0 align-middle book-stock"><strong>{{ book.stock }}</strong></td>
+                        <td class="border-0 align-middle book-faculty"><strong>{{ book.faculty }}</strong></td>
+                        <td class="border-0 align-middle book-subject"><strong>{{ book.subject }}</strong></td>
+                        <td class="border-0 align-middle"><a href="/test/{{book.id}}" class="text-dark "><i class="fa fa-edit"></i></a></td>
+                        <td class="align-middle"><a href="/delete/{{book.id}}" class="text-dark"><i class="fa fa-trash"></i></a></td>
                     </tr>
-                  </thead>
-                  <tbody>
-                      {% for book in books %}
-                      <tr>
-                          <th scope="row">
-                              <div class="p-2">
-                                  <img src="{{url_for('static', filename='images/' + book.image)}}" alt="{{book.name}}" alt='' width="70" class="img-fluid rounded shadow-sm">
-                                  <div class="ml-3 d-inline-block align-middle">
-                                      <span class="text-muted font-weight-normal font-italic book-name">{{ book.name }}</span>
-                                  </div>
-                              </div>
-                          </th>
-                          <<td class="border-0 align-middle book-price"><strong>{{ book.price }}</strong></td>
-                          <td class="border-0 align-middle book-stock"><strong>{{ book.stock }}</strong></td>
-                          <td class="border-0 align-middle book-faculty"><strong>{{ book.faculty }}</strong></td>
-                          <td class="border-0 align-middle book-subject"><strong>{{ book.subject }}</strong></td>
-                          <td class="border-0 align-middle"><a href="/test/{{book.id}}" class="text-dark "><i class="fa fa-edit"></i></a></td>
-                          <td class="align-middle"><a href="/delete/{{book.id}}" class="text-dark"><i class="fa fa-trash"></i></a></td>
-                      </tr>
-                      {% endfor %}
-                  </tbody>
-                </table>
-              </div>
+                    {% endfor %}
+                </tbody>
+              </table>
             </div>
-        </div>
+          </div>
+      </div>
     </div>
 
     <!-- Bootstrap Bundle JavaScript (includes Popper) -->
