@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 {% extends "base.html" %}
 
 {% block content %}
@@ -14,11 +15,9 @@
       <ul class="navbar-nav mr-auto">
         
         <li class="nav-item">
-          <a class="nav-link" href="/views/addbook">Books</a> <!--- cuz i lazy to type addbook,will change it later-->
+          <a class="nav-link" href="/views/home">Books</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/views/home">Second Hand Books</a>
-        </li>
+        
         <div class="dropdown">
           <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Faculty
@@ -42,9 +41,9 @@
         </div>
         <li class="nav-item">
           <a class="nav-link" href="{{url_for('views.getCart')}}">Cart ({{session['Shopcart']|length}})</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <!--- search bar to right ===================-->
         </li>
         
@@ -78,10 +77,47 @@
       <div class="card">
         <img class="card-img-top" src="{{url_for('static', filename='images/' + f.image)}}" alt="{{f.name}}" height="300">
         <div class="card-body">
-          <h5 style="text-shadow: 1px 1px 2px #000; color: #F00;">Second Hand</h5>
+          
           <h5 class="card-title">{{ f.name }}</h5>
           <p class="card-text">RM {{ f.price }}</p>
-          <h9>Sell by: {{f.username}}</h9>
+          <button class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft-{{ f.id }}" aria-controls="offcanvasLeft">Other prices</button>
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLeft-{{ f.id }}" aria-labelledby="offcanvasLeftLabel-{{ f.id }}">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasLeftLabel">{{ f.name }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <img src="{{ url_for('static', filename='images/' + f.image) }}" alt="{{ f.name }}" height="300" width="350">
+              <hr>
+              <p>RM {{ f.price }}</p>
+              <p>Condition: {{ f.con }}</p>
+              <p>Stock: {{ f.stock }}</p>
+              <form action="{{ url_for('views.addcart') }}" method="post">
+                <input type="hidden" name="book_id" value="{{ f.id }}">
+                <button type="submit" class="float-end btn btn-sm btn-warning">Add to Cart</button>
+                <input type="hidden" name="quantity" value="1" min="1" max="{{ f.stock }}">
+              </form>
+              <br>
+              <hr>
+              <h3>Other Choices:</h3>
+              <hr>
+              {% for sbook in bookss %}
+                {% if sbook.name == f.name %}
+                <p>RM {{ sbook.price }}</p>
+                <p>Condition: {{ sbook.con }}</p>
+                <p>Stock: {{ sbook.stock }}</p>
+                <p>Sell by: {{ sbook.user.username }}</p>
+                <form action="{{ url_for('views.addcart') }}" method="post">
+                  <input type="hidden" name="book_id" value="{{ sbook.id }}">
+                  <button type="submit" class="float-end btn btn-sm btn-warning">Add to Cart</button>
+                  <input type="hidden" name="quantity" value="1" min="1" max="{{ sbook.stock }}">
+                </form>
+                <br>
+                <hr>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
         </div>
         <div class="card-footer">  
           <a href="{{url_for('views.single_page', id = f.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
@@ -102,10 +138,49 @@
   <div class="card">
     <img class="card-img-top" src="{{url_for('static', filename='images/' + s.image)}}" alt="{{s.name}}" height="300">
     <div class="card-body">
-      <h5 style="text-shadow: 1px 1px 2px #000; color: #F00;">Second Hand</h5>
+      
       <h5 class="card-title">{{ s.name }}</h5>
       <p class="card-text">RM {{ s.price }}</p>
-      <h9>Sell by: {{s.user.username}}</h9>
+
+      <button class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft-{{ s.id }}" aria-controls="offcanvasLeft">Other prices</button>
+
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLeft-{{ s.id }}" aria-labelledby="offcanvasLeftLabel-{{ s.id }}">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasLeftLabel">{{ s.name }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <img src="{{ url_for('static', filename='images/' + s.image) }}" alt="{{ s.name }}" height="300" width="350">
+              <hr>
+              <p>RM {{ s.price }}</p>
+              <p>Condition: {{ s.con }}</p>
+              <p>Stock: {{ s.stock }}</p>
+              <form action="{{ url_for('views.addcart') }}" method="post">
+                <input type="hidden" name="book_id" value="{{ s.id }}">
+                <button type="submit" class="float-end btn btn-sm btn-warning">Add to Cart</button>
+                <input type="hidden" name="quantity" value="1" min="1" max="{{ s.stock }}">
+              </form>
+              <br>
+              <hr>
+              <h3>Other Choices:</h3>
+              <hr>
+              {% for sbook in bookss %}
+                {% if sbook.name == s.name %}
+                <p>RM {{ sbook.price }}</p>
+                <p>Condition: {{ sbook.con }}</p>
+                <p>Stock: {{ sbook.stock }}</p>
+                <p>Sell by: {{ sbook.user.username }}</p>
+                <form action="{{ url_for('views.addcart') }}" method="post">
+                  <input type="hidden" name="book_id" value="{{ sbook.id }}">
+                  <button type="submit" class="float-end btn btn-sm btn-warning">Add to Cart</button>
+                  <input type="hidden" name="quantity" value="1" min="1" max="{{ sbook.stock }}">
+                </form>
+                <br>
+                <hr>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
     </div>
     <div class="card-footer">  
       <a href="{{url_for('views.single_page', id = s.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
@@ -122,31 +197,85 @@
 
 {% else %}
 
-    {% for book in books %}
-    <div class="col-md-3 mt-3">
-      <div class="card">
-        <img class="card-img-top" src="{{url_for('static', filename='images/' + book.image)}}" alt="{{book.name}}" height="300">
-        <div class="card-body">
-          <h5 style="text-shadow: 1px 1px 2px #000; color: #F00;">Second Hand</h5>
-          <h5 class="card-title">{{ book.name }}</h5>
-          <p class="card-text">RM {{ book.price }}</p>
-          <h9>Sell by: {{book.user.username}}</h9>
+{% for book in books %}
+<div class="col-md-3 mt-3">
+  <div class="card">
+    <img class="card-img-top" src="{{ url_for('static', filename='images/' + book.image) }}" alt="{{ book.name }}" height="300">
+    <div class="card-body">
+      <h5 class="card-title">{{ book.name }}</h5>
+      <p class="card-text">RM {{ book.price }}</p>
+
+      
+      <button class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft-{{ book.id }}" aria-controls="offcanvasLeft">Other prices</button>
+
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLeft-{{ book.id }}" aria-labelledby="offcanvasLeftLabel-{{ book.id }}">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasLeftLabel">{{ book.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="card-footer">  
-          <a href="{{url_for('views.single_page', id = book.id )}}" class="float-start btn btn-sm btn-secondary">Details</a>
-          <form action="{{url_for('views.addcart')}}" method="post">
-            <input type="hidden" name="book_id" value="{{book.id}}">
-            <button type="submit" class="float-end btn btn-sm btn-warning">Add cart</button>
-            <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ book.stock }}">
+
+        <div class="offcanvas-body">
+          <img src="{{ url_for('static', filename='images/' + book.image) }}" alt="{{ book.name }}" height="300" width="350">
+          <hr>
+          <p>RM {{ book.price }}</p>
+          <p>Condition: {{ book.con }}</p>
+          <p>Stock: {{ book.stock }}</p>
+          
+
+          <form action="{{ url_for('views.addcart') }}" method="post">
+            <input type="hidden" name="book_id" value="{{ book.id }}">
+            <button type="submit" class="float-end btn btn-sm btn-warning">Add to Cart</button>
+            <input type="hidden" name="quantity" value="1" min="1" max="{{ book.stock }}">
           </form>
+
+          <br>
+          <hr>
+
+          <h3>Other Choices:</h3>
+          <hr>
+
+          {% for sbook in bookss %}
+            {% if sbook.name == book.name %}
+            <p>RM {{ sbook.price }}</p>
+            <p>Condition: {{ sbook.con }}</p>
+            <p>Stock: {{ sbook.stock }}</p>
+            <p>Sell by: {{ sbook.user.username }}</p>
+
+            <form action="{{ url_for('views.addcart') }}" method="post">
+              <input type="hidden" name="book_id" value="{{ sbook.id }}">
+              <button type="submit" class="float-end btn btn-sm btn-warning">Add to Cart</button>
+              <input type="hidden" name="quantity" value="1" min="1" max="{{ sbook.stock }}">
+            </form>
+
+            <br>
+            <hr>
+            {% endif %}
+          {% endfor %}
+
         </div>
       </div>
+
+      
     </div>
-    {% endfor %}
-    {% endif %}
+
+    <div class="card-footer">
+
+      <a href="{{ url_for('views.single_page', id=book.id) }}" class="float-start btn btn-sm btn-secondary">Details</a>
+
+      <form action="{{ url_for('views.addcart') }}" method="post">
+        <input type="hidden" name="book_id" value="{{ book.id }}">
+        <button type="submit" class="float-end btn btn-sm btn-warning">Add to Cart</button>
+        <input type="hidden" name="quantity" value="1" min="1" max="{{ book.stock }}">
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{% endif %}
   </div>
 </div>
 
 
-
-{% endblock content %}
+{% endblock %}

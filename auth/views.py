@@ -81,12 +81,10 @@ def create_account():
 def login():
     if request.method == "POST":
         email = request.form.get('email')
-        student_id = request.form.get('student_id')
         password = request.form.get('password') 
 
         #  check if credentials entered exist in User table
-        user_in_db = User.query.filter_by(email=email, 
-                                          student_id=student_id).first()
+        user_in_db = User.query.filter_by(email=email).first()
         
         if user_in_db:
             # if user account exists, first check if password is correct
