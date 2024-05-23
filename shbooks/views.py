@@ -1,4 +1,3 @@
-### from flask import Blueprint, render_template
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 import os
 from auth.models import User
@@ -11,26 +10,14 @@ from werkzeug.utils import secure_filename
 import sqlite3
 
 ####
-# from main import User, SecondHandBooks,db
-
-# db = SQLAlchemy()
-
-# views = Blueprint("views",__name__)
-
-### Define the Blueprint with optional custom paths for templates and static files
 shbooks = Blueprint(
     "shbooks",
     __name__,
     static_folder="static",
-    template_folder="templates"  # Ensure this folder exists in your project
+    template_folder="templates"  
 )
 
 photos = UploadSet('photos', IMAGES)
-
-### @views.route("/home")
-# @views.route("/")
-# def home():
-#     return render_template("base.html")
 
 def get_db_connection():
     con = sqlite3.connect("database.db")
@@ -74,7 +61,6 @@ def testfunction(id):
     edit_book = Book.query.get_or_404(id)
     if request.method == "POST":
         try:
-            # Ensure that the form data is properly retrieved
             image = request.files['image']
             if image and image.filename != '':
                 filename = secure_filename(image.filename)
@@ -101,7 +87,7 @@ def testfunction(id):
             edit_book.faculty_id = faculty.id
             edit_book.subject_id = subject.id
             
-            db.session.commit()  # Commit changes to the database
+            db.session.commit()  
 
             flash('Book edited successfully', 'success')
             return redirect(url_for('shbooks.myshop'))
