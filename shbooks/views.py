@@ -64,7 +64,6 @@ def testfunction(id):
             image = request.files['image']
             if image and image.filename != '':
                 filename = secure_filename(image.filename)
-                image.save(os.path.join('static/images', filename))
                 edit_book.image = filename
             
             edit_book.name = request.form['name']
