@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Second Hand Books</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='add-and-remove_style.css') }}"> 
+    <link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='add-and-remove_style.css') }}"> 
 </head>
 <body>
     <div class="header-container">
         <div class="header">
-            <img src="{{ url_for('static', filename='/addRmvAsset/logo.jpg') }}" alt="Logo" class="logo">
+            <img src="{{ url_for('.static', filename='/addRmvAsset/logo.jpg') }}" alt="Logo" class="logo">
         </div>
         <div class="title">
             <h1>Edit Book</h1>

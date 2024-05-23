@@ -206,5 +206,3 @@ def payment():
     
     session.pop('Shopcart', None)
     return render_template('payment.html')
-
-

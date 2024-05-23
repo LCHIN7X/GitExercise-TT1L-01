@@ -4,17 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Second Hand Books</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='add-and-remove_style.css') }}">
-    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='add-and-remove_style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <section>
         <nav>
             <div class="logo">
-                <img src="{{ url_for('static', filename='/addRmvAsset/logo.jpg') }}" alt="Logo" class="logo">
+                <img src="{{ url_for('.static', filename='/addRmvAsset/logo.jpg') }}" alt="Logo" class="logo">
             </div>
             <ul>
                 <li><a href="#Home">Home</a></li>
@@ -34,13 +32,13 @@
         <div class="title">
             <h1>My Shop</h1>
         </div>
-        <div class="card"> <img class="card-img-top" src="{{ url_for('static', filename='/addRmvAsset/user bg.jpg') }}" alt="Card image">
+        <div class="card"> <img class="card-img-top" src="{{ url_for('.static', filename='/addRmvAsset/user bg.jpg') }}" alt="Card image">
             <div class="card-body little-profile text-center">
-                <div class="pro-img"><img src="{{ url_for('static', filename='/addRmvAsset/portrait.jpg') }}"alt="user"></div>
+                <div class="pro-img"><img src="{{ url_for('.static', filename='/addRmvAsset/portrait.jpg') }}"alt="user"></div>
                 <h2 class="name">Chloe</h2>
                 <p>MMU Student</p>
             </div>
-        <!-- Flash messages section -->
+
         {% with messages = get_flashed_messages() %}
         {% if messages %}
           <div class="flash-messages">
@@ -99,7 +97,7 @@
                     <tr>
                         <th scope="row">
                             <div class="p-2">
-                                <img src="{{url_for('static', filename='images/' + book.image)}}" alt="{{book.name}}" alt='' width="70" class="img-fluid rounded shadow-sm">
+                                <img src="{{url_for('.static', filename='images/' + book.image)}}" alt="{{book.name}}" alt='' width="70" class="img-fluid rounded shadow-sm">
                                 <div class="ml-3 d-inline-block align-middle">
                                     <span class="text-muted font-weight-normal font-italic book-name">{{ book.name }}</span>
                                 </div>
@@ -120,26 +118,21 @@
       </div>
     </div>
 
-    <!-- Bootstrap Bundle JavaScript (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Add your JavaScript script within a document ready function -->
     <script>
       $(document).ready(function() {
-          // Get the edit icon elements
+         
           var editIcons = document.querySelectorAll('.edit-book');
   
-          // Loop through each edit icon
           editIcons.forEach(function(editIcon) {
-              // Add click event listener
+            
               editIcon.addEventListener('click', function(event) {
               event.preventDefault();
 
-               // Log a message to the console to indicate that the event listener is triggered
                console.log("Edit icon clicked");
   
-              // Get the data of the row where the edit icon was clicked
           var bookId = $(this).data('id');
           var bookImage = $(this).closest('tr').find('.book-img').attr('src');
           var bookName = $(this).closest('tr').find('.book-name').text();
@@ -148,7 +141,6 @@
           var bookFaculty = $(this).closest('tr').find('.book-faculty strong').text();
           var bookSubject = $(this).closest('tr').find('.book-subject strong').text();
           
-          // Fill the data into the edit form
           $('#editBookId').val(bookId);
           $('#image').attr('src', bookImage);
           $('#name').val(bookName);
@@ -157,7 +149,6 @@
           $('#faculty').val(bookFaculty);
           $('#subject').val(bookSubject);
   
-                  // Show the edit modal
                   $('#editModal').modal('show');
               });
           });
