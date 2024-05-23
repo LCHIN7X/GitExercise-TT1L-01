@@ -10,9 +10,3 @@ class Editbook(FlaskForm):
     stock = IntegerField('Stock', validators=[DataRequired()])
     image = FileField('Image',validators=[FileRequired(),FileAllowed('jpg','png',)])
     submit = SubmitField('Submit')
-    
-    
-    # name = StringField('Name',[validators.DataRequired()])
-    # price = IntegerField('Price',[validators.DataRequired()])
-    # stock = IntegerField('Stock', [validators.DataRequired()])
-    # image = FileField('Image',validators=[FileRequired(),FileAllowed('jpg','png',)])
