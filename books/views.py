@@ -281,6 +281,5 @@ def order():
         traceback.print_exc()
 
     session.pop('Shopcart', None)
-    return render_template('payment.html')
 
     return render_template('order.html', order_details=order_details, total=total, user=user, invoices=[invoice])
