@@ -15,11 +15,15 @@ views = Blueprint("views",__name__,template_folder="templates",static_folder="st
 @views.route('/home')
 @login_required
 def home():
-    books = Book.query.filter(Book.stock > 0, Book.is_original == True).all()
+    page = request.args.get('page', 1, type=int)
+    per_page = 10  
+    books_query = Book.query.filter(Book.stock > 0, Book.is_original == True)
+    pagination = books_query.paginate(page=page, per_page=per_page, error_out=False)
+    books = pagination.items
     bookss = Book.query.filter(Book.stock > 0, Book.is_original == False).all()
     facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
     subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
-    return render_template('home.html', books=books,bookss=bookss,facultiess=facultiess,subjects=subjects)
+    return render_template('home.html', books=books,bookss=bookss,facultiess=facultiess,subjects=subjects,pagination=pagination)
 
 
 @views.route('/searchh')
@@ -50,20 +54,36 @@ def single_page(id):
 
 
 @views.route('/faculty/<int:id>')
+@login_required
 def get_faculty(id):
-    faculty = Book.query.filter_by(faculty_id=id).filter(Book.stock > 0, Book.is_original == True).all()
-    bookss = Book.query.filter_by(faculty_id=id).filter(Book.stock > 0, Book.is_original == False).all()
+    page = request.args.get('page', 1, type=int)
+    per_page = 10 
+
+    books_query = Book.query.filter_by(faculty_id=id).filter(Book.stock > 0, Book.is_original == True)
+    pagination = books_query.paginate(page=page, per_page=per_page, error_out=False)
+    get_faculty = pagination.items
+    
+    additional_books = Book.query.filter_by(faculty_id=id).filter(Book.stock > 0, Book.is_original == False).all()
     facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
     subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
-    return render_template('home.html', books=faculty, bookss=bookss, facultiess=facultiess, subjects=subjects)
+
+    return render_template('home.html', books=get_faculty, bookss=additional_books, facultiess=facultiess, subjects=subjects, pagination=pagination)
+
 
 @views.route('/subjects/<int:id>')
 def get_subject(id):
-    get_sub = Book.query.filter_by(subject_id=id).filter(Book.stock > 0, Book.is_original == True).all()
-    bookss = Book.query.filter_by(subject_id=id).filter(Book.stock > 0, Book.is_original == False).all()
+    page = request.args.get('page', 1, type=int)
+    per_page = 10 
+
+    books_query = Book.query.filter_by(subject_id=id).filter(Book.stock > 0, Book.is_original == True)
+    pagination = books_query.paginate(page=page, per_page=per_page, error_out=False)
+    get_sub = pagination.items
+    
+    additional_books = Book.query.filter_by(subject_id=id).filter(Book.stock > 0, Book.is_original == False).all()
     facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
     subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
-    return render_template('home.html', books=get_sub, bookss=bookss, facultiess=facultiess, subjects=subjects)
+    return render_template('home.html', books=get_sub, bookss=additional_books, facultiess=facultiess, subjects=subjects, pagination=pagination)
+
 
 
 
