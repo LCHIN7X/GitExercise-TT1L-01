@@ -23,12 +23,7 @@ def get_db_connection():
     con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
     return con
-
-@shbooks.route("/upload_form", methods=['GET', 'POST'])
-def upload_form():
-    return render_template("success.html")
-
-
+    
 @shbooks.route("/ownshop", methods=['GET', 'POST'])
 def myshop():
     faculties = Faculty.query.all()
@@ -101,6 +96,4 @@ def testfunction(id):
 def searchresult():
     searchword = request.args.get('x')
     books = Book.query.msearch(searchword,fields=['name','desc'],limit=3)
-    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
-    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
-    return render_template('searchresult.html',books=books,facultiess=facultiess,subjects=subjects)
+    return render_template('searchresult.html',books=books)
