@@ -1,14 +1,14 @@
 from flask_login import current_user
-from flask_admin import AdminIndexView, Admin
+from flask_admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
-from flask import flash, redirect, url_for
+from flask import flash, redirect, url_for, request
 from books.models import Book
-from books.invoice import Invoice
 from flask_admin.form.upload import FileUploadField
 from wtforms.validators import InputRequired, ValidationError
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
-from auth.models import db
+
+#------------------------------------CODE-----------------------------------------------
 
 def file_is_valid(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'jpg', 'png', 'jpeg'}
@@ -108,6 +108,42 @@ class AdminBookView(ModelView):
         return redirect(url_for('admin.index'))
 
 
+class BrandNewBookView(AdminBookView):
+    def get_query(self):
+        return super().get_query().filter_by(con="Brand New")
+
+    def get_count_query(self):
+        return super().get_count_query().filter_by(con="Brand New")
+    
+
+class SecondHandBookView(AdminBookView):
+    def get_query(self):
+        return super().get_query().filter(Book.con != "Brand New")
+
+    def get_count_query(self):
+        return super().get_count_query().filter(Book.con != "Brand New")
+    
+    def can_create(self):
+        return False 
+    
+    def can_edit(self):
+        return False 
+    
+    def can_delete(self):
+        return False
+    
+    def create_model(self, form):
+        flash("Only Non-Admins can add secondhand books.",category='error')
+        return False 
+    
+    def update_model(self, form):
+        flash("You Cannot Update Details of Secondhand Books",category='error')
+        return False 
+    
+    def delete_model(self, form):
+        flash("You Cannot Delete Secondhand Books.",category='error')
+        return False
+    
 
 class AdminUserView(AdminModelView):
     column_labels = {
