@@ -56,13 +56,7 @@ def create_app():
     
     from books.models import Faculty, Subject, Book
     from shbooks.views import shbooks 
-    # Registering flask Blueprints
-    # app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(shbooks,url_prefix="/shbooks")
-
-    # from auth.models import db
-    # from auth.models import User
-    # from shbooks.models import SecondHandBooks
     
 
     with app.app_context():
