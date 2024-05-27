@@ -136,13 +136,21 @@ class SecondHandBookView(AdminBookView):
         flash("Only Non-Admins can add secondhand books.",category='error')
         return False 
     
-    def update_model(self, form):
+    def update_model(self, form, model, is_created):
         flash("You Cannot Update Details of Secondhand Books",category='error')
         return False 
     
     def delete_model(self, form):
         flash("You Cannot Delete Secondhand Books.",category='error')
         return False
+
+    def is_action_allowed(self, name):
+        
+        if name == 'edit' or name == 'create' or name == 'delete':
+            return False
+        
+        return super().is_action_allowed(name)
+
     
 
 class AdminUserView(AdminModelView):
