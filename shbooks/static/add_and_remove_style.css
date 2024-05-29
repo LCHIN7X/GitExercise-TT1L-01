@@ -1,0 +1,765 @@
+html {
+    font-size: 14px;
+}
+body {
+/*    background-image: url('./addRmvAsset/MMU2.jpg'); */
+    background-color: #fff;
+    background-size: cover; 
+    background-position: center; 
+    font-family: 'Kanit', sans-serif;
+    margin: 0;
+}
+
+/*h1 {
+    margin-top: 30px;
+    margin-bottom: 25px;
+    font-size: 65px;
+    font-weight: bolder;
+    text-align: center;
+}*/
+
+.header {
+    height: 80px;
+    width: 98vw;
+    display: flex;
+}
+
+.header_design {
+    background-image: url('./addRmvAsset/MMU2.jpg');
+    margin: 2em 0 0;
+    padding: 15em 0 4em;
+    background-size: cover;
+    background-position: center;
+}
+
+.updateform {
+    height: 80px;
+    width: 100vw;
+    display: flex;
+}
+
+.updatesuccessfully {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-size: 40px;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.header h1 {
+    width: 100%;
+    position: relative;
+    margin-top: 16.7px;
+    font-size: 40px;
+    font-weight: 900;
+    margin-top: 17px;
+    text-align: right;
+}
+
+.header img {
+    height: 100%;
+    width: auto;
+}
+
+.title {
+    margin: 4em 3em;
+}
+
+.title h1{
+    font-size: 65px;
+    font-weight: 900;
+    text-align: center;
+}
+
+.container {
+    background-image: url('./addRmvAsset/MMU2.jpg');
+    margin: 4em 0 0;
+    padding: 2em 0 4em;
+    background-size: cover;
+    background-position: center;
+}
+
+.container fieldset .row {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.container .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;   
+}
+
+.row {
+    width: 100%;
+}
+
+.col-6 {
+    width: 40%;
+}
+
+.hero {
+    background: #000;
+    width: 30vw;
+    height: auto;
+    border-radius: 24px;
+    background-image: url('./addRmvAsset/MMU2.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+#remove {
+    margin-bottom: 8em;
+}
+.header-container {
+    margin-top: 20px;
+}
+
+.container#remove {
+    background-image: url('./addRmvAsset/MMU4.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+#remove h1 {
+    color: #fff;
+}
+
+#remove label {
+   color:#000; 
+}
+
+#books {
+    width: 180px; 
+    padding: 10px; 
+}
+
+fieldset {
+    position: relative;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    border: 3px solid #0a0c0d;
+    border-radius: 2px;
+    min-width: 200px;
+/*    background-color: rgba(255, 255, 255, 0.5);*/
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 670px;
+    backdrop-filter: blur(6px);
+}
+
+legend {
+    font-size: 32px;
+    font-weight: bolder;
+    color: #080202;
+}
+
+label{
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+input {
+/*    padding: 8px;*/
+    padding: 12px;
+    border: 1px solid #999;
+    font-size: 18px;
+}
+
+input[type="email"], input[type="text"], input[type="number"], input[type="file"]{
+    width: 240px
+}
+
+#faculty, #subject {
+    width: 240px;
+    height: 48px;
+}
+
+textarea{
+    font-size: 18px;
+    min-height: 128px;
+    min-width: 70%;
+    padding: 8px;
+    border: 1px solid #999;
+    margin: 10px;
+}
+
+input[type="submit"] {
+    margin-top: 16px;
+    border-radius: 4px;
+    background-color: #1520A6;
+    color: #fff;
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+    font-size: 16px;
+}
+
+fieldset .row .col-6 {
+    margin-right: 3em;
+    margin-bottom: 2em;
+}
+
+.bottom-right-image {
+    position: absolute;
+/*    bottom: 20px;
+    right: 20px; */
+    bottom: -110px;
+    right: -120px;
+    transform: scale(0.7);
+}
+
+@media (max-width: 576px) {
+    .header-container {
+        background-image: url('./addRmvAsset/MMU2.jpg'); 
+        background-size: cover;
+        background-position: center;
+        margin-top: 0;
+    }
+
+    .header img {
+        height: 50px;
+    }
+
+    .header h1 {
+        font-size: 1.5em;
+        color: #fff;
+    }
+
+    .title {
+        padding: 20px 1em;
+        margin: 4em 0 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6741290266106443) 50%, rgba(0,0,0,1) 100%);;
+    }
+
+    .title h1 {
+        font-size: 35px;
+        color: #fff;
+    }
+
+    .container {
+        margin: 2em 0 8em;
+    }
+
+    .col-6 {
+        width: 100%;
+    }
+
+    fieldset {
+        width: auto;
+    }
+
+    .container fieldset .row,
+    .container .row {
+        display: block;
+    }
+
+    fieldset .row .col-6 {
+        margin-right: 0;
+    }
+
+    .hero {
+        display: none;
+    }
+
+    .bottom-image {
+        width: 100%;
+        text-align: center;
+    }
+
+    .bottom-right-image {
+        bottom: unset;
+        right: unset;
+        transform: none;
+        position: relative;
+        width : 40%
+    }
+}
+
+/* in large screen */
+@media screen and (min-width: 430px) {
+    legend {
+        font-size: 28px;
+    }
+}
+
+/* Increase the font size for larger screens */
+@media screen and (min-width: 430px) {
+    legend {
+        font-size: 36px;
+    }
+}
+
+/* .logo {
+    height: 80px;
+    width: 100vw;
+    display: flex;
+    width: 20vw;
+    height: 100px;
+} */
+
+nav .logo img {
+    height: 80px;
+    width: auto;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+[id="shb"] body {
+    width: 80%;
+    height: 100vh;
+    background-image:url('./addRmvAsset/blue bg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    font-size: 14px;
+}
+
+#shb .title {
+    padding: 10px 1em;
+    margin: auto;
+}
+
+#shb .title h1 {
+    font-size: 60px;
+    color: #000;
+}
+
+/* #shb, body {
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    font-size: 14px;
+} */
+
+section nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 0 10px #089da1;
+    background: #fff;
+    position: fixed;
+    left: 0;
+    z-index: 100;
+}
+
+ul {
+    list-style: none;
+}
+
+ul li {
+    display: inline-block;
+    padding: 0 10px;
+    position:relative
+}
+
+ul li a {
+    display: block;
+    padding: 20px 25px;
+    color: #000;
+    text-decoration: none;
+    text-align: center;
+    font-size: 20px;
+}
+
+ul li ul.dropdown li {
+    display: flex;
+    flex-direction: row;
+}
+
+ul li ul.dropdown {
+    width: 83.5%;
+    position: absolute;
+    z-index: 999;
+    display: none;
+}
+
+ul li:hover ul.dropdown {
+    display: block;
+}
+
+#bookrack {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    width: 98vw;
+    /* background-image: url(https://images.unsplash.com/photo-1499088513455-78ed88b7a5b4?crop=entropy&cs=srgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODE0OTQ3MzM&ixlib=rb-4.0.3&q=85);
+    background-size: cover; */
+    padding: 8em 0;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+#bookrack .search-bar {
+    display: flex;
+    margin-top: -70px;
+    margin-left: 76vw;
+}
+
+.thumbs {
+    display: flex;
+    width: 100%;
+    margin: 10px;
+    max-width: 100%;
+    padding: 20px;
+    align-items: baseline;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+.secondhand_book_tag {
+    display: flex;
+    text-align: center;
+    margin-top: 20px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+.secondhand_book_tag h2 {
+    font-size: 25px; 
+    margin-bottom: 5px;
+}
+
+.secondhand_book_tag .writer {
+    font-style: italic; 
+    font-size: 20px;
+    /* font-weight: bold; */
+    color: #000; 
+}
+
+.secondhand_book_tag .categories {
+    font-size: 20px; 
+    color: #000; 
+    margin-top: 5px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+
+.secondhand_book_tag .book_price {
+    font-size: 20px; 
+    margin-top: 10px;
+}
+
+.secondhand_book_tag .book_price sub {
+    font-size: 15px; 
+    color: #aaa; 
+}
+
+.secondhand_book_tag .f_btn {
+    display: inline-block; 
+    padding: 15px 20px; 
+    background-color: #007bff; 
+    color: #fff; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    margin-top: 10px; 
+    margin-bottom: 20px;
+}
+
+.secondhand_book_tag .f_btn:hover {
+    background-color: #0056b3; 
+}
+
+.book-container {
+    width: 100%;
+    max-width: 20vw;
+    margin: 1em 5em;
+}
+
+.book-container a img {
+    transform: scale(1);
+    transition: transform 0.1s ease-in-out;
+    width: 100%;
+    border-radius: 22px;
+}
+
+.book-container a {
+    max-width: 150px;
+    height: 50px;
+    margin: 10px;
+    overflow: hidden;
+    border-radius: 5px;
+  }
+
+.book-container a:hover img {
+    transform: scale(1.1);
+    filter: grayscale(0%);
+  }
+
+  [id="shop"] body {
+    width: 80%;
+    height: 100vh;
+    background-image:url('./addRmvAsset/green bg.png');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    font-size: 14px;
+}
+
+#shop .title {
+    padding: 25px 1em;
+    margin: auto;
+}
+
+#shop .title h1 {
+    font-size: 60px;
+    color: #000;
+}
+
+#myshop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    width: 98vw;
+    padding: 5em 0;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.card-img-top{
+    width: 80vw;
+    height: 350px;
+/*    margin-top: 8px;*/
+}
+
+.card-no-border .card {
+    border-color: #d7dfe3;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.05)
+}
+
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem
+}
+
+.pro-img {
+    margin-top: -120px;
+    margin-bottom: 5px;
+}
+
+.little-profile .pro-img img {
+    width: 180px;
+    height: 180px;
+    -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 100%
+}
+
+h2.name {
+    line-height: 20px;
+    font-size: 28px;
+}
+
+.card p{
+    line-height: 30px;
+    font-size: 20px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: -60px;
+}
+
+.search-bar input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.search-bar button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: #0056b3; 
+}
+
+#mybook {
+    max-width: 1120px;
+}
+
+/* Ensure table takes up full width */
+.table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Style table header */
+.table thead th {
+    border: none;
+    background-color: #f8f9fa; /* Light gray background */
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 1.2rem; /* Increased padding */
+    border-bottom: 2px solid #dee2e6; /* Bottom border */
+}
+
+/* Style table body */
+.table tbody th,
+.table tbody td {
+    vertical-align: middle;
+}
+
+/* Remove borders from table body */
+.table tbody th,
+.table tbody td {
+    border: none;
+}
+
+/* Style product images */
+.table tbody img {
+    max-width: 90px; /* Increased image width */
+    height: auto;
+    border-radius: 6px; /* Larger border radius */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Increased shadow */
+}
+
+/* Style product titles */
+.table tbody h5 {
+    margin-bottom: 0;
+    font-size: 1.1rem; /* Increased font size */
+}
+
+/* Add padding to table cells */
+.table tbody th,
+.table tbody td {
+    padding: 1rem 1.67rem; /* Increased padding */
+}
+
+/* Style remove icons */
+.table tbody .fa-trash {
+    color: #dc3545; /* Red color */
+    font-size: 1.2rem; /* Increased font size */
+}
+
+/* Hover effect for remove icons */
+.table tbody .fa-trash:hover {
+    color: #c82333; /* Darker red color */
+    cursor: pointer;
+}
+
+/* Add bottom border to table rows */
+.table tbody tr {
+    border-bottom: 1px solid #00000020; /* Black border */
+}
+
+/* Remove bottom border from the last table row */
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+#shop .card {
+    width: 97vw;
+    margin-left: 10px;
+}
+
+th[scope="col"] {
+    text-align: center;
+}
+
+i.fa-edit {
+    font-size: 1.2rem;
+}
+
+#mybook tbody td:not(:first-child) {
+    text-align: center;
+}
+
+.card img {
+    object-fit: cover;
+}
+
+#mybook {
+    margin-top: 4em;
+    width: 100vw;
+    max-width: 1120px;
+    background-color: #fff;
+    padding: 1em 3em;
+    border-radius: 22px;
+    box-shadow: 0 26px 58px 0 rgba(0, 0, 0, 0.22), 0 5px 14px 0 rgba(0, 0, 0, 0.18);
+}
+
+#mybook .title {
+    margin-bottom: 2em;
+}
+
+#mybook .title h1 {
+    text-align: left;
+}
+
+#mybook h5 a.text-dark {
+    font-size: 1.67em;
+ }
+
+ /* CSS for flash messages */
+
+.flash-messages {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.flash-messages ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.flash-messages li {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text */
+    border: 1px solid #f5c6cb; /* Border color */
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow */
+}
+
+.flash-success {
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Dark green text */
+    border-color: #c3e6cb; /* Border color */
+}
+
+.flash-error {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text */
+    border-color: #f5c6cb; /* Border color */
+}
+
+.flash-.warning {
+    background-color: #fff3cd; /* Light yellow background */
+    color: #856404; /* Dark yellow text */
+    border-color: #ffeeba; /* Border color */
+}
+
+#mybook .search{
+    margin-left: 700px;
+}
