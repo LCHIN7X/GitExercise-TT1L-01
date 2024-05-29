@@ -16,7 +16,7 @@ views = Blueprint("views",__name__,template_folder="templates",static_folder="st
 @login_required
 def home():
     page = request.args.get('page', 1, type=int)
-    per_page = 10  
+    per_page = 12  
     books_query = Book.query.filter(Book.stock > 0, Book.is_original == True)
     pagination = books_query.paginate(page=page, per_page=per_page, error_out=False)
     books = pagination.items
