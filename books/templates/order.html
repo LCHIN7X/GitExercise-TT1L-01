@@ -21,19 +21,20 @@
                 <th>Price</th>
             </thead>
             <tbody>
-                {% for book_id, book in order_details.items() %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ book.name }}</td>
-                        <td>{{ book.quantity }}</td>
-                        <td>{{ book.price }}</td>
-                    </tr>
+                {% for book_id, item in order_details.items() %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price }}</td>
+
+                </tr>
                 {% endfor %}
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td colspan="3"><h5>Total: RM{{ '%.2f' % total }}</h5></td>
+                    <td><h5>Total: RM{{ '%.2f' % total }}</h5></td>
                 </tr>
             </tbody>
         </table>

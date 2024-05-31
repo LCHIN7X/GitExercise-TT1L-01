@@ -1,12 +1,12 @@
 from flask import redirect,render_template,url_for,request,flash,Blueprint,session,jsonify
 from auth.models import db,User
 from .models import Faculty,Subject,Book
-from .invoice import Invoice
+from .invoice import Invoice,InvoiceItem
 from .bforms import Addbooks 
 from flask_uploads import UploadSet, IMAGES
 from flask_login import login_required,current_user
 
-import secrets
+import secrets,traceback
 
 
 views = Blueprint("views",__name__,template_folder="templates",static_folder="static")
@@ -16,11 +16,14 @@ views = Blueprint("views",__name__,template_folder="templates",static_folder="st
 @login_required
 def home():
     page = request.args.get('page', 1, type=int)
-    per_page = 10  
+    per_page = 12  
+
     books_query = Book.query.filter(Book.stock > 0, Book.is_original == True)
     pagination = books_query.paginate(page=page, per_page=per_page, error_out=False)
+    
     books = pagination.items
     bookss = Book.query.filter(Book.stock > 0, Book.is_original == False).all()
+
     facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
     subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
     return render_template('home.html', books=books,bookss=bookss,facultiess=facultiess,subjects=subjects,pagination=pagination)
@@ -43,21 +46,23 @@ def searchh():
     return render_template('searchh.html', books=books, bookss=bookss, facultiess=facultiess, subjects=subjects)
 
 
+
+
 @views.route('/book/<int:id>')
 @login_required
 def single_page(id):
     book = Book.query.get_or_404(id)   
     bookss = Book.query.filter_by(name=book.name).filter(Book.stock > 0,Book.is_original == False).all()
-    faculties = Faculty.query.all()
+    facultiess = Faculty.query.all()
     subjects = Subject.query.all()
-    return render_template('single_page.html', book=book, bookss=bookss, faculties=faculties, subjects=subjects)
+    return render_template('single_page.html', book=book, bookss=bookss, facultiess=facultiess, subjects=subjects)
 
 
 @views.route('/faculty/<int:id>')
 @login_required
 def get_faculty(id):
     page = request.args.get('page', 1, type=int)
-    per_page = 10 
+    per_page = 12 
 
     books_query = Book.query.filter_by(faculty_id=id).filter(Book.stock > 0, Book.is_original == True)
     pagination = books_query.paginate(page=page, per_page=per_page, error_out=False)
@@ -73,7 +78,7 @@ def get_faculty(id):
 @views.route('/subjects/<int:id>')
 def get_subject(id):
     page = request.args.get('page', 1, type=int)
-    per_page = 10 
+    per_page = 12 
 
     books_query = Book.query.filter_by(subject_id=id).filter(Book.stock > 0, Book.is_original == True)
     pagination = books_query.paginate(page=page, per_page=per_page, error_out=False)
@@ -281,25 +286,41 @@ def order():
                     flash(f'Insufficient stock for {book.name}. Please remove it from your cart.', 'warning')
                     return redirect(url_for('views.getCart'))
 
-        
         invoice_number = secrets.token_hex(5)
-        new_invoice = Invoice(invoice=invoice_number, user_id=user.id)  
-        print(f"Attempting to add invoice: {invoice_number}")
-
+        new_invoice = Invoice(invoice=invoice_number, user_id=user.id)
         db.session.add(new_invoice)
+        db.session.flush()  
+
+        for book_id, item in order_details.items():
+            book = Book.query.get(book_id)
+            if book:
+                invoice_item = InvoiceItem(invoice_id=new_invoice.id,book_id=book.id,quantity=item['quantity'],price=float(item['price']))
+                db.session.add(invoice_item)
+
         db.session.commit()
-
         invoice = new_invoice
-        print(f"Invoice saved with ID: {invoice.id}")
-
         flash('Checkout successful. Your order has been placed.', 'success')
     except Exception as e:
         db.session.rollback()
         flash('An error occurred during checkout. Please try again later.', 'error')
         print(f"Error: {str(e)}")
-        import traceback
         traceback.print_exc()
 
     session.pop('Shopcart', None)
-
     return render_template('order.html', order_details=order_details, total=total, user=user, invoices=[invoice])
+
+
+   
+
+
+
+
+@views.route('/history')
+@login_required
+def history():
+    invoices = Invoice.query.filter_by(user_id=current_user.id).all()
+
+    for invoice in invoices:
+        invoice.total_price = sum(item.price * item.quantity for item in invoice.items)
+
+    return render_template('history.html', invoices=invoices)
