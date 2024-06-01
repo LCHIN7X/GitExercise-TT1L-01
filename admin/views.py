@@ -1,13 +1,13 @@
 from flask_login import current_user
-from flask_admin import AdminIndexView
+from flask_admin import AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
-from flask import flash, redirect, url_for, request
+from flask import flash, redirect, url_for, request, render_template_string, render_template
 from books.models import Book
 from flask_admin.form.upload import FileUploadField
 from wtforms.validators import InputRequired, ValidationError
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
-
+from auth.models import db
 #------------------------------------CODE-----------------------------------------------
 
 def file_is_valid(filename):
@@ -122,36 +122,97 @@ class SecondHandBookView(AdminBookView):
 
     def get_count_query(self):
         return super().get_count_query().filter(Book.con != "Brand New")
-    
+
     def can_create(self):
-        return False 
-    
+        return False
+
     def can_edit(self):
-        return False 
-    
+        return False
+
     def can_delete(self):
-        return False
-    
+        return True
+
     def create_model(self, form):
-        flash("Only Non-Admins can add secondhand books.",category='error')
-        return False 
-    
-    def update_model(self, form, model, is_created):
-        flash("You Cannot Update Details of Secondhand Books",category='error')
-        return False 
-    
-    def delete_model(self, form):
-        flash("You Cannot Delete Secondhand Books.",category='error')
+        flash("Only Non-Admins can add secondhand books.", category='error')
         return False
 
-    def is_action_allowed(self, name):
-        
-        if name == 'edit' or name == 'create' or name == 'delete':
-            return False
-        
-        return super().is_action_allowed(name)
-
+    def update_model(self, form, model):
+        return False
     
+    def delete_model(self, model):
+        return redirect(url_for('.confirm_delete_view',id=model.id))
+    
+    @expose('/delete/',methods=['GET','POST'])
+    def delete_view(self):
+        id_ = request.form.get('id')
+        if id_:
+            return redirect(url_for('.confirm_delete_view',id=id_))
+        flash('No ID provided for deletion.',category='error')
+        return redirect(url_for('admin.index'))
+
+
+    @expose('/confirm_delete/', methods=['GET', 'POST'])
+    def confirm_delete_view(self):
+        if request.method == "POST":
+            if request.form.get('confirm') == "yes":
+                return self._delete_model()
+            else:
+                return render_template_string('<h1>Error deleting book</h1>')
+
+        else:
+            model_id = request.args.get('id')
+            return render_template_string('''
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+                          rel="stylesheet"
+                          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+                          crossorigin="anonymous"
+                    />
+                    <title>Confirm Delete</title>
+                </head>
+                <body>
+                <div style="text-align: center; margin-top: 50px;">
+                    <h3>Are you sure you want to delete this book? This will delete all entries of the same book.</h3>
+                    <form method="post" action='{{ url_for(".confirm_delete_view") }}'>
+                        <input type="hidden" name="id" value="{{ model_id }}">
+                        <button type="submit" name="confirm" value="yes">Continue</button>
+                        <button type="submit" name="confirm" value="no">Cancel</button>
+                    </form>
+                </div>
+                </body>
+                </html>
+            ''', model_id=model_id)
+
+
+    def _delete_model(self):
+        try:
+            model_id = request.form.get('id')
+            print(f'Debug: Deleting model with ID {model_id}')  # Debug statement
+
+            if not model_id:
+                flash('ID not found.', category='error')
+                return redirect(url_for('admin.index'))
+
+            model = self.session.query(self.model).get(model_id)
+            if model:
+                self.session.delete(model)
+                self.session.commit()
+                flash('Book successfully deleted!', category="success")
+                print('Debug: Model deleted successfully')  # Debug statement
+            else:
+                flash("Unable to delete book.", category='error')
+                print('Debug: Model not found')  # Debug statement
+
+        except Exception as e:
+            flash(f'Error occurred: {e}', category='error')
+            self.session.rollback()
+            print(f'Debug: Exception occurred: {e}')  # Debug statement
+
+        return redirect(url_for('admin.index'))
+
 
 class AdminUserView(AdminModelView):
     column_labels = {
@@ -222,3 +283,38 @@ class AdminInvoiceView(AdminModelView):
     column_formatters = {
         'user': _format_username
     }
+
+
+#     def _delete_view(self):
+#         if request.method == "POST":
+#             if 'confirm' in request.form:
+#                 self._delete_model()
+#                 return
+#             else:
+#                 return redirect(url_for('admin.second_hand_books'))
+        
+#         print(request.args.get('id'))
+#         model_id = request.args.get('id')
+#         return render_template_string('''
+#         <!DOCTYPE html>
+#         <html>
+#             <head>
+#                 <meta charset="utf-8">
+#                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+#       rel="stylesheet"
+#       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+#       crossorigin="anonymous"
+#     />
+#                 <title>Confirm Delete</title>
+#             </head>
+#             <body>
+#                 <div style="text-align: center; margin-top: 50px;">
+#                     <h3>Are you sure you want to delete this book? This will delete all entries of the same book.</h3>
+#                     <form method="post">
+#                         <button type="submit" name="confirm" value="yes">Continue</button>
+#                         <button type="submit" name="confirm" value="no">Cancel</button>
+#                     </form>
+#                 </div>
+#             </body
+#         </html>                                                                            
+# ''',id=model_id)
