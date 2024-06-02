@@ -1,9 +1,7 @@
-from flask_login import current_user
-from flask_admin import AdminIndexView, expose, helpers
+from flask_login import current_user, logout_user
+from flask_admin import AdminIndexView, expose, BaseView
 from flask_admin.contrib.sqla import ModelView
-from flask_admin.babel import gettext
-from flask_admin.helpers import get_redirect_target
-from flask import flash, redirect, url_for, request, render_template_string, render_template
+from flask import flash, redirect, url_for, request, render_template_string
 from books.models import Book
 from flask_admin.form.upload import FileUploadField
 from wtforms.validators import InputRequired, ValidationError
@@ -293,3 +291,11 @@ class AdminInvoiceView(AdminModelView):
     column_formatters = {
         'user': _format_username
     }
+
+
+class AdminLogoutView(BaseView):
+    @expose('/')
+    def logout_admin(self):
+        logout_user()
+        flash("Logged Out Successfully!", category='success')
+        return redirect(url_for('auth.login'))

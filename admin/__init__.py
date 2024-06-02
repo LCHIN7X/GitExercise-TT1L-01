@@ -3,7 +3,7 @@ from auth.models import db, User
 from books.models import Book, Faculty, Subject
 from books.invoice import Invoice
 from werkzeug.security import generate_password_hash
-from .views import AdminIndex, AdminBookView, AdminUserView, AdminModelView, AdminInvoiceView, BrandNewBookView, SecondHandBookView
+from .views import AdminIndex, AdminBookView, AdminUserView, AdminModelView, AdminInvoiceView, BrandNewBookView, SecondHandBookView, AdminLogoutView
 
 #------------------------------------CODE-----------------------------------------------
 
@@ -20,6 +20,7 @@ admin.add_view(AdminUserView(User,db.session))
 admin.add_view(AdminModelView(Faculty,db.session))
 admin.add_view(AdminModelView(Subject,db.session))
 admin.add_view(AdminInvoiceView(Invoice,db.session))
+admin.add_view(AdminLogoutView(name="Log Out",endpoint="logout"))
 
 
 def add_admin_to_db(app):
