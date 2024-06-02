@@ -17,8 +17,8 @@ photos = UploadSet("photos", IMAGES)
 
 
 # Create function to create app instance
+
 def create_app():
-    # create new Flask app and configuring app settings
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_NAME}"
     app.config["UPLOADED_PHOTOS_DEST"] = "static/images"
@@ -42,9 +42,7 @@ def create_app():
     from user.views import user
     app.register_blueprint(user,url_prefix="/user",name="user_bp")
 
-    
     from shbooks.views import shbooks 
-    
     app.register_blueprint(shbooks,url_prefix="/shbooks")
 
   
