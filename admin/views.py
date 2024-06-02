@@ -1,6 +1,8 @@
 from flask_login import current_user
-from flask_admin import AdminIndexView, expose
+from flask_admin import AdminIndexView, expose, helpers
 from flask_admin.contrib.sqla import ModelView
+from flask_admin.babel import gettext
+from flask_admin.helpers import get_redirect_target
 from flask import flash, redirect, url_for, request, render_template_string, render_template
 from books.models import Book
 from flask_admin.form.upload import FileUploadField
@@ -68,12 +70,18 @@ class AdminBookView(ModelView):
         try:
             print(f"create_model called for book: {form.name.data}")
             book_name = form.name.data
+            book_condition = form.con.data
             book_already_exists = Book.query.filter_by(name=book_name).first()
             print(f"Query result for book with name '{book_name}': {book_already_exists}")
 
             model = self.model()
             form.populate_obj(model)
 
+            if book_condition.lower() != "brand new":
+                self.session.rollback()
+                flash("Admins cannot add second hand books.", category='error')
+                return False
+                
             if book_already_exists:
                 print(f"Book with name '{book_name}' already exists.")
                 model.is_original = False
@@ -106,6 +114,7 @@ class AdminBookView(ModelView):
     def on_validation_error(self, form):
         flash('Form validation failed', category='error')
         return redirect(url_for('admin.index'))
+
 
 
 class BrandNewBookView(AdminBookView):
