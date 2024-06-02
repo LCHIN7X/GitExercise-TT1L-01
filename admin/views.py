@@ -7,7 +7,7 @@ from flask_admin.form.upload import FileUploadField
 from wtforms.validators import InputRequired, ValidationError
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
-from auth.models import db
+
 #------------------------------------CODE-----------------------------------------------
 
 def file_is_valid(filename):
@@ -148,7 +148,7 @@ class SecondHandBookView(AdminBookView):
         if id_:
             return redirect(url_for('.confirm_delete_view',id=id_))
         flash('No ID provided for deletion.',category='error')
-        return redirect(url_for('admin.index'))
+        return redirect(url_for('.index_view'))
 
 
     @expose('/confirm_delete/', methods=['GET', 'POST'])
@@ -157,7 +157,8 @@ class SecondHandBookView(AdminBookView):
             if request.form.get('confirm') == "yes":
                 return self._delete_model()
             else:
-                return render_template_string('<h1>Error deleting book</h1>')
+                flash("Book deletion cancelled",category='error')
+                return redirect(url_for('.index_view'))
 
         else:
             model_id = request.args.get('id')
@@ -201,17 +202,17 @@ class SecondHandBookView(AdminBookView):
                 self.session.delete(model)
                 self.session.commit()
                 flash('Book successfully deleted!', category="success")
-                print('Debug: Model deleted successfully')  # Debug statement
+                print('Debug: Model deleted successfully')  
             else:
                 flash("Unable to delete book.", category='error')
-                print('Debug: Model not found')  # Debug statement
+                print('Debug: Model not found')  
 
         except Exception as e:
             flash(f'Error occurred: {e}', category='error')
             self.session.rollback()
-            print(f'Debug: Exception occurred: {e}')  # Debug statement
+            print(f'Debug: Exception occurred: {e}')  
 
-        return redirect(url_for('admin.index'))
+        return redirect(url_for('.index_view'))
 
 
 class AdminUserView(AdminModelView):
@@ -283,38 +284,3 @@ class AdminInvoiceView(AdminModelView):
     column_formatters = {
         'user': _format_username
     }
-
-
-#     def _delete_view(self):
-#         if request.method == "POST":
-#             if 'confirm' in request.form:
-#                 self._delete_model()
-#                 return
-#             else:
-#                 return redirect(url_for('admin.second_hand_books'))
-        
-#         print(request.args.get('id'))
-#         model_id = request.args.get('id')
-#         return render_template_string('''
-#         <!DOCTYPE html>
-#         <html>
-#             <head>
-#                 <meta charset="utf-8">
-#                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-#       rel="stylesheet"
-#       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-#       crossorigin="anonymous"
-#     />
-#                 <title>Confirm Delete</title>
-#             </head>
-#             <body>
-#                 <div style="text-align: center; margin-top: 50px;">
-#                     <h3>Are you sure you want to delete this book? This will delete all entries of the same book.</h3>
-#                     <form method="post">
-#                         <button type="submit" name="confirm" value="yes">Continue</button>
-#                         <button type="submit" name="confirm" value="no">Cancel</button>
-#                     </form>
-#                 </div>
-#             </body
-#         </html>                                                                            
-# ''',id=model_id)
