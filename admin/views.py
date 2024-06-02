@@ -13,6 +13,7 @@ from werkzeug.security import generate_password_hash
 def file_is_valid(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'jpg', 'png', 'jpeg'}
 
+
 class AdminIndex(AdminIndexView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.is_admin
@@ -66,16 +67,14 @@ class AdminBookView(ModelView):
 
     def create_model(self, form):
         try:
-            print(f"create_model called for book: {form.name.data}")
             book_name = form.name.data
             book_condition = form.con.data
             book_already_exists = Book.query.filter_by(name=book_name).first()
-            print(f"Query result for book with name '{book_name}': {book_already_exists}")
 
             model = self.model()
             form.populate_obj(model)
 
-            if book_condition.lower() != "brand new":
+            if book_condition != "Brand New" or book_condition != "brand new":
                 self.session.rollback()
                 flash("Admins cannot add second hand books.", category='error')
                 return False
@@ -95,7 +94,7 @@ class AdminBookView(ModelView):
             return model
 
         except Exception as e:
-            flash(f'Error creating book: {str(e)}', 'error')
+            flash(f'Error creating book: {str(e)}', category='error')
             self.session.rollback()
             return False
 
@@ -111,8 +110,7 @@ class AdminBookView(ModelView):
 
     def on_validation_error(self, form):
         flash('Form validation failed', category='error')
-        return redirect(url_for('admin.index'))
-
+        return False
 
 
 class BrandNewBookView(AdminBookView):

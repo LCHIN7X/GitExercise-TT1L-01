@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from auth.models import db
+from auth.models import db, User
 from flask_login import current_user
 from werkzeug.utils import secure_filename
 from PIL import Image
@@ -44,24 +44,40 @@ def customize_profile():
                     db.session.commit()
                     flash("Profile Picture Successfully Updated!",category='success')
 
-        bio = request.form.get('bio')
+        old_bio = current_user.bio
+        new_bio = request.form.get('bio')
         
-        if bio is not None and bio.strip() != "":
-            current_user.bio = bio 
-            db.session.commit()
-            flash("Bio Successfully Updated!",category='success')
-            return redirect(url_for('user_bp.customize_profile'))
-        
-        else:
-            current_user.bio = None 
-            db.session.commit()
-            flash("Bio Successfully Cleared!",category="success")
-            return redirect(url_for('user_bp.customize_profile'))
+        if old_bio != new_bio:
+            if new_bio is not None and new_bio.strip() != "":
+                current_user.bio = new_bio 
+                db.session.commit()
+                flash("Bio Successfully Updated!",category='success')
+                return redirect(url_for('user_bp.customize_profile'))
+            
+            else:
+                current_user.bio = None 
+                db.session.commit()
+                flash("Bio Successfully Cleared!",category="success")
+                
+        old_username = current_user.username
+        new_username = request.form.get("username")
 
+        new_username_is_taken = User.query.filter_by(username=new_username).first()
+        if new_username_is_taken:
+            flash("Oops! Username already taken. Please enter a different username.",category="error")
+            return redirect(url_for("user_bp.customize_profile"))
+
+        if old_username != new_username and new_username is not None:
+            current_user.username = new_username 
+            db.session.commit()
+            flash("Username successfully changed!",category='success')
+            return redirect(url_for('user_bp.customize_profile'))
 
     current_bio = current_user.bio
     current_profile_pic = current_user.profile_pic 
+    current_username = current_user.username
     return render_template('customize_profile.html',
                            current_page="customize_profile",
                            current_profile_pic=current_profile_pic,
-                           current_bio=current_bio)
+                           current_bio=current_bio,
+                           current_username=current_username)
