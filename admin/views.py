@@ -74,7 +74,7 @@ class AdminBookView(ModelView):
             model = self.model()
             form.populate_obj(model)
 
-            if book_condition != "Brand New" or book_condition != "brand new":
+            if book_condition != "Brand New":
                 self.session.rollback()
                 flash("Admins cannot add second hand books.", category='error')
                 return False
