@@ -111,38 +111,6 @@ class AdminBookView(ModelView):
     def on_validation_error(self, form):
         flash('Form validation failed', category='error')
         return False
-
-
-class BrandNewBookView(AdminBookView):
-    def get_query(self):
-        return super().get_query().filter_by(con="Brand New")
-
-    def get_count_query(self):
-        return super().get_count_query().filter_by(con="Brand New")
-    
-
-class SecondHandBookView(AdminBookView):
-    def get_query(self):
-        return super().get_query().filter(Book.con != "Brand New")
-
-    def get_count_query(self):
-        return super().get_count_query().filter(Book.con != "Brand New")
-
-    def can_create(self):
-        return False
-
-    def can_edit(self):
-        return False
-
-    def can_delete(self):
-        return True
-
-    def create_model(self, form):
-        flash("Only Non-Admins can add secondhand books.", category='error')
-        return False
-
-    def update_model(self, form, model):
-        return False
     
     def delete_model(self, model):
         return redirect(url_for('.confirm_delete_view',id=model.id))
@@ -219,6 +187,38 @@ class SecondHandBookView(AdminBookView):
 
         return redirect(url_for('.index_view'))
 
+
+class BrandNewBookView(AdminBookView):
+    def get_query(self):
+        return super().get_query().filter_by(con="Brand New")
+
+    def get_count_query(self):
+        return super().get_count_query().filter_by(con="Brand New")
+    
+
+class SecondHandBookView(AdminBookView):
+    def get_query(self):
+        return super().get_query().filter(Book.con != "Brand New")
+
+    def get_count_query(self):
+        return super().get_count_query().filter(Book.con != "Brand New")
+
+    def can_create(self):
+        return False
+
+    def can_edit(self):
+        return False
+
+    def can_delete(self):
+        return True
+
+    def create_model(self, form):
+        flash("Only Non-Admins can add secondhand books.", category='error')
+        return False
+
+    def update_model(self, form, model):
+        return False
+    
 
 class AdminUserView(AdminModelView):
     column_labels = {
