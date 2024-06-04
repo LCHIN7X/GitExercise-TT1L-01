@@ -1,17 +1,18 @@
-from flask_login import current_user
-from flask_admin import AdminIndexView, Admin
+from flask_login import current_user, logout_user
+from flask_admin import AdminIndexView, expose, BaseView
 from flask_admin.contrib.sqla import ModelView
-from flask import flash, redirect, url_for
+from flask import flash, redirect, url_for, request, render_template_string
 from books.models import Book
-from books.invoice import Invoice
 from flask_admin.form.upload import FileUploadField
 from wtforms.validators import InputRequired, ValidationError
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
-from auth.models import db
+
+#------------------------------------CODE-----------------------------------------------
 
 def file_is_valid(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'jpg', 'png', 'jpeg'}
+
 
 class AdminIndex(AdminIndexView):
     def is_accessible(self):
@@ -66,14 +67,18 @@ class AdminBookView(ModelView):
 
     def create_model(self, form):
         try:
-            print(f"create_model called for book: {form.name.data}")
             book_name = form.name.data
+            book_condition = form.con.data
             book_already_exists = Book.query.filter_by(name=book_name).first()
-            print(f"Query result for book with name '{book_name}': {book_already_exists}")
 
             model = self.model()
             form.populate_obj(model)
 
+            if book_condition != "Brand New":
+                self.session.rollback()
+                flash("Admins cannot add second hand books.", category='error')
+                return False
+                
             if book_already_exists:
                 print(f"Book with name '{book_name}' already exists.")
                 model.is_original = False
@@ -89,7 +94,7 @@ class AdminBookView(ModelView):
             return model
 
         except Exception as e:
-            flash(f'Error creating book: {str(e)}', 'error')
+            flash(f'Error creating book: {str(e)}', category='error')
             self.session.rollback()
             return False
 
@@ -105,9 +110,115 @@ class AdminBookView(ModelView):
 
     def on_validation_error(self, form):
         flash('Form validation failed', category='error')
-        return redirect(url_for('admin.index'))
+        return False
+    
+    def delete_model(self, model):
+        return redirect(url_for('.confirm_delete_view',id=model.id))
+    
+    @expose('/delete/',methods=['GET','POST'])
+    def delete_view(self):
+        id_ = request.form.get('id')
+        if id_:
+            return redirect(url_for('.confirm_delete_view',id=id_))
+        flash('No ID provided for deletion.',category='error')
+        return redirect(url_for('.index_view'))
 
 
+    @expose('/confirm_delete/', methods=['GET', 'POST'])
+    def confirm_delete_view(self):
+        if request.method == "POST":
+            if request.form.get('confirm') == "yes":
+                return self._delete_model()
+            else:
+                flash("Book deletion cancelled",category='error')
+                return redirect(url_for('.index_view'))
+
+        else:
+            model_id = request.args.get('id')
+            return render_template_string('''
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+                          rel="stylesheet"
+                          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+                          crossorigin="anonymous"
+                    />
+                    <title>Confirm Delete</title>
+                </head>
+                <body>
+                <div style="text-align: center; margin-top: 50px;">
+                    <h3>Are you sure you want to delete this book? This will delete all entries of the same book.</h3>
+                    <form method="post" action='{{ url_for(".confirm_delete_view") }}'>
+                        <input type="hidden" name="id" value="{{ model_id }}">
+                        <button type="submit" name="confirm" value="yes">Continue</button>
+                        <button type="submit" name="confirm" value="no">Cancel</button>
+                    </form>
+                </div>
+                </body>
+                </html>
+            ''', model_id=model_id)
+
+
+    def _delete_model(self):
+        try:
+            model_id = request.form.get('id')
+            print(f'Debug: Deleting model with ID {model_id}')  # Debug statement
+
+            if not model_id:
+                flash('ID not found.', category='error')
+                return redirect(url_for('admin.index'))
+
+            model = self.session.query(self.model).get(model_id)
+            if model:
+                self.session.delete(model)
+                self.session.commit()
+                flash('Book successfully deleted!', category="success")
+                print('Debug: Model deleted successfully')  
+            else:
+                flash("Unable to delete book.", category='error')
+                print('Debug: Model not found')  
+
+        except Exception as e:
+            flash(f'Error occurred: {e}', category='error')
+            self.session.rollback()
+            print(f'Debug: Exception occurred: {e}')  
+
+        return redirect(url_for('.index_view'))
+
+
+class BrandNewBookView(AdminBookView):
+    def get_query(self):
+        return super().get_query().filter_by(con="Brand New")
+
+    def get_count_query(self):
+        return super().get_count_query().filter_by(con="Brand New")
+    
+
+class SecondHandBookView(AdminBookView):
+    def get_query(self):
+        return super().get_query().filter(Book.con != "Brand New")
+
+    def get_count_query(self):
+        return super().get_count_query().filter(Book.con != "Brand New")
+
+    def can_create(self):
+        return False
+
+    def can_edit(self):
+        return False
+
+    def can_delete(self):
+        return True
+
+    def create_model(self, form):
+        flash("Only Non-Admins can add secondhand books.", category='error')
+        return False
+
+    def update_model(self, form, model):
+        return False
+    
 
 class AdminUserView(AdminModelView):
     column_labels = {
@@ -178,3 +289,11 @@ class AdminInvoiceView(AdminModelView):
     column_formatters = {
         'user': _format_username
     }
+
+
+class AdminLogoutView(BaseView):
+    @expose('/')
+    def logout_admin(self):
+        logout_user()
+        flash("Logged Out Successfully!", category='success')
+        return redirect(url_for('auth.login'))
