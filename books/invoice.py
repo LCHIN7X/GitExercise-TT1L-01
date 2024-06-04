@@ -13,3 +13,17 @@ class Invoice(db.Model):
 
     def __repr__(self):
         return f"<Invoice {self.invoice}>"
+    
+class InvoiceItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    invoice_id = db.Column(db.Integer, db.ForeignKey('invoice.id'), nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    
+    invoice = db.relationship('Invoice', backref=db.backref('items', lazy=True))
+    book = db.relationship('Book')
+
+    def __repr__(self):
+        return f"<InvoiceItem {self.id}>"
+

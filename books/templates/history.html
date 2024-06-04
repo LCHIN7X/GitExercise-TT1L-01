@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <h2>Order History</h2>
+        <hr>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Invoice ID</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                    <th>Date Order</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for invoice in invoices %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ invoice.invoice }}</td>
+                    <td>{{ invoice.status }}</td>
+                    <td>
+                        <button class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft-{{ invoice.id }}" aria-controls="offcanvasLeft-{{ invoice.id }}">
+                            View Invoice
+                        </button>
+
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLeft-{{ invoice.id }}" aria-labelledby="offcanvasLeftLabel-{{ invoice.id }}">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title" id="offcanvasLeftLabel-{{ invoice.id }}">Invoice {{ invoice.invoice }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <table class="table table-sm">
+                                    <thead>
+
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Book</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+                                        {% for item in invoice.items %}
+                                            <tr>
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ item.book.name }}</td>
+                                                <td>{{ item.quantity }}</td>
+                                                <td>RM {{ '%.2f' % item.price }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="3"><h5>Total: RM{{ '%.2f' % invoice.total_price }}</h5></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ invoice.date_order }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
