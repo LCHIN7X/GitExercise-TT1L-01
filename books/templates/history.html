@@ -36,7 +36,7 @@
                                             <th>No.</th>
                                             <th>Book</th>
                                             <th>Quantity</th>
-                                            <th>Price</th>
+                                            <th>Price(RM)</th>
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
@@ -46,20 +46,21 @@
                                             <td>{{ loop.index }}</td>
                                             <td>{{ item.book.name }}</td>
                                             <td>{{ item.quantity }}</td>
-                                            <td>RM {{ item.price }}</td>
+                                            <td>{{ '%.2f' %item.price }}</td>
                                             <td>
                                                 <a href="{{ url_for('views.rate', book_id=item.book.id, invoice_id=invoice.id) }}" class="btn btn-danger btn-sm">Rate</a>
                                             </td>
-                                            <td>{{ invoice.date_order }}</td>
+                                            
                                         </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
                                 <hr>
-                                <h5>Total Price: RM {{ invoice.total_price }}</h5>
+                                <h5>Total Price: RM {{ '%.2f' %invoice.total_price }}</h5>
                             </div>
                         </div>
                     </td>
+                    <td>{{ invoice.date_order }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
