@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='add-and-remove_style.css') }}"> 
     <script>
         function confirmSubmission(event) {
-            var confirmation = confirm("Are you sure you want to save these changes? Product, Book name, Subject cannot be changed! Make sure your Faculty is correct! If you want to changed these you can delete it and add another book , go to the add book page!");
+            var confirmation = confirm("Are you sure you want to save these changes? Book image, Book name, Subject cannot be changed! Make sure your Faculty is correct! If you want to changed these you can delete it and add another book , go to the add book page!");
             if (!confirmation) {
                 event.preventDefault();
             }
