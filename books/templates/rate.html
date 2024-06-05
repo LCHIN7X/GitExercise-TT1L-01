@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h2>Rate Book: {{ book.name }}</h2>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-6" id="f_image">
+                    <img src="{{ url_for('static', filename='images/' + book.image) }}" alt="{{ book.name }}" height="400">
+                </div>
+                <div class="col-md-6">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="form-group">
+                            <label for="rating">Rating:</label>
+                            <div class="starability-basic">
+                                <input type="radio" id="rate1" name="rating" value="1">
+                                <label for="rate1">1 star</label>
+                                <input type="radio" id="rate2" name="rating" value="2">
+                                <label for="rate2">2 stars</label>
+                                <input type="radio" id="rate3" name="rating" value="3">
+                                <label for="rate3">3 stars</label>
+                                <input type="radio" id="rate4" name="rating" value="4">
+                                <label for="rate4">4 stars</label>
+                                <input type="radio" id="rate5" name="rating" value="5">
+                                <label for="rate5">5 stars</label>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit Rating</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
