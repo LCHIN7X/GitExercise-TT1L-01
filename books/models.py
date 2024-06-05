@@ -33,6 +33,7 @@ class Book(db.Model):
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+    name = db.Column(db.String(80), db.ForeignKey('book.name'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     stock = db.Column(db.Integer, nullable=False)
     con = db.Column(db.Text, nullable=False)
