@@ -190,7 +190,7 @@ def addbook():
         db.session.add(addbo)
         db.session.commit()
 
-        addstock = Stock(book_id=addbo.id,user_id=user.id,stock=stock,con=con,faculty_id=faculty,subject_id=subject)
+        addstock = Stock(book_id=addbo.id,user_id=user.id,name=name,stock=stock,con=con,faculty_id=faculty,subject_id=subject)
         db.session.add(addstock)
         db.session.commit()
         
@@ -217,7 +217,7 @@ def addsbook(book_id):
         db.session.add(addbo)
         db.session.commit()
 
-        addstock = Stock(book_id=addbo.id,user_id=user.id,stock=stock,con=con,faculty_id=original_book.faculty_id,subject_id=original_book.subject_id)
+        addstock = Stock(book_id=addbo.id,user_id=user.id,name=original_book.name,stock=stock,con=con,faculty_id=original_book.faculty_id,subject_id=original_book.subject_id)
         db.session.add(addstock)
         db.session.commit()
 
