@@ -8,7 +8,9 @@
                 <tr>
                     <th>No.</th>
                     <th>Invoice ID</th>
+                    <th>Status</th>
                     <th>Details</th>
+                    <th>Date Order</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,6 +18,7 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ invoice.invoice }}</td>
+                    <td>{{ invoice.status }}</td>
                     <td>
                         <button class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft-{{ invoice.id }}" aria-controls="offcanvasLeft-{{ invoice.id }}">
                             View Invoice
@@ -47,6 +50,7 @@
                                             <td>
                                                 <a href="{{ url_for('views.rate', book_id=item.book.id, invoice_id=invoice.id) }}" class="btn btn-danger btn-sm">Rate</a>
                                             </td>
+                                            <td>{{ invoice.date_order }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
