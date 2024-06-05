@@ -80,6 +80,9 @@
           
           <h5 class="card-title">{{ f.name }}</h5>
           <p class="card-text">RM {{ f.price }}</p>
+          <p class="card-text">Rating: {{ '{:.2f}'.format(average_rating.get(book.id, 0)) }}</p>
+          
+
           <button class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft-{{ f.id }}" aria-controls="offcanvasLeft">Other prices</button>
           <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLeft-{{ f.id }}" aria-labelledby="offcanvasLeftLabel-{{ f.id }}">
             <div class="offcanvas-header">
@@ -92,6 +95,7 @@
               <p>RM {{ f.price }}</p>
               <p>Condition: {{ f.con }}</p>
               <p>Stock: {{ f.stock }}</p>
+              <p class="card-text">Rating: {{ '{:.2f}'.format(average_rating.get(book.id, 0)) }}</p>
               <form action="{{ url_for('views.addcart') }}" method="post">
                 <input type="hidden" name="book_id" value="{{ f.id }}">
                 <button type="submit" class="float-end btn btn-sm btn-warning">Add to Cart</button>
@@ -104,8 +108,11 @@
               {% for sbook in bookss %}
                 {% if sbook.name == f.name %}
                 <p>RM {{ sbook.price }}</p>
+                <p>Faculty:{{ sbook.faculty }}</p>
                 <p>Condition: {{ sbook.con }}</p>
+                <p>Rating: {{ '{:.2f}'.format(average_ratingsh.get(sbook.id, 0)) }}</p>
                 <p>Stock: {{ sbook.stock }}</p>
+                
                 <p>Sell by: {{ sbook.user.username }}</p>
                 <form action="{{ url_for('views.addcart') }}" method="post">
                   <input type="hidden" name="book_id" value="{{ sbook.id }}">
@@ -187,6 +194,9 @@
       
       <h5 class="card-title">{{ s.name }}</h5>
       <p class="card-text">RM {{ s.price }}</p>
+      <p class="card-text">Rating: {{ '{:.2f}'.format(average_rating.get(book.id, 0)) }}</p>
+
+      
 
       <button class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft-{{ s.id }}" aria-controls="offcanvasLeft">Other prices</button>
 
@@ -201,6 +211,7 @@
               <p>RM {{ s.price }}</p>
               <p>Condition: {{ s.con }}</p>
               <p>Stock: {{ s.stock }}</p>
+              <p class="card-text">Rating: {{ '{:.2f}'.format(average_rating.get(book.id, 0)) }}</p>
               <form action="{{ url_for('views.addcart') }}" method="post">
                 <input type="hidden" name="book_id" value="{{ s.id }}">
                 <button type="submit" class="float-end btn btn-sm btn-warning">Add to Cart</button>
@@ -213,8 +224,10 @@
               {% for sbook in bookss %}
                 {% if sbook.name == s.name %}
                 <p>RM {{ sbook.price }}</p>
+                <p>Faculty:{{ sbook.faculty }}</p>
                 <p>Condition: {{ sbook.con }}</p>
                 <p>Stock: {{ sbook.stock }}</p>
+                <p>Rating: {{ '{:.2f}'.format(average_ratingsh.get(sbook.id, 0)) }}</p>
                 <p>Sell by: {{ sbook.user.username }}</p>
                 <form action="{{ url_for('views.addcart') }}" method="post">
                   <input type="hidden" name="book_id" value="{{ sbook.id }}">
@@ -297,8 +310,9 @@
     <div class="card-body">
       <h5 class="card-title">{{ book.name }}</h5>
       <p class="card-text">RM {{ book.price }}</p>
+      <p class="card-text">Rating: {{ '{:.2f}'.format(average_rating.get(book.id, 0)) }}</p>
 
-      
+
       <button class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft-{{ book.id }}" aria-controls="offcanvasLeft">Other prices</button>
 
       <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLeft-{{ book.id }}" aria-labelledby="offcanvasLeftLabel-{{ book.id }}">
@@ -313,8 +327,8 @@
           <p>RM {{ book.price }}</p>
           <p>Condition: {{ book.con }}</p>
           <p>Stock: {{ book.stock }}</p>
+          <p class="card-text">Rating: {{ '{:.2f}'.format(average_rating.get(book.id, 0)) }}</p>
           
-
           <form action="{{ url_for('views.addcart') }}" method="post">
             <input type="hidden" name="book_id" value="{{ book.id }}">
             <button type="submit" class="float-end btn btn-sm btn-warning">Add to Cart</button>
@@ -330,8 +344,10 @@
           {% for sbook in bookss %}
             {% if sbook.name == book.name %}
             <p>RM {{ sbook.price }}</p>
+            <p>Faculty:{{ sbook.faculty }}</p>
             <p>Condition: {{ sbook.con }}</p>
             <p>Stock: {{ sbook.stock }}</p>
+            <p>Rating: {{ '{:.2f}'.format(average_ratingsh.get(sbook.id, 0)) }}</p>
             <p>Sell by: {{ sbook.user.username }}</p>
 
             <form action="{{ url_for('views.addcart') }}" method="post">

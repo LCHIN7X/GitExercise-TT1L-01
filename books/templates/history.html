@@ -1,27 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
-
 <div class="container">
     <div class="row">
         <h2>Order History</h2>
-        <hr>
         <table class="table table-sm">
             <thead>
                 <tr>
                     <th>No.</th>
                     <th>Invoice ID</th>
-                    <th>Status</th>
                     <th>Details</th>
-                    <th>Date Order</th>
                 </tr>
             </thead>
-
             <tbody>
                 {% for invoice in invoices %}
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ invoice.invoice }}</td>
-                    <td>{{ invoice.status }}</td>
                     <td>
                         <button class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft-{{ invoice.id }}" aria-controls="offcanvasLeft-{{ invoice.id }}">
                             View Invoice
@@ -35,41 +29,37 @@
                             <div class="offcanvas-body">
                                 <table class="table table-sm">
                                     <thead>
-
                                         <tr>
                                             <th>No.</th>
                                             <th>Book</th>
                                             <th>Quantity</th>
                                             <th>Price</th>
+                                            <th>Rating</th>
                                         </tr>
-                                        
                                     </thead>
                                     <tbody>
                                         {% for item in invoice.items %}
-                                            <tr>
-                                                <td>{{ loop.index }}</td>
-                                                <td>{{ item.book.name }}</td>
-                                                <td>{{ item.quantity }}</td>
-                                                <td>RM {{ '%.2f' % item.price }}</td>
-                                            </tr>
-                                        {% endfor %}
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td colspan="3"><h5>Total: RM{{ '%.2f' % invoice.total_price }}</h5></td>
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ item.book.name }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td>RM {{ item.price }}</td>
+                                            <td>
+                                                <a href="{{ url_for('views.rate', book_id=item.book.id, invoice_id=invoice.id) }}" class="btn btn-danger btn-sm">Rate</a>
+                                            </td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
+                                <hr>
+                                <h5>Total Price: RM {{ invoice.total_price }}</h5>
                             </div>
                         </div>
                     </td>
-                    <td>{{ invoice.date_order }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
-
 {% endblock %}

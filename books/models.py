@@ -25,8 +25,27 @@ class Book(db.Model):
     image = db.Column(db.String(150),nullable=False,default='image.jpg')
     is_original = db.Column(db.Boolean, default=True, nullable=False)
 
+    ratings = db.relationship('Rating', backref='book_ratings', lazy=True)
+
     def __repr__(self):
         return self.name
+    
+class Stock(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    stock = db.Column(db.Integer, nullable=False)
+    con = db.Column(db.Text, nullable=False)
+    faculty_id = db.Column(db.Integer, db.ForeignKey('faculty.id'), nullable=False)
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
+
+    faculty = db.relationship('Faculty', backref=db.backref('stock_entries', lazy=True))
+    subject = db.relationship('Subject', backref=db.backref('stock_entries', lazy=True))
+    user = db.relationship('User', backref=db.backref('stock_entries', lazy=True))
+
+    def __repr__(self):
+        return f"<Stock {self.id}>"
+
 
 
 class Faculty(db.Model):
