@@ -25,6 +25,11 @@ def get_db_connection():
     con.row_factory = sqlite3.Row
     return con
 
+@shbooks.route("/upload_form", methods=['GET', 'POST'])
+def upload_form():
+    return render_template("success.html")
+
+
 @shbooks.route("/ownshop", methods=['GET', 'POST'])
 def myshop():
     user_bg = current_user.profile_pic if current_user.is_authenticated else 'default_pfp.png'
@@ -54,38 +59,23 @@ def delete(id):
 @shbooks.route('/test/<int:id>', methods=['POST', 'GET'] )
 def testpage(id):
     edit_book = Book.query.get_or_404(id)
-    return render_template('editform.html', edit_book=edit_book)
+    faculties = Faculty.query.all() 
+    subjects = Subject.query.all()  
+    return render_template('editform.html', edit_book=edit_book, faculties=faculties, subjects=subjects)
 
 @shbooks.route('/testfunction/<int:id>', methods=['POST', 'GET'])
 def testfunction(id):
     edit_book = Book.query.get_or_404(id)
     if request.method == "POST":
         try:
-            image = request.files['image']
-            if image and image.filename != '':
-                filename = secure_filename(image.filename)
-                image.save(os.path.join('static/images', filename))
-                edit_book.image = filename
-            
-            edit_book.name = request.form['name']
             edit_book.price = float(request.form['price'])
             edit_book.stock = int(request.form['stock'])
             edit_book.faculty_id = request.form['faculty']
-            edit_book.subject_id = request.form['subject'] 
-
             faculty_name = request.form['faculty']
-            subject_name = request.form['subject']
-            
-           
+
             faculty = Faculty.query.filter_by(name=faculty_name).first()
-            subject = Subject.query.filter_by(name=subject_name).first()
-
-            if not faculty or not subject:
-                flash('Invalid faculty or subject name', 'error')
-                return redirect(url_for('shbooks.myshop'))
-
+ 
             edit_book.faculty_id = faculty.id
-            edit_book.subject_id = subject.id
             
             db.session.commit()  
 
@@ -104,4 +94,6 @@ def searchresult():
     username = current_user.username if current_user.is_authenticated else ''
     searchword = request.args.get('x')
     books = Book.query.msearch(searchword,fields=['name','desc'],limit=3)
-    return render_template('searchresult.html',profile_pic=profile_pic, bio=bio, username=username,books=books)
+    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
+    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
+    return render_template('searchresult.html',profile_pic=profile_pic, bio=bio, username=username,books=books,facultiess=facultiess,subjects=subjects)
