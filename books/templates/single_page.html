@@ -1,5 +1,8 @@
+<!DOCTYPE html>
 {% extends "base.html" %}
-
+{% block title %}
+Book Details
+{% endblock %}
 {% block content %}
 <!--- navbar starts ===================-->
 <div class="container">
@@ -104,7 +107,7 @@
 </div>
 
 <div class="container mt-5">
-  <h3>Other Choose for {{ book.name }}</h3>
+  <h3>Other Choices for {{ book.name }}</h3>
     <div class="row">
         {% for sbook in bookss %}
         
