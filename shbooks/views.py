@@ -3,34 +3,27 @@ import os
 from auth.models import User
 from flask_login import current_user, login_required
 from flask import session
-from flask_uploads import UploadSet, IMAGES
 from auth.models import db
 from books.models import Book, Faculty, Subject
+from books.invoice import Rating
 from .forms import Editbook
-from werkzeug.utils import secure_filename
+
 import sqlite3
 
-####
 shbooks = Blueprint(
     "shbooks",
     __name__,
     static_folder="static",
-    template_folder="templates"  
+    template_folder="templates"
 )
-
-photos = UploadSet('photos', IMAGES)
 
 def get_db_connection():
     con = sqlite3.connect("database.db")
     con.row_factory = sqlite3.Row
     return con
 
-@shbooks.route("/upload_form", methods=['GET', 'POST'])
-def upload_form():
-    return render_template("success.html")
-
-
 @shbooks.route("/ownshop", methods=['GET', 'POST'])
+@login_required
 def myshop():
     user_bg = current_user.profile_pic if current_user.is_authenticated else 'default_pfp.png'
     profile_pic = current_user.profile_pic if current_user.is_authenticated else 'default_pfp.png'
@@ -38,54 +31,68 @@ def myshop():
     username = current_user.username if current_user.is_authenticated else ''
     faculties = Faculty.query.all()
     subjects = Subject.query.all()
-    books = Book.query.all()
+    books = Book.query.filter_by(user_id=current_user.id).all()  # Filter books by current user
     form = Editbook(request.form)
-    return render_template("ownshop.html", user_bg=user_bg, profile_pic=profile_pic, bio=bio, username=username, books=books, form=form, faculties=faculties, subjects=subjects,edit_book=None)  
+    return render_template("ownshop.html", user_bg=user_bg, profile_pic=profile_pic, bio=bio, username=username, books=books, form=form, faculties=faculties, subjects=subjects, edit_book=None)
 
-
-@shbooks.route("/delete/<int:id>")
+@shbooks.route("/delete/<int:id>", methods=['POST'])
+@login_required
 def delete(id):
     delete_book = Book.query.get_or_404(id)
+    if delete_book.user_id != current_user.id:
+        flash('Unauthorized action', 'error')
+        return redirect(url_for('shbooks.myshop'))
+
     
+    try:
+        db.session.query(Rating).filter_by(book_id=id).delete()
+        db.session.commit()
+    except Exception as e:
+        flash(f'Failed to delete associated ratings: {str(e)}', 'error')
+
     try:
         db.session.delete(delete_book)
         db.session.commit()
-        flash('Book deleteted successfully', 'success')
-        return redirect('../ownshop')
-    except:
-        flash('Book deleted failed', 'error')
-        return redirect('../ownshop')
+        flash('Book deleted successfully', 'success')
+    except Exception as e:
+        flash(f'Failed to delete the book: {str(e)}', 'error')
 
-@shbooks.route('/test/<int:id>', methods=['POST', 'GET'] )
-def testpage(id):
-    edit_book = Book.query.get_or_404(id)
-    faculties = Faculty.query.all() 
-    subjects = Subject.query.all()  
-    return render_template('editform.html', edit_book=edit_book, faculties=faculties, subjects=subjects)
+    return redirect(url_for('shbooks.myshop'))
 
-@shbooks.route('/testfunction/<int:id>', methods=['POST', 'GET'])
-def testfunction(id):
+
+
+
+@shbooks.route('/edit/<int:id>', methods=['POST', 'GET'])
+@login_required
+def edit(id):
     edit_book = Book.query.get_or_404(id)
-    if request.method == "POST":
+    if edit_book.user_id != current_user.id:
+        flash('Unauthorized action', 'error')
+        return redirect(url_for('shbooks.myshop'))
+        
+    faculties = Faculty.query.all()
+    subjects = Subject.query.all()
+    if request.method == 'POST':
         try:
             edit_book.price = float(request.form['price'])
             edit_book.stock = int(request.form['stock'])
-            edit_book.faculty_id = request.form['faculty']
             faculty_name = request.form['faculty']
 
             faculty = Faculty.query.filter_by(name=faculty_name).first()
- 
-            edit_book.faculty_id = faculty.id
-            
-            db.session.commit()  
+            if faculty:
+                edit_book.faculty_id = faculty.id
+            else:
+                flash('Selected faculty not found', 'error')
+                return redirect(url_for('shbooks.edit', id=id))
 
+            db.session.commit()
             flash('Book edited successfully', 'success')
             return redirect(url_for('shbooks.myshop'))
         except Exception as e:
             flash(f'Error editing book: {str(e)}', 'error')
-            return redirect(url_for('shbooks.myshop'))
+            return redirect(url_for('shbooks.edit', id=id))
 
-    return redirect(url_for('shbooks.myshop'))
+    return render_template('editform.html', edit_book=edit_book, faculties=faculties, subjects=subjects)
 
 @shbooks.route('/searchresult')
 def searchresult():
@@ -93,7 +100,7 @@ def searchresult():
     bio = current_user.bio if current_user.is_authenticated else ''
     username = current_user.username if current_user.is_authenticated else ''
     searchword = request.args.get('x')
-    books = Book.query.msearch(searchword,fields=['name','desc'],limit=3)
-    facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
-    subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
-    return render_template('searchresult.html',profile_pic=profile_pic, bio=bio, username=username,books=books,facultiess=facultiess,subjects=subjects)
+    books = Book.query.msearch(searchword, fields=['name', 'desc'], limit=3)
+    facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
+    subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
+    return render_template('searchresult.html', profile_pic=profile_pic, bio=bio, username=username, books=books, facultiess=facultiess, subjects=subjects)
