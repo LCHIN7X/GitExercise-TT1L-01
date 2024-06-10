@@ -36,6 +36,3 @@ class Rating(db.Model):
     user = db.relationship('User', backref=db.backref('ratings', lazy=True))
     book = db.relationship('Book', backref=db.backref('book_ratings', lazy=True))
     invoice = db.relationship('Invoice', backref=db.backref('ratings', lazy=True))  
-
-
-

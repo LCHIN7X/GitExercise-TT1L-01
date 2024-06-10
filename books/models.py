@@ -1,4 +1,3 @@
-
 from auth.models import db
 from datetime import datetime
 
@@ -51,7 +50,7 @@ class Stock(db.Model):
 
 class BannedBook(db.Model):
     id = db.Column(db.Integer,primary_key=True)
-    book_name = db.Column(db.String(100))
+    book_name = db.Column(db.String(100),nullable=False)
     reason = db.Column(db.String(100))
     
 
