@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
+
 {% block favicon %}
 <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('.static', filename='assets/favicons/order/apple-touch-icon.png')}}" />
 <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('.static',filename='assets/favicons/order/favicon-32x32.png') }}" />
@@ -8,8 +10,7 @@
 {% block title %}
 My Order
 {% endblock %}
-{% extends 'base.html' %}
-
+`
 {% block content %}
 <div class="container">
     <div class="row">
