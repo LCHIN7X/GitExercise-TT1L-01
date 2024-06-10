@@ -156,7 +156,7 @@ def addfaculty():
   
         existing_faculty = Faculty.query.filter_by(name=getfaculty).first()
         if existing_faculty:
-            flash(f'Faculty "{getfaculty}" already exists.', 'error')
+            flash(f'Faculty "{getfaculty}" already exists.',  category='error')
             return redirect(url_for('views.addfaculty'))
         
         faculty = Faculty(name=getfaculty)
@@ -177,7 +177,7 @@ def addsub():
     
         existing_subject = Subject.query.filter_by(name=getsubject).first()
         if existing_subject:
-            flash(f'Subject "{getsubject}" already exists.', 'error')
+            flash(f'Subject "{getsubject}" already exists.',  category='error')
             return redirect(url_for('views.addsub'))
         
         sub = Subject(name=getsubject)  
@@ -203,17 +203,17 @@ def addbook():
         name = form.name.data
         username = request.form.get("username")
         
-        # Retrieve price from form and convert to string
+       
         price_str = request.form.get('price')
         
-        # Validate price value
+       
         if not price_str:
-            flash("Price cannot be empty", "error")
+            flash("Price cannot be empty", category='error')
             return redirect(url_for('views.addbook'))
         try:
             price = float(price_str)
         except ValueError:
-            flash("Price must be a valid number", "error")
+            flash("Price must be a valid number",  category='error')
             return redirect(url_for('views.addbook'))
             
         stock = form.stock.data
@@ -228,7 +228,7 @@ def addbook():
        
         existing_book = Book.query.filter_by(name=name).first()
         if existing_book:
-            flash("This book has been added. If you need to sell the same book again, please add it at a different price in the book details.", "info")
+            flash("This book has been added. If you need to sell the same book again, please add it at a different price in the book details.",  category='error')
             return redirect(url_for('views.addbook'))
         
         addbo = Book(name=name, user_id=username, price=price, stock=stock, desc=desc, con=con, faculty_id=faculty,
@@ -241,7 +241,7 @@ def addbook():
         db.session.add(addstock)
         db.session.commit()
         
-        flash(f"Book {name} has been added to your database. If you need to sell the same book again, please add it at a different price in the book details.", 'success')
+        flash(f"Book {name} has been added to your database. If you need to sell the same book again, please add it at a different price in the book details.",  category='error')
         return redirect(url_for('views.addbook'))
     
     return render_template('addbook.html', title="Add Book page", form=form, faculties=faculties, subjects=subjects, photos=photos, users=users)
@@ -269,7 +269,7 @@ def addsbook(book_id):
         db.session.add(addstock)
         db.session.commit()
 
-        flash(f"Your book has been listed for sale", 'success')
+        flash(f"Your book has been listed for sale",  category='error')
         return redirect(url_for('views.single_page', id=book_id))  
 
     return render_template('addsbook.html', form=form, user=user, book=original_book)
@@ -368,7 +368,7 @@ def payment():
 @login_required
 def order():
     if 'Shopcart' not in session or not session['Shopcart']:
-        flash('Your cart is empty', 'warning')
+        flash('Your cart is empty',  category='error')
         return redirect(url_for('views.getCart'))
 
     order_details = session['Shopcart']
@@ -386,7 +386,7 @@ def order():
                     book.stock -= quantity_to_deduct
                     total += float(item['price']) * quantity_to_deduct
                 else:
-                    flash(f'Insufficient stock for {book.name}. Please remove it from your cart.', 'warning')
+                    flash(f'Insufficient stock for {book.name}. Please remove it from your cart.',  category='error')
                     return redirect(url_for('views.getCart'))
 
         invoice_number = secrets.token_hex(5)
@@ -405,7 +405,7 @@ def order():
         flash('Checkout successful. Your order has been placed.', 'success')
     except Exception as e:
         db.session.rollback()
-        flash('An error occurred during checkout. Please try again later.', 'error')
+        flash('An error occurred during checkout. Please try again later.',  category='error')
         print(f"Error: {str(e)}")
         traceback.print_exc()
 
@@ -446,7 +446,7 @@ def rate(book_id, invoice_id):
         rated = Rating.query.filter_by(user_id=current_user.id, book_id=book_id, invoice_id=invoice_id).first()
 
         if rated:
-            flash('You have already rated this book for this order.', 'warning')
+            flash('You have already rated this book for this order.',  category='error')
         else:
            
             rating = Rating(rating=form.rating.data, user_id=current_user.id, book_id=book_id, invoice_id=invoice_id)
