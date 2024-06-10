@@ -1,5 +1,4 @@
 flask
-gunicorn
 flask_login
 email_validator
 flask_wtf
@@ -11,3 +10,4 @@ flask_uploads
 flask-reuploaded
 flask_bcrypt
 flask_msearch
+Pillow
