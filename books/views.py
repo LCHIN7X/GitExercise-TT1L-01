@@ -1,8 +1,9 @@
 from flask import redirect,render_template,url_for,request,flash,Blueprint,session,jsonify
 from auth.models import db,User
-from .models import Faculty,Subject,Book
-from .invoice import Invoice,InvoiceItem
-from .bforms import Addbooks 
+from .models import Faculty,Subject,Book,Stock
+from .invoice import Invoice,InvoiceItem,Rating
+from .bforms import Addbooks
+from .forms import RatingForm 
 from flask_uploads import UploadSet, IMAGES
 from flask_login import login_required,current_user
 
@@ -26,7 +27,19 @@ def home():
 
     facultiess = Faculty.query.join(Book,(Faculty.id == Book.faculty_id)).all()
     subjects = Subject.query.join(Book,(Subject.id == Book.subject_id)).all()
-    return render_template('home.html', books=books,bookss=bookss,facultiess=facultiess,subjects=subjects,pagination=pagination)
+
+    average_rating = {}
+    for book in books:
+        ratings = [rating.rating for rating in book.book_ratings]
+        average_rating[book.id] = sum(ratings) / len(ratings) if ratings else 0
+        
+    
+    average_ratingsh = {}
+    for sbook in bookss:
+        ratings = [rating.rating for rating in sbook.book_ratings]
+        average_ratingsh[sbook.id] = sum(ratings) / len(ratings) if ratings else 0
+        
+    return render_template('home.html', books=books, bookss=bookss, facultiess=facultiess,subjects=subjects, pagination=pagination, average_rating=average_rating,average_ratingsh=average_ratingsh)
 
 
 @views.route('/searchh')
@@ -42,8 +55,18 @@ def searchh():
    
     facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
     subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
+
+    average_rating = {}
+    for book in books:
+        ratings = [rating.rating for rating in book.book_ratings]
+        average_rating[book.id] = sum(ratings) / len(ratings) if ratings else 0
+
+    average_ratingsh = {}
+    for sbook in bookss:
+        ratings = [rating.rating for rating in sbook.book_ratings]
+        average_ratingsh[sbook.id] = sum(ratings) / len(ratings) if ratings else 0
     
-    return render_template('searchh.html', books=books, bookss=bookss, facultiess=facultiess, subjects=subjects)
+    return render_template('searchh.html', books=books, bookss=bookss, facultiess=facultiess, subjects=subjects,average_rating=average_rating,average_ratingsh=average_ratingsh)
 
 
 
@@ -52,10 +75,21 @@ def searchh():
 @login_required
 def single_page(id):
     book = Book.query.get_or_404(id)   
-    bookss = Book.query.filter_by(name=book.name).filter(Book.stock > 0,Book.is_original == False).all()
+    bookss = Book.query.filter_by(name=book.name).filter(Book.stock > 0, Book.is_original == False).all()
     facultiess = Faculty.query.all()
     subjects = Subject.query.all()
-    return render_template('single_page.html', book=book, bookss=bookss, facultiess=facultiess, subjects=subjects)
+    
+    
+    ratings = [rating.rating for rating in book.ratings]
+    average_rating = sum(ratings) / len(ratings) if ratings else 0
+
+    average_ratingsh = {}
+    for sbook in bookss:
+        ratings = [rating.rating for rating in sbook.book_ratings]
+        average_ratingsh[sbook.id] = sum(ratings) / len(ratings) if ratings else 0
+    
+    return render_template('single_page.html', book=book, bookss=bookss, facultiess=facultiess, subjects=subjects,average_rating=average_rating,average_ratingsh=average_ratingsh)
+
 
 
 @views.route('/faculty/<int:id>')
@@ -72,7 +106,17 @@ def get_faculty(id):
     facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
     subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
 
-    return render_template('home.html', books=get_faculty, bookss=additional_books, facultiess=facultiess, subjects=subjects, pagination=pagination)
+    average_rating = {}
+    for book in get_faculty:
+        ratings = [rating.rating for rating in book.book_ratings]
+        average_rating[book.id] = sum(ratings) / len(ratings) if ratings else 0
+
+    average_ratingsh = {}
+    for sbook in additional_books:
+        ratings = [rating.rating for rating in sbook.book_ratings]
+        average_ratingsh[sbook.id] = sum(ratings) / len(ratings) if ratings else 0
+
+    return render_template('home.html', books=get_faculty, bookss=additional_books, facultiess=facultiess, subjects=subjects, pagination=pagination,average_rating=average_rating,average_ratingsh=average_ratingsh)
 
 
 @views.route('/subjects/<int:id>')
@@ -87,7 +131,18 @@ def get_subject(id):
     additional_books = Book.query.filter_by(subject_id=id).filter(Book.stock > 0, Book.is_original == False).all()
     facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
     subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
-    return render_template('home.html', books=get_sub, bookss=additional_books, facultiess=facultiess, subjects=subjects, pagination=pagination)
+
+    average_rating = {}
+    for book in get_sub:
+        ratings = [rating.rating for rating in book.book_ratings]
+        average_rating[book.id] = sum(ratings) / len(ratings) if ratings else 0
+
+    average_ratingsh = {}
+    for sbook in additional_books:
+        ratings = [rating.rating for rating in sbook.book_ratings]
+        average_ratingsh[sbook.id] = sum(ratings) / len(ratings) if ratings else 0
+
+    return render_template('home.html', books=get_sub, bookss=additional_books, facultiess=facultiess, subjects=subjects, pagination=pagination,average_rating=average_rating,average_ratingsh=average_ratingsh)
 
 
 
@@ -97,29 +152,44 @@ def get_subject(id):
 def addfaculty():
     if request.method == "POST":
         getfaculty = request.form.get('faculty')
+        
+  
+        existing_faculty = Faculty.query.filter_by(name=getfaculty).first()
+        if existing_faculty:
+            flash(f'Faculty "{getfaculty}" already exists.',  category='error')
+            return redirect(url_for('views.addfaculty'))
+        
         faculty = Faculty(name=getfaculty)
         db.session.add(faculty)
-        flash(f'Faculty {getfaculty} was added to your database', 'success')
         db.session.commit()
-        return redirect(url_for('views.addfaculty'))
+        flash(f'Faculty "{getfaculty}" was added to your database.', 'success')
+        return redirect(url_for('views.home'))
     
-    return render_template('addfaculty.html', faculties='faculties')
-
-
+    return render_template('addfaculty.html')
 
 
 @views.route('/addsub', methods=['GET','POST'])
 @login_required
-def addsub():
+def addsub():  
     if request.method =="POST":
-        getfaculty = request.form.get('subject')
-        sub = Subject(name=getfaculty)
-        db.session.add(sub)
-        flash(f'Subject {getfaculty} was added to your datebase','success')
-        db.session.commit()
-        return redirect(url_for('views.addfaculty'))
+        getsubject = request.form.get('subject') 
+        
     
-    return render_template('addfaculty.html')
+        existing_subject = Subject.query.filter_by(name=getsubject).first()
+        if existing_subject:
+            flash(f'Subject "{getsubject}" already exists.',  category='error')
+            return redirect(url_for('views.addsub'))
+        
+        sub = Subject(name=getsubject)  
+        db.session.add(sub)
+        db.session.commit()
+        flash(f'Subject "{getsubject}" was added to your database.', 'success') 
+        return redirect(url_for('views.addbook'))
+    
+    return render_template('addsub.html')
+
+
+
 
 @views.route('/addbook', methods=['POST', 'GET'])
 @login_required
@@ -127,26 +197,54 @@ def addbook():
     faculties = Faculty.query.all()
     subjects = Subject.query.all()
     users = User.query.all()
-    form=Addbooks(request.form)
+    form = Addbooks(request.form)
     photos = UploadSet('photos', IMAGES)
     if request.method == 'POST':
         name = form.name.data
         username = request.form.get("username")
-        price = form.price.data
+        
+       
+        price_str = request.form.get('price')
+        
+       
+        if not price_str:
+            flash("Price cannot be empty", category='error')
+            return redirect(url_for('views.addbook'))
+        try:
+            price = float(price_str)
+        except ValueError:
+            flash("Price must be a valid number",  category='error')
+            return redirect(url_for('views.addbook'))
+            
         stock = form.stock.data
         desc = form.discription.data
         con = form.condition.data
         faculty = request.form.get('faculty')
         subject = request.form.get('subject')
+        
         image = photos.save(request.files['image'])
         user = current_user
-        addbo = Book(name=name,user_id=username,price=price,stock=stock,desc=desc,con=con,faculty_id=faculty,
-                     subject_id=subject,image=image,user=user, is_original=True)
+        
+       
+        existing_book = Book.query.filter_by(name=name).first()
+        if existing_book:
+            flash("This book has been added. If you need to sell the same book again, please add it at a different price in the book details.",  category='error')
+            return redirect(url_for('views.addbook'))
+        
+        addbo = Book(name=name, user_id=username, price=price, stock=stock, desc=desc, con=con, faculty_id=faculty,
+                     subject_id=subject, image=image, user=user, is_original=True)
         db.session.add(addbo)
         db.session.commit()
-        flash(f"Book {name} has been added to your database",'success')
+
+        addstock = Stock(book_id=addbo.id, user_id=user.id, name=name, stock=stock, con=con, faculty_id=faculty,
+                         subject_id=subject)
+        db.session.add(addstock)
+        db.session.commit()
+        
+        flash(f"Book {name} has been added to your database. If you need to sell the same book again, please add it at a different price in the book details.",  category='error')
         return redirect(url_for('views.addbook'))
-    return render_template('addbook.html',title ="Add Book page",form=form,faculties=faculties,subjects=subjects,photos=photos,users=users)
+    
+    return render_template('addbook.html', title="Add Book page", form=form, faculties=faculties, subjects=subjects, photos=photos, users=users)
 
 
 
@@ -166,7 +264,12 @@ def addsbook(book_id):
 
         db.session.add(addbo)
         db.session.commit()
-        flash(f"Your book has been listed for sale", 'success')
+
+        addstock = Stock(book_id=addbo.id,user_id=user.id,name=original_book.name,stock=stock,con=con,faculty_id=original_book.faculty_id,subject_id=original_book.subject_id)
+        db.session.add(addstock)
+        db.session.commit()
+
+        flash(f"Your book has been listed for sale",  category='error')
         return redirect(url_for('views.single_page', id=book_id))  
 
     return render_template('addsbook.html', form=form, user=user, book=original_book)
@@ -265,7 +368,7 @@ def payment():
 @login_required
 def order():
     if 'Shopcart' not in session or not session['Shopcart']:
-        flash('Your cart is empty', 'warning')
+        flash('Your cart is empty',  category='error')
         return redirect(url_for('views.getCart'))
 
     order_details = session['Shopcart']
@@ -283,7 +386,7 @@ def order():
                     book.stock -= quantity_to_deduct
                     total += float(item['price']) * quantity_to_deduct
                 else:
-                    flash(f'Insufficient stock for {book.name}. Please remove it from your cart.', 'warning')
+                    flash(f'Insufficient stock for {book.name}. Please remove it from your cart.',  category='error')
                     return redirect(url_for('views.getCart'))
 
         invoice_number = secrets.token_hex(5)
@@ -302,7 +405,7 @@ def order():
         flash('Checkout successful. Your order has been placed.', 'success')
     except Exception as e:
         db.session.rollback()
-        flash('An error occurred during checkout. Please try again later.', 'error')
+        flash('An error occurred during checkout. Please try again later.',  category='error')
         print(f"Error: {str(e)}")
         traceback.print_exc()
 
@@ -324,3 +427,39 @@ def history():
         invoice.total_price = sum(item.price * item.quantity for item in invoice.items)
 
     return render_template('history.html', invoices=invoices)
+
+
+@views.route('/rate/<int:book_id>/<int:invoice_id>', methods=['GET', 'POST'])
+@login_required
+def rate(book_id, invoice_id):
+    form = RatingForm()
+    book = Book.query.get_or_404(book_id)
+    invoice = Invoice.query.get_or_404(invoice_id)
+
+    
+    if invoice.user_id != current_user.id:
+        flash('Invalid invoice.', 'warning')
+        return redirect(url_for('views.home'))
+
+    if form.validate_on_submit():
+        
+        rated = Rating.query.filter_by(user_id=current_user.id, book_id=book_id, invoice_id=invoice_id).first()
+
+        if rated:
+            flash('You have already rated this book for this order.',  category='error')
+        else:
+           
+            rating = Rating(rating=form.rating.data, user_id=current_user.id, book_id=book_id, invoice_id=invoice_id)
+            db.session.add(rating)
+            db.session.commit()
+            flash('Rating submitted successfully', 'success')
+        
+        return redirect(url_for('views.home'))
+    
+    return render_template('rate.html', form=form, book=book)
+
+
+
+
+
+

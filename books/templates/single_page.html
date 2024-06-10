@@ -83,6 +83,8 @@
             <hr>
             <h5>Stock: {{ book.stock }}</h5>
             <hr>
+            <h5>Average Rating: {{ '{:.2f}'.format(average_rating) }}</h5>
+            <hr>
             <b>Book details:</b>
             <p>{{ book.desc }}</p>
             <hr>
@@ -111,8 +113,10 @@
                     
                         
                         <p class="card-text">RM {{ sbook.price }}</p>
+                        <p>Faculty:{{ sbook.faculty }}</p>
                         <p>Condition: {{ sbook.con }}</p>
                         <p>Stock: {{ sbook.stock }}</p>
+                        <p>Rating: {{ '{:.2f}'.format(average_ratingsh.get(sbook.id, 0)) }}</p>
                         <p>Sell by: {{ sbook.user.username }}</p>
                         
                     

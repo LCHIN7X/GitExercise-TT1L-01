@@ -3,53 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Second Hand Books</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='add-and-remove_style.css') }}"> 
+    <title>Second Hand Books - Edit Book</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script>
+        function confirmSubmission(event) {
+            var confirmation = confirm("Are you sure you want to save these changes? Book image, Book name, Subject cannot be changed! Make sure your Faculty is correct! If you want to change these you can delete it and add another book, go to the add book page!");
+            if (!confirmation) {
+                event.preventDefault();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.querySelector('form');
+            form.addEventListener('submit', confirmSubmission);
+        });
+    </script>
 </head>
 <body>
-    <div class="header-container">
-        <div class="header">
-            <img src="{{ url_for('.static', filename='/addRmvAsset/logo.jpg') }}" alt="Logo" class="logo">
-        </div>
-        <div class="title">
-            <h1>Edit Book</h1>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <form action="{{ url_for('shbooks.testfunction', id=edit_book.id) }}" method="POST" enctype="multipart/form-data">
-                <fieldset>
-                    <legend>Edit Book Details</legend>
-                    <div class="col-6">
-                        <label for="image">Product</label>
-                        <input type="file" id="image" name="image" accept=".jpg, .png"><br>
-                    </div>
-                    <div class="col-6">
-                        <label for="name">Book name</label>
-                        <input type="text" id="name" name="name" required placeholder="Enter the Book name" value="{{ edit_book.name }}"><br>
-                    </div>
-                    <div class="col-6">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Edit Book</h2>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('shbooks.edit', id=edit_book.id) }}" method="POST">
+                    <div class="form-group">
                         <label for="price">Price</label>
-                        <input type="number" id="price" name="price" required placeholder="Enter the Price" value="{{ edit_book.price }}"><br>
+                        <input type="number" class="form-control" id="price" name="price" value="{{ edit_book.price }}" required>
                     </div>
-                    <div class="col-6">
-                        <label for="stock">Quantity</label>
-                        <input type="number" id="stock" name="stock" required placeholder="Enter the Quantity" value="{{ edit_book.stock }}"><br>
+                    <div class="form-group">
+                        <label for="stock">Stock</label>
+                        <input type="number" class="form-control" id="stock" name="stock" value="{{ edit_book.stock }}" required>
                     </div>
-                    <div class="col-6">
+                    <div class="form-group">
                         <label for="faculty">Faculty</label>
-                        <input type="text" id="faculty" name="faculty" required placeholder="Enter the Faculty ID" value="{{ edit_book.faculty.name }}"><br>
+                        <select class="form-control" id="faculty" name="faculty" required>
+                            <option value="" disabled>Select Faculty</option>
+                            {% for faculty in faculties %}
+                            <option value="{{ faculty.name }}" {% if faculty.id == edit_book.faculty_id %}selected{% endif %}>{{ faculty.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <div class="col-6">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" required placeholder="Enter the Subject ID" value="{{ edit_book.subject.name }}"><br>
-                    </div>
-                    <input type="hidden" name="id" id="editBookId" value="{{ edit_book.id }}">
-                    <div class="col-6"></div>
-                    <input type="submit" value="Save Changes">
-                </fieldset>
-            </form>
+                    <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+                </form>
+            </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

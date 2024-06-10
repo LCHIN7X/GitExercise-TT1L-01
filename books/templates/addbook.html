@@ -1,8 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<!--- navbar starts ===================-->
+<div class="container">
+  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/views/addfaculty">Add Faculty</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/views/addsub">Add Subject</a>
+          </li>
 
-{% include "_messages.html" %}
+          
+        </ul>
+
+      </div>
+    </nav>
+  </div>
+  <!--- navbar ends ===================-->
+
+
 
 <div class="container">
     <div class="row">
@@ -13,7 +39,8 @@
                 <form action="" method="POST" enctype="multipart/form-data">
                     {{ render_field(form.name, class="form-control" ,placeholder="Add book name")}}
         
-                    {{ render_field(form.price, class="form-control" ,placeholder="Add book price")}}
+                    {{ render_field(form.price, type="number", step="0.01", class="form-control", placeholder="Add book price")}}
+
                     {{ render_field(form.stock, class="form-control" ,placeholder="Add book stock")}}
                     
 
