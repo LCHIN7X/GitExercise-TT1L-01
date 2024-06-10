@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class Book(db.Model):
-    __searchbale__ = ['name','desc']
+    __searchable__ = ['name','desc']
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     price = db.Column(db.Numeric(10,2), nullable=False)
@@ -27,6 +27,7 @@ class Book(db.Model):
 
     ratings = db.relationship('Rating', backref='book_ratings', lazy=True)
 
+
     def __repr__(self):
         return self.name
     
@@ -47,6 +48,15 @@ class Stock(db.Model):
     def __repr__(self):
         return f"<Stock {self.id}>"
 
+
+class BannedBook(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    book_name = db.Column(db.String(100))
+    reason = db.Column(db.String(100))
+    
+
+    def __repr__(self):
+        return f"Banned Book: {self.book_name}"
 
 
 class Faculty(db.Model):

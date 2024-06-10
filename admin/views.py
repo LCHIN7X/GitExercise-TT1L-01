@@ -2,7 +2,7 @@ from flask_login import current_user, logout_user
 from flask_admin import AdminIndexView, expose, BaseView
 from flask_admin.contrib.sqla import ModelView
 from flask import flash, redirect, url_for, request, render_template_string
-from books.models import Book
+from books.models import Book, BannedBook
 from flask_admin.form.upload import FileUploadField
 from wtforms.validators import InputRequired, ValidationError
 from werkzeug.utils import secure_filename
@@ -70,9 +70,15 @@ class AdminBookView(ModelView):
             book_name = form.name.data
             book_condition = form.con.data
             book_already_exists = Book.query.filter_by(name=book_name).first()
+            book_is_banned = BannedBook.query.filter_by(book_name=book_name).first()
 
             model = self.model()
             form.populate_obj(model)
+
+            if book_is_banned:
+                self.session.rollback()
+                flash(f"Unable to add book with title of {book_name} because it is banned by the system.",category="error")    
+                return False 
 
             if book_condition != "Brand New":
                 self.session.rollback()
@@ -82,6 +88,7 @@ class AdminBookView(ModelView):
             if book_already_exists:
                 print(f"Book with name '{book_name}' already exists.")
                 model.is_original = False
+
             else:
                 print(f"No book with name '{book_name}' found. Setting is_original to True.")
                 model.is_original = True
@@ -149,11 +156,11 @@ class AdminBookView(ModelView):
                 </head>
                 <body>
                 <div style="text-align: center; margin-top: 50px;">
-                    <h3>Are you sure you want to delete this book? This will delete all entries of the same book.</h3>
+                    <h3>Are you sure you want to delete this book? This will delete all entries of the same book, and the book will be banned.</h3>
                     <form method="post" action='{{ url_for(".confirm_delete_view") }}'>
                         <input type="hidden" name="id" value="{{ model_id }}">
-                        <button type="submit" name="confirm" value="yes">Continue</button>
-                        <button type="submit" name="confirm" value="no">Cancel</button>
+                        <button type="submit" name="confirm" value="yes" class='btn btn-primary mr-2'>Continue</button>
+                        <button type="submit" name="confirm" value="no" class='btn btn-danger ml-2'>Cancel</button>
                     </form>
                 </div>
                 </body>
@@ -172,13 +179,17 @@ class AdminBookView(ModelView):
 
             model = self.session.query(self.model).get(model_id)
             if model:
+                
+                new_banned_book = BannedBook(book_name=model.name,reason="Deleted by Admin")
+                self.session.add(new_banned_book)
                 self.session.delete(model)
                 self.session.commit()
-                flash('Book successfully deleted!', category="success")
+                flash('Book successfully deleted and banned!', category="success")
                 print('Debug: Model deleted successfully')  
+
             else:
                 flash("Unable to delete book.", category='error')
-                print('Debug: Model not found')  
+
 
         except Exception as e:
             flash(f'Error occurred: {e}', category='error')
