@@ -8,7 +8,11 @@
     
     <div class="card-body text-center">
         <div class="pro-img">
+            {% if profile_pic != 'default_pfp.png' %}
             <img src="{{ url_for('user_bp.static', filename='assets/images/user_uploads/' + profile_pic) }}" alt="User Profile Picture" class="img-fluid rounded-circle" width="150">
+            {% else %}
+            <img src="{{ url_for('user_bp.static', filename='assets/images/default_pfp.png') }}" alt="User Profile Picture" class="img-fluid rounded-circle" width="150">
+            {% endif %}
         </div>
         <h2>{{ username }}</h2>
         <p>{{ bio }}</p>

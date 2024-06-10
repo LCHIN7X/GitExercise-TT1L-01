@@ -67,9 +67,7 @@
               <li class="nav-item d-flex align-self-center justify-content-end">
                 <a class="nav-link" href="/shbooks/ownshop">My shop</a>
               </li>
-              <li class="nav-item d-flex align-self-center justify-content-end">
-                <a class="nav-link" href="{{url_for('auth.logout')}}">Log Out</a>
-              </li>
+
               <li class="nav-item d-flex align-self-center justify-content-end">
                 <a
                   href="{{url_for('auth.change_password')}}"
@@ -77,6 +75,7 @@
                   >Change Password</a
                 >
               </li>
+
               {% if not current_user.is_admin %}
               <li class="nav-item d-flex align-self-center justify-content-end">
                 <a
@@ -92,10 +91,13 @@
                 >
               </li>
               {% endif %}
+              <li class="nav-item d-flex align-self-center justify-content-end">
+                <a class="nav-link" href="{{url_for('auth.logout')}}">Log Out</a>
+              </li>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
               <li
               class="nav-item d-flex align-self-center justify-content-center"
             >
@@ -103,7 +105,7 @@
                 src="{{ url_for('user_bp.static', filename='assets/images/default_pfp.png') }}"
                 alt="Profile Picture"
                 height="250"
-                class="rounded-circle"
+                class="rounded-circle pro-img"
               />
             </li> 
             {% else %}
