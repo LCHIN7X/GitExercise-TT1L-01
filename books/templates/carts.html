@@ -1,4 +1,14 @@
+<!DOCTYPE html>
 {% extends 'base.html' %}
+{% block favicon %}
+<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('.static', filename='assets/favicons/cart/apple-touch-icon.png')}}" />
+<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('.static',filename='assets/favicons/cart/favicon-32x32.png') }}" />
+<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('.static',filename='assets/favicons/cart/favicon-16x16.png') }}" />
+<link rel="manifest" href="{{url_for('.static', filename='assets/favicons/cart/site.webmanifest')}}" />
+{% endblock %}
+{% block title %}
+Your Cart
+{% endblock %}
 {% block content %}
 <!--- navbar starts ===================-->
 <div class="container">
@@ -84,7 +94,7 @@
                 {% endfor %}
                 <tr>
                     <td></td>
-                    <td></tc>
+                    <td></td>
                     <td></td>
                     <td colspan="3"><h3>Total: RM{{ '{:.2f}'.format(total) }}</h3></td>
                     <td><a href="/views/payment" class="btn btn-danger">Check Out ({{session['Shopcart']|length}})</a></td>
