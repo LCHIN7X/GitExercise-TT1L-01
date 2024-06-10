@@ -14,8 +14,12 @@
             <img src="{{ url_for('user_bp.static', filename='assets/images/default_pfp.png') }}" alt="User Profile Picture" class="img-fluid rounded-circle" width="150">
             {% endif %}
         </div>
-        <h2>{{ username }}</h2>
-        <p>{{ bio }}</p>
+        <h3>Username: {{ username }}</h3>
+        {% if bio %}
+        <p>Bio: {{ bio }}</p>
+        {% else %}
+        <p>Bio: No bio yet. Add one <a href="{{url_for('user_bp.customize_profile')}}">here</a>!</p>
+        {% endif %}
     </div>
     
     

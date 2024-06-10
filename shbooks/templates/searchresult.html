@@ -10,10 +10,14 @@
     <div class="card mb-4">
         <div class="card-body text-center">
             <div class="pro-img mb-3">
+                {% if profile_pic != 'default_pfp.png' %}
                 <img src="{{ url_for('user_bp.static', filename='assets/images/user_uploads/' + profile_pic) }}" alt="User Profile Picture" class="img-fluid rounded-circle" width="150">
+                {% else %}
+                <img src="{{ url_for('user_bp.static', filename='assets/images/default_pfp.png') }}" alt="User Profile Picture" class="img-fluid rounded-circle" width="150">
+                {% endif %}
             </div>
-            <h2>{{ username }}</h2>
-            <p>{{ bio }}</p>
+            <h2>Username: {{ username }}</h2>
+            <p>Bio: {{ bio }}</p>
         </div>
     </div>
     
