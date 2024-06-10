@@ -205,8 +205,7 @@ def addbook():
         
        
         price_str = request.form.get('price')
-        
-       
+ 
         if not price_str:
             flash("Price cannot be empty", category='error')
             return redirect(url_for('views.addbook'))
@@ -228,7 +227,7 @@ def addbook():
        
         existing_book = Book.query.filter_by(name=name).first()
         if existing_book:
-            flash("This book has been added. If you need to sell the same book again, please add it at a different price in the book details.",  category='error')
+            flash("This book has been added. If you need to sell the same book, please add it at a different price in the book details.",  category='error')
             return redirect(url_for('views.addbook'))
         
         addbo = Book(name=name, user_id=username, price=price, stock=stock, desc=desc, con=con, faculty_id=faculty,
@@ -241,7 +240,7 @@ def addbook():
         db.session.add(addstock)
         db.session.commit()
         
-        flash(f"Book {name} has been added to your database. If you need to sell the same book again, please add it at a different price in the book details.",  category='error')
+        flash(f"Book {name} has been added to your database.",  'success')
         return redirect(url_for('views.addbook'))
     
     return render_template('addbook.html', title="Add Book page", form=form, faculties=faculties, subjects=subjects, photos=photos, users=users)
@@ -269,7 +268,7 @@ def addsbook(book_id):
         db.session.add(addstock)
         db.session.commit()
 
-        flash(f"Your book has been listed for sale",  category='error')
+        flash(f"Your book has been listed for sale", 'success' )
         return redirect(url_for('views.single_page', id=book_id))  
 
     return render_template('addsbook.html', form=form, user=user, book=original_book)

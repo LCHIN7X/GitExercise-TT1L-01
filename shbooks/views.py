@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 import os
 from auth.models import User
 from flask_login import current_user, login_required
-from flask import session
 from auth.models import db
 from books.models import Book, Faculty, Subject
 from books.invoice import Rating
@@ -95,12 +94,20 @@ def edit(id):
     return render_template('editform.html', edit_book=edit_book, faculties=faculties, subjects=subjects)
 
 @shbooks.route('/searchresult')
+@login_required
 def searchresult():
+    user = current_user
     profile_pic = current_user.profile_pic if current_user.is_authenticated else 'default_pfp.png'
     bio = current_user.bio if current_user.is_authenticated else ''
     username = current_user.username if current_user.is_authenticated else ''
     searchword = request.args.get('x')
-    books = Book.query.msearch(searchword, fields=['name', 'desc'], limit=3)
-    facultiess = Faculty.query.join(Book, (Faculty.id == Book.faculty_id)).all()
-    subjects = Subject.query.join(Book, (Subject.id == Book.subject_id)).all()
-    return render_template('searchresult.html', profile_pic=profile_pic, bio=bio, username=username, books=books, facultiess=facultiess, subjects=subjects)
+    
+
+    books = Book.query.msearch(searchword, fields=['name', 'desc']).filter(Book.user_id == current_user.id).limit(3).all()
+    
+    return render_template('searchresult.html', profile_pic=profile_pic, bio=bio, username=username, books=books,user=user)
+
+
+
+
+
