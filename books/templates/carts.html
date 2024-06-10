@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 {% extends 'base.html' %}
 {% block title %}
 Your Cart
@@ -87,7 +88,7 @@ Your Cart
                 {% endfor %}
                 <tr>
                     <td></td>
-                    <td></tc>
+                    <td></td>
                     <td></td>
                     <td colspan="3"><h3>Total: RM{{ '{:.2f}'.format(total) }}</h3></td>
                     <td><a href="/views/payment" class="btn btn-danger">Check Out ({{session['Shopcart']|length}})</a></td>
