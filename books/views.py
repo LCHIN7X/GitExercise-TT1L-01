@@ -246,7 +246,7 @@ def addbook():
         db.session.add(addstock)
         db.session.commit()
         
-        flash(f"Book {name} has been added to your database.",  'success')
+        flash(f"Book {name} has been added!",  'success')
         return redirect(url_for('views.addbook'))
     
     return render_template('addbook.html', title="Add Book page", form=form, faculties=faculties, subjects=subjects, photos=photos, users=users)
