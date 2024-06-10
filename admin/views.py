@@ -73,6 +73,7 @@ class AdminBookView(ModelView):
             book_is_banned = BannedBook.query.filter_by(book_name=book_name).first()
 
             model = self.model()
+            #  prepopulate value in form_args (con)
             form.populate_obj(model)
 
             if book_is_banned:
@@ -141,7 +142,9 @@ class AdminBookView(ModelView):
                 return redirect(url_for('.index_view'))
 
         else:
+            # get ID of entry to be deleted
             model_id = request.args.get('id')
+            # render delete confirmation page
             return render_template_string('''
                 <!DOCTYPE html>
                 <html>
@@ -170,8 +173,8 @@ class AdminBookView(ModelView):
 
     def _delete_model(self):
         try:
+            # get ID of entry to be deleted
             model_id = request.form.get('id')
-            print(f'Debug: Deleting model with ID {model_id}')  # Debug statement
 
             if not model_id:
                 flash('ID not found.', category='error')
@@ -185,7 +188,6 @@ class AdminBookView(ModelView):
                 self.session.delete(model)
                 self.session.commit()
                 flash('Book successfully deleted and banned!', category="success")
-                print('Debug: Model deleted successfully')  
 
             else:
                 flash("Unable to delete book.", category='error')
@@ -194,7 +196,6 @@ class AdminBookView(ModelView):
         except Exception as e:
             flash(f'Error occurred: {e}', category='error')
             self.session.rollback()
-            print(f'Debug: Exception occurred: {e}')  
 
         return redirect(url_for('.index_view'))
 

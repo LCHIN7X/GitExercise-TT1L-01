@@ -5,7 +5,6 @@ from flask_login import LoginManager
 from auth.models import db
 from flask_msearch import Search
 import os
-from auth.views import auth
 from admin import admin, add_admin_to_db
 
 # ------------------------------- CODE ---------------------------------------------
@@ -17,7 +16,6 @@ photos = UploadSet("photos", IMAGES)
 
 
 # Create function to create app instance
-
 def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_NAME}"
@@ -49,7 +47,7 @@ def create_app():
     with app.app_context():
         db.create_all()
     
-    
+    #  add admin to database 
     add_admin_to_db(app)
     
     # create LoginManager object to handle logins
@@ -64,7 +62,6 @@ def create_app():
         return user
     
     return app 
-
 
 
 if __name__ == "__main__":
