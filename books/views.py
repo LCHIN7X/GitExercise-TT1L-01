@@ -441,24 +441,25 @@ def rate(book_id, invoice_id):
     book = Book.query.get_or_404(book_id)
     invoice = Invoice.query.get_or_404(invoice_id)
 
-    
     if invoice.user_id != current_user.id:
         flash('Invalid invoice.', 'warning')
         return redirect(url_for('views.home'))
 
+    if invoice.status.lower() != 'complete':
+        flash('You can only rate after payment is complete.', 'error')
+        return redirect(url_for('views.home'))
+
     if form.validate_on_submit():
-        
         rated = Rating.query.filter_by(user_id=current_user.id, book_id=book_id, invoice_id=invoice_id).first()
 
         if rated:
-            flash('You have already rated this book for this order.',  category='error')
+            flash('You have already rated this book for this order.', 'error')
         else:
-           
             rating = Rating(rating=form.rating.data, user_id=current_user.id, book_id=book_id, invoice_id=invoice_id)
             db.session.add(rating)
             db.session.commit()
             flash('Rating submitted successfully', 'success')
-        
+
         return redirect(url_for('views.home'))
     
     return render_template('rate.html', form=form, book=book)
