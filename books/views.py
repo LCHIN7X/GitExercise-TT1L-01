@@ -373,7 +373,7 @@ def payment():
 @login_required
 def order():
     if 'Shopcart' not in session or not session['Shopcart']:
-        flash('Your cart is empty',  category='error')
+        flash('Your cart is empty', category='error')
         return redirect(url_for('views.getCart'))
 
     order_details = session['Shopcart']
@@ -386,12 +386,16 @@ def order():
         for book_id, item in order_details.items():
             book = Book.query.get(book_id)
             if book:
+                if book.user_id == current_user.id:
+                    flash(f'You cannot buy your own book: {book.name}. Please remove it from your cart.', category='error')
+                    return redirect(url_for('views.getCart'))
+                
                 quantity_to_deduct = int(item['quantity'])
                 if book.stock >= quantity_to_deduct:
                     book.stock -= quantity_to_deduct
                     total += float(item['price']) * quantity_to_deduct
                 else:
-                    flash(f'Insufficient stock for {book.name}. Please remove it from your cart.',  category='error')
+                    flash(f'Insufficient stock for {book.name}. Please remove it from your cart.', category='error')
                     return redirect(url_for('views.getCart'))
 
         invoice_number = secrets.token_hex(5)
@@ -402,7 +406,7 @@ def order():
         for book_id, item in order_details.items():
             book = Book.query.get(book_id)
             if book:
-                invoice_item = InvoiceItem(invoice_id=new_invoice.id,book_id=book.id,quantity=item['quantity'],price=float(item['price']))
+                invoice_item = InvoiceItem(invoice_id=new_invoice.id, book_id=book.id, quantity=item['quantity'], price=float(item['price']))
                 db.session.add(invoice_item)
 
         db.session.commit()
@@ -410,7 +414,7 @@ def order():
         flash('Checkout successful. Your order has been placed.', 'success')
     except Exception as e:
         db.session.rollback()
-        flash('An error occurred during checkout. Please try again later.',  category='error')
+        flash('An error occurred during checkout. Please try again later.', category='error')
         print(f"Error: {str(e)}")
         traceback.print_exc()
 
