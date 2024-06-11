@@ -226,7 +226,7 @@ def addbook():
         
        
         existing_book = Book.query.filter_by(name=name).first()
-        book_is_banned = BannedBook.query.filter_by(book_name=name).first()
+        book_is_banned = BannedBook.query.filter_by(book_name=name.lower()).first()
         if existing_book:
             flash("This book has been added. If you need to sell the same book, please add it at a different price in the book details.",  category='error')
             return redirect(url_for('views.addbook'))

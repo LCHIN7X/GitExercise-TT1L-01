@@ -70,7 +70,7 @@ class AdminBookView(ModelView):
             book_name = form.name.data
             book_condition = form.con.data
             book_already_exists = Book.query.filter_by(name=book_name).first()
-            book_is_banned = BannedBook.query.filter_by(book_name=book_name).first()
+            book_is_banned = BannedBook.query.filter_by(book_name=book_name.lower()).first()
 
             model = self.model()
             #  prepopulate value in form_args (con)
@@ -183,7 +183,7 @@ class AdminBookView(ModelView):
             model = self.session.query(self.model).get(model_id)
             if model:
                 
-                new_banned_book = BannedBook(book_name=model.name,reason="Deleted by Admin")
+                new_banned_book = BannedBook(book_name=model.name.lower(),reason="Deleted by Admin")
                 self.session.add(new_banned_book)
                 self.session.delete(model)
                 self.session.commit()
