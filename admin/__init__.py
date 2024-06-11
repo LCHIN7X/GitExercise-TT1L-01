@@ -17,8 +17,8 @@ admin.add_view(AdminBookView(Book,db.session, endpoint="all_books", name="All Bo
 admin.add_view(BrandNewBookView(Book,db.session, endpoint="brand_new_books", name="Brand New Books"))
 admin.add_view(SecondHandBookView(Book,db.session, endpoint="second_hand_books",name="Second Hand Books"))
 admin.add_view(AdminUserView(User,db.session))
-admin.add_view(AdminSubjectView(Faculty,db.session))
-admin.add_view(AdminFacultyView(Subject,db.session))
+admin.add_view(AdminFacultyView(Faculty,db.session))
+admin.add_view(AdminSubjectView(Subject,db.session))
 admin.add_view(AdminInvoiceView(Invoice,db.session))
 admin.add_view(AdminLogoutView(name="Log Out",endpoint="logout"))
 
