@@ -162,7 +162,7 @@ def addfaculty():
         faculty = Faculty(name=getfaculty)
         db.session.add(faculty)
         db.session.commit()
-        flash(f'Faculty "{getfaculty}" was added to your database.', 'success')
+        flash(f'Faculty "{getfaculty}" was added successfully!', 'success')
         return redirect(url_for('views.addbook'))
     
     return render_template('addfaculty.html')
@@ -183,7 +183,7 @@ def addsub():
         sub = Subject(name=getsubject)  
         db.session.add(sub)
         db.session.commit()
-        flash(f'Subject "{getsubject}" was added to your database.', 'success') 
+        flash(f'Subject "{getsubject}" was added successfully!', 'success') 
         return redirect(url_for('views.addbook'))
     
     return render_template('addsub.html')

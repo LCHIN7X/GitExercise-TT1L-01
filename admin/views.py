@@ -302,6 +302,27 @@ class AdminInvoiceView(AdminModelView):
         'user': _format_username
     }
 
+class AdminFacultyView(AdminModelView):
+
+    form_columns = ['name']
+
+    def delete_model(self, model):
+        if Book.query.filter_by(faculty_id=model.id).first():
+            flash("Cannot delete faculty because it is linked to one or more books.", category='error')
+            return False
+        return super().delete_model(model)
+
+
+class AdminSubjectView(AdminModelView):
+
+    form_columns = ['name']
+
+    def delete_model(self, model):
+        if Book.query.filter_by(subject_id=model.id).first():
+            flash("Cannot delete subject because it is linked to one or more books.", category='error')
+            return False
+        return super().delete_model(model)
+
 
 class AdminLogoutView(BaseView):
     @expose('/')
