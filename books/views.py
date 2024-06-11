@@ -163,7 +163,7 @@ def addfaculty():
         db.session.add(faculty)
         db.session.commit()
         flash(f'Faculty "{getfaculty}" was added to your database.', 'success')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.addbook'))
     
     return render_template('addfaculty.html')
 
