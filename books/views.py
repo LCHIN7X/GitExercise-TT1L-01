@@ -1,6 +1,6 @@
 from flask import redirect, render_template, url_for, request, flash, Blueprint, session
 from auth.models import db, User
-from .models import Faculty, Subject,Book,  Stock, BannedBook
+from .models import Faculty, Subject,Book,  Stock
 from .invoice import Invoice,InvoiceItem,Rating
 from .bforms import Addbooks
 from .forms import RatingForm 
@@ -224,9 +224,9 @@ def addbook():
         image = photos.save(request.files['image'])
         user = current_user
         
-       
+        
         existing_book = Book.query.filter_by(name=name).first()
-        book_is_banned = BannedBook.query.filter_by(book_name=name.lower()).first()
+        book_is_banned = Book.query.filter_by(name=name.lower(),is_banned=True).first()
         if existing_book:
             flash("This book has been added. If you need to sell the same book, please add it at a different price in the book details.",  category='error')
             return redirect(url_for('views.addbook'))
@@ -278,8 +278,6 @@ def addsbook(book_id):
         return redirect(url_for('views.single_page', id=book_id))  
 
     return render_template('addsbook.html', form=form, user=user, book=original_book)
-
-
 
 
 
@@ -422,11 +420,6 @@ def order():
     return render_template('order.html', order_details=order_details, total=total, user=user, invoices=[invoice])
 
 
-   
-
-
-
-
 @views.route('/history')
 @login_required
 def history():
@@ -467,9 +460,3 @@ def rate(book_id, invoice_id):
         return redirect(url_for('views.home'))
     
     return render_template('rate.html', form=form, book=book)
-
-
-
-
-
-

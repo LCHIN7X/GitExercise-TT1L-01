@@ -50,6 +50,7 @@ Search Result
                 </thead>
                 <tbody>
                     {% for book in books %}
+                    {% if not book.is_banned %}
                     <tr>
                         <td class="border-0 align-middle">
                             <div class="p-2">
@@ -74,6 +75,7 @@ Search Result
                             </form>
                         </td>
                     </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>
             </table>

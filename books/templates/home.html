@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block title %}
-Home Page
+MMU Well of Wisdom
 {% endblock %}
 
 {% block content %}
@@ -315,6 +315,7 @@ Home Page
 {% else %}
 
 {% for book in books %}
+{% if not book.is_banned %}
 <div class="col-md-3 mt-3">
   <div class="card">
     <img class="card-img-top" src="{{ url_for('static', filename='images/' + book.image) }}" alt="{{ book.name }}" height="300">
@@ -395,6 +396,7 @@ Home Page
 
 
 </div>
+{% endif %}
 {% endfor %}
 
 <hr>
