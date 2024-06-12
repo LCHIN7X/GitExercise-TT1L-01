@@ -315,6 +315,7 @@ MMU Well of Wisdom
 {% else %}
 
 {% for book in books %}
+{% if not book.is_banned %}
 <div class="col-md-3 mt-3">
   <div class="card">
     <img class="card-img-top" src="{{ url_for('static', filename='images/' + book.image) }}" alt="{{ book.name }}" height="300">
@@ -395,6 +396,7 @@ MMU Well of Wisdom
 
 
 </div>
+{% endif %}
 {% endfor %}
 
 <hr>
