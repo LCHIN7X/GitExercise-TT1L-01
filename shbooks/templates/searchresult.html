@@ -1,39 +1,32 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
-{% block favicon %}
-<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('.static', filename='assets/favicons/apple-touch-icon.png')}}" />
-<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('.static',filename='assets/favicons/favicon-32x32.png') }}" />
-<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('.static',filename='assets/favicons/favicon-16x16.png') }}" />
-<link rel="manifest" href="{{url_for('.static', filename='assets/favicons/site.webmanifest')}}" />
-{% endblock %}
 {% block title %}
-My Shop
+Search Result
 {% endblock %}
 {% block content %}
 <div class="container mt-5" id="shop">
-    <div class="text-center">
+    <div class="text-center mb-4">
         <h1>My Shop</h1>
+   
     </div>
     
-    <div class="card-body text-center">
-        <div class="pro-img">
-            {% if profile_pic != 'default_pfp.png' %}
-            <img src="{{ url_for('user_bp.static', filename='assets/images/user_uploads/' + profile_pic) }}" alt="User Profile Picture" class="img-fluid rounded-circle" width="150">
-            {% else %}
-            <img src="{{ url_for('user_bp.static', filename='assets/images/default_pfp.png') }}" alt="User Profile Picture" class="img-fluid rounded-circle" width="150">
-            {% endif %}
+    <div class="card mb-4">
+        <div class="card-body text-center">
+            <div class="pro-img mb-3">
+                {% if profile_pic != 'default_pfp.png' %}
+                <img src="{{ url_for('user_bp.static', filename='assets/images/user_uploads/' + profile_pic) }}" alt="User Profile Picture" class="img-fluid rounded-circle" width="150">
+                {% else %}
+                <img src="{{ url_for('user_bp.static', filename='assets/images/default_pfp.png') }}" alt="User Profile Picture" class="img-fluid rounded-circle" width="150">
+                {% endif %}
+            </div>
+            <h2>Username: {{ username }}</h2>
+            <p>Bio: {{ bio }}</p>
         </div>
-        <h3>Username: {{ username }}</h3>
-        {% if bio %}
-        <p>Bio: {{ bio }}</p>
-        {% else %}
-        <p>Bio: No bio yet. Add one <a href="{{url_for('user_bp.customize_profile')}}">here</a>!</p>
-        {% endif %}
     </div>
     
-    <div class="mt-5">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1>My Books</h1>
+    <div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>Search Results</h1>
             <form class="form-inline" action="{{ url_for('shbooks.searchresult') }}" method="get"> 
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="x">
                 <hr>
@@ -41,7 +34,6 @@ My Shop
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
-        <hr>
         
         <div class="table-responsive">
             <table class="table table-striped">
