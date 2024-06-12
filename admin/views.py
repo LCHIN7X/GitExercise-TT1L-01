@@ -2,11 +2,12 @@ from flask_login import current_user, logout_user
 from flask_admin import AdminIndexView, expose, BaseView
 from flask_admin.contrib.sqla import ModelView
 from flask import flash, redirect, url_for, request, render_template_string
-from books.models import Book, BannedBook
+from books.models import Book
 from flask_admin.form.upload import FileUploadField
 from wtforms.validators import InputRequired, ValidationError
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
+from sqlalchemy import func
 
 #------------------------------------CODE-----------------------------------------------
 
@@ -66,12 +67,20 @@ class AdminBookView(ModelView):
         }
     }
 
+    def get_query(self):
+        return self.session.query(self.model).filter(self.model.is_banned == False)
+    
+    
+    def get_count_query(self):
+        return self.session.query(func.count(self.model.id)).filter(self.model.is_banned == False)
+
+
     def create_model(self, form):
         try:
             book_name = form.name.data
             book_condition = form.con.data
             book_already_exists = Book.query.filter_by(name=book_name).first()
-            book_is_banned = BannedBook.query.filter_by(book_name=book_name.lower()).first()
+            book_is_banned = Book.query.filter_by(name=book_name.lower(),is_banned=True).first()
 
             model = self.model()
             #  prepopulate value in form_args (con)
@@ -176,17 +185,15 @@ class AdminBookView(ModelView):
         try:
             # get ID of entry to be deleted
             model_id = request.form.get('id')
-
+            book_in_db = Book.query.get(model_id)
             if not model_id:
                 flash('ID not found.', category='error')
                 return redirect(url_for('admin.index'))
 
             model = self.session.query(self.model).get(model_id)
             if model:
-                
-                new_banned_book = BannedBook(book_name=model.name.lower(),reason="Deleted by Admin")
-                self.session.add(new_banned_book)
-                self.session.delete(model)
+                book_in_db.name = book_in_db.name.lower()
+                book_in_db.is_banned = True
                 self.session.commit()
                 flash('Book successfully deleted and banned!', category="success")
 

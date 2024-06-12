@@ -1,6 +1,6 @@
 from flask import redirect, render_template, url_for, request, flash, Blueprint, session
 from auth.models import db, User
-from .models import Faculty, Subject,Book,  Stock, BannedBook
+from .models import Faculty, Subject,Book,  Stock
 from .invoice import Invoice,InvoiceItem,Rating
 from .bforms import Addbooks
 from .forms import RatingForm 
@@ -226,7 +226,7 @@ def addbook():
         
        
         existing_book = Book.query.filter_by(name=name).first()
-        book_is_banned = BannedBook.query.filter_by(book_name=name.lower()).first()
+        book_is_banned = Book.query.filter_by(name=name,is_banned=True).first()
         if existing_book:
             flash("This book has been added. If you need to sell the same book, please add it at a different price in the book details.",  category='error')
             return redirect(url_for('views.addbook'))

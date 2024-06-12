@@ -25,6 +25,7 @@ class Book(db.Model):
     is_original = db.Column(db.Boolean, default=True, nullable=False)
 
     ratings = db.relationship('Rating', backref='book_ratings', lazy=True)
+    is_banned = db.Column(db.Boolean,default=False,nullable=False)
 
 
     def __repr__(self):
@@ -47,15 +48,6 @@ class Stock(db.Model):
     def __repr__(self):
         return f"<Stock {self.id}>"
 
-
-class BannedBook(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
-    book_name = db.Column(db.String(100),nullable=False)
-    reason = db.Column(db.String(100))
-    
-
-    def __repr__(self):
-        return f"Banned Book: {self.book_name}"
 
 
 class Faculty(db.Model):
