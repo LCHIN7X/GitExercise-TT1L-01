@@ -44,9 +44,10 @@ class AdminBookView(ModelView):
         "subject.name": "Subject",
         "desc": "Description",
         "pub_date": "Date Published",
-        'con': 'Condition'
+        'con': 'Condition',
+        'user.username' : "Added By"
     }
-    column_list = ['name', 'price', 'stock', 'desc', 'con', 'pub_date', 'faculty', 'subject']
+    column_list = ['name', 'price', 'stock', 'desc', 'con', 'pub_date', 'faculty', 'subject','user.username']
     form_columns = ['name', 'price', 'stock', 'desc', 'con', 'pub_date', 'faculty', 'subject', 'image', 'user']
     column_filters = ['name', 'faculty.name', 'subject.name', 'pub_date']
     column_sortable_list = ['name', 'price', 'stock', 'pub_date', ('faculty', 'faculty.name'), ('subject', 'subject.name')]
